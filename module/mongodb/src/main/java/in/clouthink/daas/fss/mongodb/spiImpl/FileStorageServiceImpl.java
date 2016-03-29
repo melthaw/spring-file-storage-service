@@ -2,7 +2,7 @@ package in.clouthink.daas.fss.mongodb.spiImpl;
 
 import in.clouthink.daas.fss.core.FileStorage;
 import in.clouthink.daas.fss.core.FileStorageMetadata;
-import in.clouthink.daas.fss.core.spi.FileStorageService;
+import in.clouthink.daas.fss.core.FileStorageService;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

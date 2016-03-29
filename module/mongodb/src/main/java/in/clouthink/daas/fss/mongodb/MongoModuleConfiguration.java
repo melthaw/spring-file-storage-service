@@ -1,7 +1,7 @@
 package in.clouthink.daas.fss.mongodb;
 
-import in.clouthink.daas.fss.core.spi.FileObjectService;
-import in.clouthink.daas.fss.core.spi.FileStorageService;
+import in.clouthink.daas.fss.core.FileObjectService;
+import in.clouthink.daas.fss.core.FileStorageService;
 import in.clouthink.daas.fss.mongodb.spiImpl.FileObjectServiceImpl;
 import in.clouthink.daas.fss.mongodb.spiImpl.FileStorageServiceImpl;
 import org.springframework.context.annotation.Bean;

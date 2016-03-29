@@ -1,4 +1,4 @@
-package in.clouthink.daas.fss.core.spi;
+package in.clouthink.daas.fss.core;
 
 import in.clouthink.daas.fss.core.FileStorage;
 import in.clouthink.daas.fss.core.FileStorageMetadata;

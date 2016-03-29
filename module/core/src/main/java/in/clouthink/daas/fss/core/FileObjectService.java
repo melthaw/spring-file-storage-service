@@ -1,7 +1,4 @@
-package in.clouthink.daas.fss.core.spi;
-
-import in.clouthink.daas.fss.core.FileObject;
-import in.clouthink.daas.fss.core.FileObjectHistory;
+package in.clouthink.daas.fss.core;
 
 import java.util.List;
 
