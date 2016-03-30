@@ -52,7 +52,7 @@ public class FileStorageRestSupport {
 
 		InputStream is = multipartFile.getInputStream();
 		try {
-			FileStorage fileStorage = fileStorageService.restore(id ,is, fileStorageRequest);
+			FileStorage fileStorage = fileStorageService.restore(id, is, fileStorageRequest);
 			return fileStorage.getFileObject();
 		} finally {
 			IOUtils.close(is);
@@ -82,7 +82,7 @@ public class FileStorageRestSupport {
 
 	public void downloadById(String id, HttpServletResponse response) throws IOException {
 		FileStorage fileStorage = fileStorageService.findById(id);
-		if (fileStorage == null || !fileStorage.isExisted()) {
+		if (fileStorage == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
@@ -97,7 +97,7 @@ public class FileStorageRestSupport {
 
 	public void downloadByFilename(String filename, HttpServletResponse response) throws IOException {
 		FileStorage fileStorage = fileStorageService.findByFilename(filename);
-		if (fileStorage == null || !fileStorage.isExisted()) {
+		if (fileStorage == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
