@@ -6,7 +6,7 @@
 
     <groupId>in.clouthink.daas</groupId>
     <artifactId>daas-fss-core</artifactId>
-    <version>1.0.0-snapshot</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>daas-fss-core</name>
     <url>http://clouthink.in</url>
@@ -38,7 +38,6 @@
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
-        <spring.version>3.2.13.RELEASE</spring.version>
     </properties>
 
     <dependencies>
@@ -46,21 +45,21 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${spring.version}</version>
+            <version>3.2.13.RELEASE</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
+            <version>3.2.13.RELEASE</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
+            <version>3.2.13.RELEASE</version>
             <scope>provided</scope>
         </dependency>
 
