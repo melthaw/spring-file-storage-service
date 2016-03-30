@@ -6,28 +6,12 @@ import java.util.Map;
 /**
  * Created by dz on 16/3/28.
  */
-public interface FileObject {
+public interface FileObject extends FileStorageRequest {
 
 	String getId();
-
-	String getFinalFilename();
-
-	String getOriginalFilename();
-
-	String getPrettyFilename();
-
-	String getContentType();
-
-	String getUploadedBy();
 
 	Date getUploadedAt();
 
 	int getVersion();
-
-	String getCode();
-
-	String getBizId();
-
-	Map<String, String> getAttributes();
 
 }

@@ -17,6 +17,9 @@ public class FileObject implements in.clouthink.daas.fss.core.FileObject {
 	private String id;
 
 	@Indexed
+	private String category;
+
+	@Indexed
 	private String finalFilename;
 
 	private String originalFilename;
@@ -47,6 +50,15 @@ public class FileObject implements in.clouthink.daas.fss.core.FileObject {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	@Override
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	@Override

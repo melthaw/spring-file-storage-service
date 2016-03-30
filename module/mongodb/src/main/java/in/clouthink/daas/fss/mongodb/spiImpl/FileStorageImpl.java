@@ -21,8 +21,12 @@ public class FileStorageImpl implements FileStorage {
 
 	private GridFSDBFileProvider gridFSDBFileProvider;
 
-	public FileStorageImpl(FileObject fileObject) {
+	public FileStorageImpl() {
+	}
+
+	public FileStorageImpl(FileObject fileObject, GridFSDBFileProvider gridFSDBFileProvider) {
 		this.fileObject = fileObject;
+		this.gridFSDBFileProvider = gridFSDBFileProvider;
 	}
 
 	@Override

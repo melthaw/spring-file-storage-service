@@ -43,6 +43,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>in.clouthink.daas</groupId>
+            <artifactId>daas-edm</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>daas-fss-core</artifactId>
             <version>${project.version}</version>

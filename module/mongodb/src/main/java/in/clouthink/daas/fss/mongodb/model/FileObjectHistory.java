@@ -20,6 +20,7 @@ public class FileObjectHistory implements in.clouthink.daas.fss.core.FileObjectH
 	@DBRef
 	private FileObject fileObject;
 
+	@Indexed
 	private String finalFilename;
 
 	private String originalFilename;

@@ -13,6 +13,8 @@ public interface FileObjectRepository extends AbstractRepository<FileObject> {
 
 	FileObject findByFinalFilename(String finalFilename);
 
+	Page<FileObject> findByCategory(String category, Pageable pageable);
+
 	Page<FileObject> findByUploadedBy(String uploadedBy, Pageable pageable);
 
 	Page<FileObject> findByUploadedAtBetween(Date start, Date end, Pageable pageable);

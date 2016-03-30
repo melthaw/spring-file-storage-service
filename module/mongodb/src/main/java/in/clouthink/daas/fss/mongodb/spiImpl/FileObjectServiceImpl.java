@@ -1,8 +1,9 @@
 package in.clouthink.daas.fss.mongodb.spiImpl;
 
+import in.clouthink.daas.edm.Edms;
 import in.clouthink.daas.fss.core.FileObject;
 import in.clouthink.daas.fss.core.FileObjectHistory;
-import in.clouthink.daas.fss.core.FileObjectService;
+import in.clouthink.daas.fss.spi.FileObjectService;
 import in.clouthink.daas.fss.core.FileStorageException;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectHistoryRepository;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectRepository;
@@ -62,6 +63,7 @@ public class FileObjectServiceImpl implements FileObjectService, FileObjectServi
 		in.clouthink.daas.fss.mongodb.model.FileObject result = fileObjectRepository.findById(id);
 		if (result != null) {
 			fileObjectRepository.delete(result);
+			Edms.getEdm().dispatch("in.clouthink.daas.fss#delete", result);
 		}
 		return result;
 	}
@@ -71,6 +73,7 @@ public class FileObjectServiceImpl implements FileObjectService, FileObjectServi
 		in.clouthink.daas.fss.mongodb.model.FileObject result = fileObjectRepository.findByFinalFilename(finalFilename);
 		if (result != null) {
 			fileObjectRepository.delete(result);
+			Edms.getEdm().dispatch("in.clouthink.daas.fss#delete", result);
 		}
 		return result;
 	}
