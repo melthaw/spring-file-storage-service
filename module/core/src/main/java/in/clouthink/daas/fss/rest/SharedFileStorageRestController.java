@@ -14,12 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 /**
  */
 @Controller
 @RequestMapping(value = "/api")
-public class SharedFileStorageRestService implements InitializingBean {
+public class SharedFileStorageRestController implements InitializingBean {
 
 	@Autowired
 	private FileObjectService fileObjectService;
@@ -29,7 +30,14 @@ public class SharedFileStorageRestService implements InitializingBean {
 
 	private FileStorageRestSupport fileStorageRestSupport;
 
-	@RequestMapping(value = "/files/{id}/object", method = RequestMethod.POST)
+	@RequestMapping(value = "/fileStorageMetadata", method = RequestMethod.GET)
+	@ResponseBody
+	public Properties getFileStorageMetadata(HttpServletRequest request, HttpServletResponse response) throws
+																									   IOException {
+		return fileStorageService.getStorageMetadata().getPublicProperties();
+	}
+
+	@RequestMapping(value = "/files/{id}/object", method = RequestMethod.GET)
 	@ResponseBody
 	public FileObject getFileObjectDetail(@PathVariable String id,
 										  HttpServletRequest request,
@@ -37,7 +45,7 @@ public class SharedFileStorageRestService implements InitializingBean {
 		return fileObjectService.findById(id);
 	}
 
-	@RequestMapping(value = "/files/{id}/history", method = RequestMethod.POST)
+	@RequestMapping(value = "/files/{id}/history", method = RequestMethod.GET)
 	@ResponseBody
 	public List<FileObjectHistory> getFileObjectHistory(@PathVariable String id,
 														HttpServletRequest request,
@@ -45,22 +53,22 @@ public class SharedFileStorageRestService implements InitializingBean {
 		return fileObjectService.findHistoryById(id);
 	}
 
-	@RequestMapping(value = "/files/{id}", method = RequestMethod.POST)
-	@ResponseBody
-	public void reupload(@PathVariable String id,
-						 @RequestBody UploadFileRequest uploadFileRequest,
-						 HttpServletRequest request,
-						 HttpServletResponse response) throws IOException {
-		fileStorageRestSupport.reupload(id, uploadFileRequest, request, response);
-	}
-
 	@RequestMapping(value = "/files", method = RequestMethod.POST)
 	@ResponseBody
-	public String upload(@RequestBody UploadFileRequest uploadFileRequest,
+	public String upload(UploadFileRequest uploadFileRequest,
 						 HttpServletRequest request,
 						 HttpServletResponse response) throws IOException {
 		FileObject fileObject = fileStorageRestSupport.upload(uploadFileRequest, request, response);
 		return fileObject.getId();
+	}
+
+	@RequestMapping(value = "/files/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public void reupload(@PathVariable String id,
+						 UploadFileRequest uploadFileRequest,
+						 HttpServletRequest request,
+						 HttpServletResponse response) throws IOException {
+		fileStorageRestSupport.reupload(id, uploadFileRequest, request, response);
 	}
 
 	@RequestMapping(value = "/files/{id}", method = RequestMethod.GET)

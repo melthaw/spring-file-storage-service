@@ -1,5 +1,6 @@
 package in.clouthink.daas.fss.mongodb.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -16,8 +17,9 @@ public class FileObjectHistory implements in.clouthink.daas.fss.core.FileObjectH
 	@Id
 	private String id;
 
+	@JsonIgnore
 	@Indexed
-	@DBRef
+	@DBRef(lazy = true)
 	private FileObject fileObject;
 
 	@Indexed

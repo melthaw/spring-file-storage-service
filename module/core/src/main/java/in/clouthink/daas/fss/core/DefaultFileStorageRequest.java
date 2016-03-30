@@ -1,5 +1,6 @@
 package in.clouthink.daas.fss.core;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,7 +24,7 @@ public class DefaultFileStorageRequest implements FileStorageRequest {
 
 	private String bizId;
 
-	private Map<String, String> attributes;
+	private Map<String, String> attributes = new HashMap<String, String>();
 
 	@Override
 	public String getCategory() {

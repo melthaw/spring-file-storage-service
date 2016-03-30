@@ -158,8 +158,10 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		GridFSInputFile gfsInputFile = gridFSService.getGridFS().createFile(inputStream);
 		gfsInputFile.setFilename(request.getFinalFilename());
 		gfsInputFile.setContentType(request.getContentType());
-		DBObject dbObject = new BasicDBObject(request.getAttributes());
-		gfsInputFile.setMetaData(dbObject);
+		if (request.getAttributes() != null) {
+			DBObject dbObject = new BasicDBObject(request.getAttributes());
+			gfsInputFile.setMetaData(dbObject);
+		}
 		gfsInputFile.save();
 		return gfsInputFile;
 	}
