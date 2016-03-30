@@ -14,9 +14,6 @@ module name | latest version
 ------|------
 daas-fss-core |1.0.0
 daas-fss-mongodb|1.0.0
-daas-fss-gridfs|1.0.0
-daas-fss-alioss |1.0.0
-daas-fss-rest |1.0.0
 daas-fss-sample |1.0.0
 
 
@@ -34,24 +31,10 @@ daas-fss-sample |1.0.0
         <version>${daas.fss.mongodb.version}</version>
     </dependency>
 
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-fss-gridfs</artifactId>
-        <version>${daas.fss.gridfs.version}</version>
-    </dependency>
-    
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-fss-rest</artifactId>
-        <version>${daas.fss.rest.version}</version>
-    </dependency>
-
 ## Gradle
 
     compile "in.clouthink.daas:daas-fss-core:${daas_fss_core_version}"
     compile "in.clouthink.daas:daas-fss-mongodb:${daas_fss_mongodb_version}"
-    compile "in.clouthink.daas:daas-fss-gridfs:${daas_fss_gridfs_version}"
-    compile "in.clouthink.daas:daas-fss-rest:${daas_fss_rest_version}"
 
 
 # For Example
