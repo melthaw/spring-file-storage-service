@@ -13,9 +13,8 @@ So far the following version is available
 module name | latest version
 ------|------
 daas-fss-core |1.0.0
-daas-fss-mongodb|1.0.0
-daas-fss-sample |1.0.0
-
+daas-fss-mongodb|1.0.1
+daas-fss-sample |1.0.0-snapshot
 
 ## Maven
 

@@ -96,7 +96,7 @@
     </object>
     <object type="LMREQUEST" id="z107">
         <attribute name="uuid" type="string">76ED2766-2849-410D-903F-73AED75F4179</attribute>
-        <attribute name="url" type="string">http://127.0.0.1:8080/api/files</attribute>
+        <attribute name="url" type="string">http://127.0.0.1:8080/api/files?uploadedBy=test-upload\u2600start=0</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>

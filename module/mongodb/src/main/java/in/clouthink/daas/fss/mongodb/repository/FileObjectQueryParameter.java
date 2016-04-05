@@ -7,10 +7,6 @@ import java.util.Date;
  */
 public interface FileObjectQueryParameter {
 
-	int getStart();
-
-	int getLimit();
-
 	String getBizId();
 
 	String getCode();

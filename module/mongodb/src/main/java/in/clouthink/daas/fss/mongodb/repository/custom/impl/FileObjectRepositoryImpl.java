@@ -4,10 +4,7 @@ import in.clouthink.daas.fss.mongodb.model.FileObject;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectQueryParameter;
 import in.clouthink.daas.fss.mongodb.repository.custom.FileObjectRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -24,26 +21,14 @@ public class FileObjectRepositoryImpl implements FileObjectRepositoryCustom {
 	protected MongoTemplate mongoTemplate;
 
 	@Override
-	public Page<FileObject> findPage(FileObjectQueryParameter queryParameter) {
-		int start = getStart(queryParameter);
-		int limit = getLimit(queryParameter);
-
+	public Page<FileObject> findPage(FileObjectQueryParameter queryParameter, Pageable pageable) {
 		Query query = buildQuery(queryParameter);
 
-		PageRequest pageable = new PageRequest(start, limit);
-		query.with(pageable).with(new Sort(Sort.Direction.DESC, "uploadedAt"));
+		query.with(new PageRequest(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()));
 		long count = mongoTemplate.count(query, FileObject.class);
 		List<FileObject> list = mongoTemplate.find(query, FileObject.class);
 
 		return new PageImpl<FileObject>(list, pageable, count);
-	}
-
-	int getStart(FileObjectQueryParameter queryParameter) {
-		return (queryParameter.getStart() < 0) ? 0 : queryParameter.getStart();
-	}
-
-	int getLimit(FileObjectQueryParameter queryParameter) {
-		return (queryParameter.getLimit() <= 0) ? 10 : queryParameter.getLimit();
 	}
 
 	private Query buildQuery(FileObjectQueryParameter queryParameter) {
