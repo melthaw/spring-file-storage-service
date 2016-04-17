@@ -37,11 +37,11 @@ public class FileObjectServiceImpl implements FileObjectService {
         if (StringUtils.isBlank(bucket)) {
             throw new FileStorageException("Can't resolve OSS bucket.");
         }
-        
-        ObjectMetadata objectMetadata = client.getObjectMetadata(bucket, id);
-        if (objectMetadata == null) {
+        if (!fileExists(bucket, id)) {
             return null;
         }
+        
+        ObjectMetadata objectMetadata = client.getObjectMetadata(bucket, id);
         return strategy.revertFromObjectMeta(objectMetadata, id);
     }
     
@@ -52,7 +52,6 @@ public class FileObjectServiceImpl implements FileObjectService {
     
     @Override
     public FileObject deleteById(String id) {
-        // TODO whether is this needed?
         FileObject fileObject = findById(id);
         if (fileObject != null) {
             String bucket = strategy.getBucket(id);
@@ -76,4 +75,9 @@ public class FileObjectServiceImpl implements FileObjectService {
     public List<FileObjectHistory> findHistoryById(String fileObjectId) {
         throw new UnsupportedOperationException();
     }
+    
+    private boolean fileExists(String bucket, String key) {
+        return client.doesObjectExist(bucket, key);
+    }
+    
 }

@@ -105,7 +105,7 @@ public class DefaultOssStrategy implements OssStrategy {
     
     private String getFromUserMetadata(String property,
                                        Map<String, String> userMetadata) {
-        String key = METADATA_KEY_PREFIX + property;
+        String key = (METADATA_KEY_PREFIX + property).toLowerCase();
         String value = null;
         if (userMetadata.containsKey(key)) {
             value = userMetadata.remove(key);
@@ -119,26 +119,38 @@ public class DefaultOssStrategy implements OssStrategy {
             metadata.putAll(request.getAttributes());
         }
         
-        metadata.put(METADATA_KEY_PREFIX + "BizId", request.getBizId());
-        metadata.put(METADATA_KEY_PREFIX + "Category", request.getCategory());
-        metadata.put(METADATA_KEY_PREFIX + "Code", request.getCode());
-        metadata.put(METADATA_KEY_PREFIX + "FinalFilename",
-                     request.getFinalFilename());
-        metadata.put(METADATA_KEY_PREFIX + "OriginalFilename",
-                     request.getOriginalFilename());
-        metadata.put(METADATA_KEY_PREFIX + "PrettyFilename",
-                     request.getPrettyFilename());
-        metadata.put(METADATA_KEY_PREFIX + "UploadedBy",
-                     request.getUploadedBy());
+        putUserMetadata("BizId", request.getBizId(), metadata);
+        putUserMetadata("Category", request.getCategory(), metadata);
+        putUserMetadata("Code", request.getCode(), metadata);
+        putUserMetadata("FinalFilename", request.getFinalFilename(), metadata);
+        putUserMetadata("OriginalFilename",
+                        request.getOriginalFilename(),
+                        metadata);
+        putUserMetadata("PrettyFilename",
+                        request.getPrettyFilename(),
+                        metadata);
+        putUserMetadata("UploadedBy", request.getUploadedBy(), metadata);
         if (request instanceof OssFileObject) {
             OssFileObject fileObject = (OssFileObject) request;
-            metadata.put(METADATA_KEY_PREFIX + "UploadedAt",
-                         String.valueOf(fileObject.getUploadedAt().getTime()));
+            if (fileObject.getUploadedAt() != null) {
+                putUserMetadata("UploadedAt",
+                                String.valueOf(fileObject.getUploadedAt()
+                                                         .getTime()),
+                                metadata);
+            }
             metadata.put(METADATA_KEY_PREFIX + "Version",
                          String.valueOf(fileObject.getVersion()));
         }
         
         return metadata;
+    }
+    
+    private void putUserMetadata(String property,
+                                 String value,
+                                 Map<String, String> metadata) {
+        if (value != null) {
+            metadata.put(METADATA_KEY_PREFIX + property, value);
+        }
     }
     
     private String generateFilename(String prefix, String originalFilename) {

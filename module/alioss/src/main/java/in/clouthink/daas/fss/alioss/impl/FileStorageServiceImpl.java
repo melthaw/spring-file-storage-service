@@ -3,6 +3,7 @@ package in.clouthink.daas.fss.alioss.impl;
 import java.io.InputStream;
 import java.util.Date;
 
+import in.clouthink.daas.fss.spi.FileObjectService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -33,6 +34,9 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Autowired
     private OssFileProvider ossFileProvider;
     
+    @Autowired
+    private FileObjectService fileObjectService;
+    
     @Override
     public FileStorageMetadata getStorageMetadata() {
         return metadata;
@@ -41,6 +45,28 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public FileStorage store(InputStream inputStream,
                              FileStorageRequest request) {
+        OssFileObject fileObject = storeToOss(inputStream, request, null);
+        
+        return new FileStorageImpl(fileObject, ossFileProvider);
+    }
+    
+    private OssFileObject storeToOss(InputStream inputStream,
+                                     FileStorageRequest request,
+                                     String key) {
+        OssFileObject fileObject = checkAndCreateFileObject(request);
+        
+        if (StringUtils.isEmpty(key)) {
+            key = strategy.generateKey(fileObject);
+        }
+        String bucket = strategy.getBucket(fileObject);
+        fileObject.setFinalFilename(key);
+        ObjectMetadata objectMetadata = strategy.createObjectMeta(fileObject);
+        client.putObject(bucket, key, inputStream, objectMetadata);
+        fileObject.setId(key);
+        return fileObject;
+    }
+    
+    private OssFileObject checkAndCreateFileObject(FileStorageRequest request) {
         OssFileObject fileObject = copy(request);
         if (StringUtils.isEmpty(fileObject.getOriginalFilename())) {
             throw new FileStorageException("The originalFilename is required.");
@@ -57,34 +83,31 @@ public class FileStorageServiceImpl implements FileStorageService {
         if (fileObject.getVersion() == 0) {
             fileObject.setVersion(1);
         }
-        
-        String bucket = strategy.getBucket(fileObject);
-        String key = strategy.generateKey(fileObject);
-        fileObject.setFinalFilename(key);
-        ObjectMetadata objectMetadata = strategy.createObjectMeta(fileObject);
-        client.putObject(bucket, key, inputStream, objectMetadata);
-        fileObject.setId(key);
-        
-        return new FileStorageImpl(fileObject, ossFileProvider);
+        fileObject.setUploadedAt(new Date());
+        return fileObject;
     }
     
     @Override
     public FileStorage restore(String previousId,
                                InputStream inputStream,
                                FileStorageRequest request) {
-        // TODO
-        return null;
+        FileObject fileObject = fileObjectService.findById(previousId);
+        if (fileObject != null) {
+            ((OssFileObject) fileObject).setVersion(fileObject.getVersion()
+                                                    + 1);
+        }
+        FileObject newFileObject = storeToOss(inputStream,
+                                              fileObject,
+                                              previousId);
+        return new FileStorageImpl(newFileObject, ossFileProvider);
     }
     
     @Override
     public FileStorage findById(String id) {
-        String bucket = strategy.getBucket(id);
-        ObjectMetadata metadata = client.getObjectMetadata(bucket, id);
-        if (metadata == null) {
+        FileObject fileObject = fileObjectService.findById(id);
+        if (fileObject == null) {
             return null;
         }
-        
-        FileObject fileObject = strategy.revertFromObjectMeta(metadata, id);
         return new FileStorageImpl(fileObject, ossFileProvider);
     }
     

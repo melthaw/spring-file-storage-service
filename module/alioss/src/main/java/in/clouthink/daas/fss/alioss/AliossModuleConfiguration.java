@@ -37,7 +37,8 @@ public class AliossModuleConfiguration {
     public OssStrategy ossStrategy() {
         return new DefaultOssStrategy();
     }
-    
+
+    @Bean
     public OssFileProvider ossFileProvider() {
         return new DefaultOssFileProvider();
     }
