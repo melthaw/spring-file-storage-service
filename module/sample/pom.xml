@@ -12,7 +12,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>in.clouthink.daas</groupId>
     <artifactId>daas-fss-sample</artifactId>
-    <version>1.0.0-snapshot</version>
+    <version>1.0.1-snapshot</version>
     <packaging>war</packaging>
     <name>daas-fss-sample</name>
     <url>http://clouthink.in</url>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>daas-fss-core</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>
