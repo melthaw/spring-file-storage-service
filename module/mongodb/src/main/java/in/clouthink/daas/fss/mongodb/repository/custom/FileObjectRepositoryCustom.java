@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Created by dz on 16/4/5.
  */
 public interface FileObjectRepositoryCustom {
 

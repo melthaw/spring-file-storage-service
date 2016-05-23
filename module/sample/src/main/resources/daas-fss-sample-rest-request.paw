@@ -5,7 +5,7 @@
     <databaseInfo>
         <version>134481920</version>
         <UUID>0325D8F9-6744-439C-9A78-B231F37082A4</UUID>
-        <nextObjectID>120</nextObjectID>
+        <nextObjectID>122</nextObjectID>
         <metadata>
             <plist version="1.0">
                 <dict>
@@ -96,7 +96,7 @@
     </object>
     <object type="LMREQUEST" id="z107">
         <attribute name="uuid" type="string">76ED2766-2849-410D-903F-73AED75F4179</attribute>
-        <attribute name="url" type="string">http://127.0.0.1:8080/api/files?uploadedBy=test-upload\u2600start=0</attribute>
+        <attribute name="url" type="string">http://127.0.0.1:8080/api/files?uploadedBy=test-uploaded-by\u2600start=0\u2600bizId=123456789</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -117,7 +117,7 @@
         <relationship name="values" type="0/0" destination="LMENVIRONMENTVARIABLEVALUE" idrefs="z102"></relationship>
     </object>
     <object type="LMREQUEST" id="z109">
-        <attribute name="body" type="string">[{"data":{"keyValues":[[["name"],["thanksfordownload"],true],[["category"],["test-category"],true],[["uploadedBy"],["test-uploaded-by"],true],[["file"],[{"data":{"bookmarkData":"Ym9vazADAAAAAAQQMAAAAAvhsPiHksLvKqq842da86HCuldGJh+vK5119akEBAT6LAIAAAQAAAADAwAAABgAKAUAAAABAQAAVXNlcnMAAAACAAAAAQEAAGR6AAAHAAAAAQEAAHByb2plY3QABAAAAAEBAABkYWFzCgAAAAEBAABjb2RpbmcubmV0AAAIAAAAAQEAAGRhYXMtZnNzDQAAAAEBAABpbnN0YWxsQWxsLnNoAAAAHAAAAAEGAAAQAAAAIAAAACwAAAA8AAAASAAAAFwAAABsAAAACAAAAAQDAACaKgYAAAAAAAgAAAAEAwAAHVsJAAAAAAAIAAAABAMAABALEwAAAAAACAAAAAQDAAAdCxMAAAAAAAgAAAAEAwAA\\/PgYAAAAAAAIAAAABAMAACJTYwYAAAAACAAAAAQDAAAabmYGAAAAABwAAAABBgAAqAAAALgAAADIAAAA2AAAAOgAAAD4AAAACAEAAAgAAAAABAAAQbyrwKAAAAAYAAAAAQIAAAEAAAAAAAAADwAAAAAAAAAAAAAAAAAAAAgAAAAEAwAABQAAAAAAAAAEAAAAAwMAAPUBAAAIAAAAAQkAAGZpbGU6Ly8vDAAAAAEBAABNYWNpbnRvc2ggSEQIAAAABAMAAAAAADJ0AAAACAAAAAAEAABBu9Mq4QAAACQAAAABAQAAMDgyQUM3QUEtM0Y5NC0zODlFLThEMTAtMjcyMjc0Qjg5OUIyGAAAAAECAACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAABAAAAAQEAAC8AAAAAAAAAAQUAAMwAAAD+\\/\\/\\/\\/AQAAAAAAAAAQAAAABBAAAIQAAAAAAAAABRAAABgBAAAAAAAAEBAAAEwBAAAAAAAAQBAAADwBAAAAAAAAAiAAABgCAAAAAAAABSAAAIgBAAAAAAAAECAAAJgBAAAAAAAAESAAAMwBAAAAAAAAEiAAAKwBAAAAAAAAEyAAALwBAAAAAAAAICAAAPgBAAAAAAAAMCAAACQCAAAAAAAAAcAAAGwBAAAAAAAAEcAAACAAAAAAAAAAEsAAAHwBAAAAAAAAENAAAAQAAAAAAAAA"},"identifier":"com.luckymarmot.FileContentDynamicValue"}],true]]},"identifier":"com.luckymarmot.BodyMultipartFormDataDynamicValue"}]</attribute>
+        <attribute name="body" type="string">[{"data":{"keyValues":[[["name"],["test-image-download"],true],[["category"],["image"],true],[["uploadedBy"],["test-uploaded-by"],true],[["file"],[{"data":{"bookmarkData":"Ym9va7QCAAAAAAQQMAAAAPado3rT5yevPCK7gIb\\/ThasYCkARepfDgKoSrrETv2ssAEAAAQAAAADAwAAABgAKAUAAAABAQAAVXNlcnMAAAACAAAAAQEAAGR6AAAIAAAAAQEAAFBpY3R1cmVzCwAAAAEBAAAxMjYucGljLmpwZwAQAAAAAQYAABAAAAAgAAAALAAAADwAAAAIAAAABAMAAJoqBgAAAAAACAAAAAQDAAAdWwkAAAAAAAgAAAAEAwAAWlsJAAAAAAAIAAAABAMAABb5gQYAAAAAEAAAAAEGAABoAAAAeAAAAIgAAACYAAAACAAAAAAEAABBvM+eXgAAABgAAAABAgAAAQAAAAAAAAAPAAAAAAAAAAAAAAAAAAAACAAAAAQDAAACAAAAAAAAAAQAAAADAwAA9QEAAAgAAAABCQAAZmlsZTovLy8MAAAAAQEAAE1hY2ludG9zaCBIRAgAAAAEAwAAAAAAMnQAAAAIAAAAAAQAAEG70yrhAAAAJAAAAAEBAAAwODJBQzdBQS0zRjk0LTM4OUUtOEQxMC0yNzIyNzRCODk5QjIYAAAAAQIAAIEAAAABAAAA7xMAAAEAAAAAAAAAAAAAAAEAAAABAQAALwAAAAAAAAABBQAAzAAAAP7\\/\\/\\/8BAAAAAAAAABAAAAAEEAAAUAAAAAAAAAAFEAAAqAAAAAAAAAAQEAAA0AAAAAAAAABAEAAAwAAAAAAAAAACIAAAnAEAAAAAAAAFIAAADAEAAAAAAAAQIAAAHAEAAAAAAAARIAAAUAEAAAAAAAASIAAAMAEAAAAAAAATIAAAQAEAAAAAAAAgIAAAfAEAAAAAAAAwIAAAqAEAAAAAAAABwAAA8AAAAAAAAAARwAAAIAAAAAAAAAASwAAAAAEAAAAAAAAQ0AAABAAAAAAAAAA="},"identifier":"com.luckymarmot.FileContentDynamicValue"}],true],[["bizId"],["123456789"],true],[["contentType"],["image\\/jpeg"],true]]},"identifier":"com.luckymarmot.BodyMultipartFormDataDynamicValue"}]</attribute>
         <attribute name="uuid" type="string">46A2417D-D287-4C1A-9EEA-987AD7A89BB7</attribute>
         <attribute name="url" type="string">http://127.0.0.1:8080/api/files</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
@@ -154,7 +154,7 @@
     </object>
     <object type="LMREQUEST" id="z112">
         <attribute name="uuid" type="string">04A608D1-8F96-41B6-8F8C-FDA8783D6EAB</attribute>
-        <attribute name="url" type="string">http://127.0.0.1:8080/api/files/56fbc7ea74f83ec593d289b9/</attribute>
+        <attribute name="url" type="string">http://127.0.0.1:8080/api/files/57354c3977c89d574a269287/</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -267,5 +267,30 @@
         <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
         <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
         <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z119"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z121">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z122"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z122">
+        <attribute name="uuid" type="string">A2A1135F-DA84-4851-8C07-72A2764B6203</attribute>
+        <attribute name="url" type="string">http://127.0.0.1:8080/api/files/57354c3977c89d574a269287</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">DELETE</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">7</attribute>
+        <attribute name="name" type="string">delete by id</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z121"></relationship>
     </object>
 </database>
