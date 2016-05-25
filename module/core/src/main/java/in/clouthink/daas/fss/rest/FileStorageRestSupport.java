@@ -93,7 +93,14 @@ public class FileStorageRestSupport {
 			return;
 		}
 		response.setContentType(fileObject.getContentType());
-		response.addHeader("Content-Disposition", "attachment; filename=\"" + fileObject.getPrettyFilename() + "\"");
+		String downloadFilename = fileStorage.getFileObject().getFinalFilename();
+		if (!StringUtils.isEmpty(fileObject.getPrettyFilename())) {
+			downloadFilename = new String(fileObject.getPrettyFilename().getBytes("utf-8"), "ISO_8859_1");
+		}
+		else if (!StringUtils.isEmpty(fileObject.getOriginalFilename())) {
+			downloadFilename = new String(fileObject.getOriginalFilename().getBytes("utf-8"), "ISO_8859_1");
+		}
+		response.addHeader("Content-Disposition", "attachment; filename=\"" + downloadFilename + "\"");
 		OutputStream os = response.getOutputStream();
 		try {
 			fileStorage.writeTo(os, 4 * 1024);
@@ -116,7 +123,7 @@ public class FileStorageRestSupport {
 			return;
 		}
 		response.setContentType(fileObject.getContentType());
-		response.addHeader("Content-Disposition", "attachment; filename=\"" + fileObject.getPrettyFilename() + "\"");
+		response.addHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 		OutputStream os = response.getOutputStream();
 		try {
 			fileStorage.writeTo(os, 4 * 1024);
