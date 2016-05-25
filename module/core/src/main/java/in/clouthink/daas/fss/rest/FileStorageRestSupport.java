@@ -168,7 +168,12 @@ public class FileStorageRestSupport {
 			prettyFilename = originalFileName;
 		}
 		else {
-			prettyFilename += '.' + suffix;
+			String suffixOfName = FilenameUtils.getExtension(prettyFilename);
+			if (suffix != null) {
+				if (suffixOfName == null || !suffixOfName.equalsIgnoreCase(suffix)) {
+					prettyFilename += '.' + suffix;
+				}
+			}
 		}
 		result.setPrettyFilename(prettyFilename);
 
