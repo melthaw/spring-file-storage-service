@@ -127,6 +127,15 @@ public class FileStorageRestSupport {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
+
+		String existedSuffix = FilenameUtils.getExtension(fileObject.getOriginalFilename());
+		String suffixOfSpecifiedFilename = FilenameUtils.getExtension(filename);
+		if (existedSuffix != null) {
+			if (suffixOfSpecifiedFilename == null || !suffixOfSpecifiedFilename.equalsIgnoreCase(existedSuffix)) {
+				filename += '.' + existedSuffix;
+			}
+		}
+
 		response.setContentType(fileObject.getContentType());
 		String downloadFilename = new String(filename.getBytes("utf-8"), "ISO_8859_1");
 		response.addHeader("Content-Disposition", "attachment; filename=\"" + downloadFilename + "\"");
