@@ -12,9 +12,8 @@ So far the following version is available
 
 module name | latest version
 ------|------
-daas-fss-core |1.0.0
-daas-fss-mongodb|1.0.1
-daas-fss-sample |1.0.0-snapshot
+daas-fss-core |1.0.4
+daas-fss-mongodb|1.0.2
 
 ## Maven
 
@@ -28,6 +27,12 @@ daas-fss-sample |1.0.0-snapshot
         <groupId>in.clouthink.daas</groupId>
         <artifactId>daas-fss-mongodb</artifactId>
         <version>${daas.fss.mongodb.version}</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>in.clouthink.daas</groupId>
+        <artifactId>daas-edm</artifactId>
+        <version>1.0.1</version>
     </dependency>
 
 ## Gradle

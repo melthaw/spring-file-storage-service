@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Created by dz on 16/3/29.
  */
 public class FileStorageRestSupport {
 
@@ -54,7 +53,8 @@ public class FileStorageRestSupport {
 		try {
 			FileStorage fileStorage = fileStorageService.restore(id, is, fileStorageRequest);
 			return fileStorage.getFileObject();
-		} finally {
+		}
+		finally {
 			IOUtils.close(is);
 		}
 	}
@@ -75,7 +75,8 @@ public class FileStorageRestSupport {
 		try {
 			FileStorage fileStorage = fileStorageService.store(is, fileStorageRequest);
 			return fileStorage.getFileObject();
-		} finally {
+		}
+		finally {
 			IOUtils.close(is);
 		}
 	}
@@ -86,10 +87,63 @@ public class FileStorageRestSupport {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
+		FileObject fileObject = fileStorage.getFileObject();
+		if (fileObject == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+
+		response.setContentType(fileObject.getContentType());
+		String downloadFilename = fileStorage.getFileObject().getFinalFilename();
+		if (!StringUtils.isEmpty(fileObject.getPrettyFilename())) {
+			downloadFilename = new String(fileObject.getPrettyFilename().getBytes("utf-8"), "ISO_8859_1");
+		}
+		else if (!StringUtils.isEmpty(fileObject.getOriginalFilename())) {
+			downloadFilename = new String(fileObject.getOriginalFilename().getBytes("utf-8"), "ISO_8859_1");
+		}
+		response.addHeader("Content-Disposition", "attachment; filename=\"" + downloadFilename + "\"");
 		OutputStream os = response.getOutputStream();
 		try {
 			fileStorage.writeTo(os, 4 * 1024);
-		} finally {
+		}
+		finally {
+			IOUtils.flush(os);
+			IOUtils.close(os);
+		}
+	}
+
+	public void downloadById(String id, String filename, HttpServletResponse response) throws IOException {
+		if (StringUtils.isEmpty(filename)) {
+			throw new FileStorageException("Please specify the download filename.");
+		}
+
+		FileStorage fileStorage = fileStorageService.findById(id);
+		if (fileStorage == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		FileObject fileObject = fileStorage.getFileObject();
+		if (fileObject == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+
+		String existedSuffix = FilenameUtils.getExtension(fileObject.getOriginalFilename());
+		String suffixOfSpecifiedFilename = FilenameUtils.getExtension(filename);
+		if (existedSuffix != null) {
+			if (suffixOfSpecifiedFilename == null || !suffixOfSpecifiedFilename.equalsIgnoreCase(existedSuffix)) {
+				filename += '.' + existedSuffix;
+			}
+		}
+
+		response.setContentType(fileObject.getContentType());
+		String downloadFilename = new String(filename.getBytes("utf-8"), "ISO_8859_1");
+		response.addHeader("Content-Disposition", "attachment; filename=\"" + downloadFilename + "\"");
+		OutputStream os = response.getOutputStream();
+		try {
+			fileStorage.writeTo(os, 4 * 1024);
+		}
+		finally {
 			IOUtils.flush(os);
 			IOUtils.close(os);
 		}
@@ -101,10 +155,18 @@ public class FileStorageRestSupport {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
+		FileObject fileObject = fileStorage.getFileObject();
+		if (fileObject == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		response.setContentType(fileObject.getContentType());
+		response.addHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 		OutputStream os = response.getOutputStream();
 		try {
 			fileStorage.writeTo(os, 4 * 1024);
-		} finally {
+		}
+		finally {
 			IOUtils.flush(os);
 			IOUtils.close(os);
 		}
@@ -142,8 +204,14 @@ public class FileStorageRestSupport {
 		String prettyFilename = uploadFileRequest.getName();
 		if (StringUtils.isEmpty(prettyFilename)) {
 			prettyFilename = originalFileName;
-		} else {
-			prettyFilename += '.' + suffix;
+		}
+		else {
+			String suffixOfName = FilenameUtils.getExtension(prettyFilename);
+			if (suffix != null) {
+				if (suffixOfName == null || !suffixOfName.equalsIgnoreCase(suffix)) {
+					prettyFilename += '.' + suffix;
+				}
+			}
 		}
 		result.setPrettyFilename(prettyFilename);
 
@@ -153,7 +221,8 @@ public class FileStorageRestSupport {
 			contentType = multipartFile.getContentType();
 			if ("image/pjpeg".equals(contentType) || "image/jpg".equals(contentType)) {
 				contentType = "image/jpeg";
-			} else if ("image/x-png".equals(contentType)) {
+			}
+			else if ("image/x-png".equals(contentType)) {
 				contentType = "image/png";
 			}
 		}

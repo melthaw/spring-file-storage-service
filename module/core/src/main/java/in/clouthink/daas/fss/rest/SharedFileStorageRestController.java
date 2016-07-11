@@ -8,7 +8,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,8 +35,8 @@ public class SharedFileStorageRestController implements InitializingBean {
 
 	@RequestMapping(value = "/fileStorageMetadata", method = RequestMethod.GET)
 	@ResponseBody
-	public Properties getFileStorageMetadata(HttpServletRequest request, HttpServletResponse response) throws
-																									   IOException {
+	public Properties getFileStorageMetadata(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		return fileStorageService.getStorageMetadata().getPublicProperties();
 	}
 
@@ -55,9 +58,8 @@ public class SharedFileStorageRestController implements InitializingBean {
 
 	@RequestMapping(value = "/files", method = RequestMethod.POST)
 	@ResponseBody
-	public String upload(UploadFileRequest uploadFileRequest,
-						 HttpServletRequest request,
-						 HttpServletResponse response) throws IOException {
+	public String upload(UploadFileRequest uploadFileRequest, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		FileObject fileObject = fileStorageRestSupport.upload(uploadFileRequest, request, response);
 		return fileObject.getId();
 	}
@@ -73,8 +75,8 @@ public class SharedFileStorageRestController implements InitializingBean {
 
 	@RequestMapping(value = "/files/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public void downloadById(@PathVariable String id, HttpServletRequest request, HttpServletResponse response) throws
-																												IOException {
+	public void downloadById(@PathVariable String id, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		fileStorageRestSupport.downloadById(id, response);
 	}
 
