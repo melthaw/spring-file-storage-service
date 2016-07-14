@@ -1,23 +1,54 @@
 package in.clouthink.daas.fss.mongodb.model;
 
+import in.clouthink.daas.fss.core.FileStorageRequest;
+import in.clouthink.daas.fss.core.MutableFileObject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by dz on 16/3/29.
+ * @author dz
  */
 @Document(collection = "FileObjects")
-public class FileObject implements in.clouthink.daas.fss.core.FileObject {
+public class FileObject implements MutableFileObject {
+
+	public static FileObject from(in.clouthink.daas.fss.core.FileObject fromObject) {
+		FileObject result = new FileObject();
+		BeanUtils.copyProperties(fromObject, result);
+		if (result.getAttributes() == null) {
+			result.setAttributes(new HashMap<String,String>());
+		}
+		return result;
+	}
+
+	public static FileObject from(FileStorageRequest request) {
+		FileObject result = new FileObject();
+		BeanUtils.copyProperties(request, result);
+		if (result.getAttributes() == null) {
+			result.setAttributes(new HashMap<String,String>());
+		}
+		return result;
+	}
 
 	@Id
 	private String id;
 
-	@Indexed
 	private String category;
+
+	private String code;
+
+	@Indexed
+	private String name;
+
+	private String description;
+
+	@Indexed
+	private String bizId;
 
 	@Indexed
 	private String finalFilename;
@@ -34,14 +65,11 @@ public class FileObject implements in.clouthink.daas.fss.core.FileObject {
 	@Indexed
 	private Date uploadedAt;
 
+	private long size;
+
 	private int version;
 
-	private String code;
-
-	@Indexed
-	private String bizId;
-
-	private Map<String, String> attributes;
+	private Map<String,String> attributes = new HashMap<String,String>();
 
 	@Override
 	public String getId() {
@@ -59,6 +87,42 @@ public class FileObject implements in.clouthink.daas.fss.core.FileObject {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	@Override
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Override
+	public String getBizId() {
+		return bizId;
+	}
+
+	public void setBizId(String bizId) {
+		this.bizId = bizId;
 	}
 
 	@Override
@@ -116,6 +180,15 @@ public class FileObject implements in.clouthink.daas.fss.core.FileObject {
 	}
 
 	@Override
+	public long getSize() {
+		return size;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
+	}
+
+	@Override
 	public int getVersion() {
 		return version;
 	}
@@ -125,29 +198,11 @@ public class FileObject implements in.clouthink.daas.fss.core.FileObject {
 	}
 
 	@Override
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	@Override
-	public String getBizId() {
-		return bizId;
-	}
-
-	public void setBizId(String bizId) {
-		this.bizId = bizId;
-	}
-
-	@Override
-	public Map<String, String> getAttributes() {
+	public Map<String,String> getAttributes() {
 		return attributes;
 	}
 
-	public void setAttributes(Map<String, String> attributes) {
+	public void setAttributes(Map<String,String> attributes) {
 		this.attributes = attributes;
 	}
 }

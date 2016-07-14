@@ -3,7 +3,7 @@ package in.clouthink.daas.fss.rest;
 import java.util.Map;
 
 /**
- * Created by dz on 16/3/29.
+ * @author dz
  */
 public class UploadFileRequest {
 
@@ -13,13 +13,17 @@ public class UploadFileRequest {
 
 	private String name;
 
+	private String description;
+
 	private String bizId;
+
+	private String prettyFilename;
 
 	private String uploadedBy;
 
 	private String contentType;
 
-	private Map<String, String> attributes;
+	private Map<String,String> attributes;
 
 	public String getCategory() {
 		return category;
@@ -45,12 +49,28 @@ public class UploadFileRequest {
 		this.name = name;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String getBizId() {
 		return bizId;
 	}
 
 	public void setBizId(String bizId) {
 		this.bizId = bizId;
+	}
+
+	public String getPrettyFilename() {
+		return prettyFilename;
+	}
+
+	public void setPrettyFilename(String prettyFilename) {
+		this.prettyFilename = prettyFilename;
 	}
 
 	public String getUploadedBy() {
@@ -69,11 +89,11 @@ public class UploadFileRequest {
 		this.contentType = contentType;
 	}
 
-	public Map<String, String> getAttributes() {
+	public Map<String,String> getAttributes() {
 		return attributes;
 	}
 
-	public void setAttributes(Map<String, String> attributes) {
+	public void setAttributes(Map<String,String> attributes) {
 		this.attributes = attributes;
 	}
 }

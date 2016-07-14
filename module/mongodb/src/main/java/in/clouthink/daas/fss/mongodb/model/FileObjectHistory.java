@@ -7,12 +7,30 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by dz on 16/3/29.
+ * @author dz
  */
 @Document(collection = "FileObjectHistories")
 public class FileObjectHistory implements in.clouthink.daas.fss.core.FileObjectHistory {
+
+	public static FileObjectHistory from(FileObject fileObjectImpl) {
+		FileObjectHistory result = new FileObjectHistory();
+		result.setFileObject(fileObjectImpl);
+		result.setFinalFilename(fileObjectImpl.getFinalFilename());
+		result.setOriginalFilename(fileObjectImpl.getOriginalFilename());
+		result.setPrettyFilename(fileObjectImpl.getPrettyFilename());
+
+		result.setContentType(fileObjectImpl.getContentType());
+		result.setUploadedBy(fileObjectImpl.getUploadedBy());
+		result.setUploadedAt(fileObjectImpl.getUploadedAt());
+		result.setVersion(fileObjectImpl.getVersion());
+		result.setSize(fileObjectImpl.getSize());
+		result.setAttributes(fileObjectImpl.getAttributes());
+		return result;
+	}
 
 	@Id
 	private String id;
@@ -35,7 +53,11 @@ public class FileObjectHistory implements in.clouthink.daas.fss.core.FileObjectH
 
 	private Date uploadedAt;
 
+	private long size;
+
 	private int version;
+
+	private Map<String,String> attributes = new HashMap<String,String>();
 
 	@Override
 	public String getId() {
@@ -116,5 +138,23 @@ public class FileObjectHistory implements in.clouthink.daas.fss.core.FileObjectH
 
 	public void setVersion(int version) {
 		this.version = version;
+	}
+
+	@Override
+	public long getSize() {
+		return size;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
+	}
+
+	@Override
+	public Map<String,String> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Map<String,String> attributes) {
+		this.attributes = attributes;
 	}
 }

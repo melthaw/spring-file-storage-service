@@ -5,7 +5,7 @@ import in.clouthink.daas.fss.mongodb.repository.FileObjectQueryParameter;
 import java.util.Date;
 
 /**
- * Created by dz on 16/4/5.
+* @author dz
  */
 public class DefaultFileObjectQueryParameter implements FileObjectQueryParameter {
 

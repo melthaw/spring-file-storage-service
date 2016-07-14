@@ -13,7 +13,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 /**
- * Created by dz on 16/3/29.
+* @author dz
  */
 @Configuration
 @ComponentScan({"in.clouthink.daas.fss.mongodb.model"})

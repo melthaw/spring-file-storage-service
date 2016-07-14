@@ -3,11 +3,11 @@ package in.clouthink.daas.fss.mongodb.spiImpl;
 import in.clouthink.daas.edm.Edms;
 import in.clouthink.daas.fss.core.FileObject;
 import in.clouthink.daas.fss.core.FileObjectHistory;
-import in.clouthink.daas.fss.spi.FileObjectService;
 import in.clouthink.daas.fss.core.FileStorageException;
+import in.clouthink.daas.fss.core.FileStorageRequest;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectHistoryRepository;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectRepository;
-import in.clouthink.daas.fss.mongodb.service.FileObjectServiceExtension;
+import in.clouthink.daas.fss.spi.MutableFileObjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -16,9 +16,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by dz on 16/3/29.
+ * @author dz
  */
-public class FileObjectServiceImpl implements FileObjectService, FileObjectServiceExtension {
+public class FileObjectServiceImpl implements MutableFileObjectService {
 
 	@Autowired
 	private FileObjectRepository fileObjectRepository;
@@ -27,15 +27,52 @@ public class FileObjectServiceImpl implements FileObjectService, FileObjectServi
 	private FileObjectHistoryRepository fileObjectHistoryRepository;
 
 	@Override
-	public FileObject save(FileObject fileObject) {
-		in.clouthink.daas.fss.mongodb.model.FileObject fileObjectImpl = (in.clouthink.daas.fss.mongodb.model.FileObject) fileObject;
-
-		if (StringUtils.isEmpty(fileObjectImpl.getOriginalFilename())) {
+	public FileObject merge(FileStorageRequest request, FileObject fileObject) {
+		if (StringUtils.isEmpty(request.getOriginalFilename())) {
 			throw new FileStorageException("The originalFilename is required.");
 		}
-		if (StringUtils.isEmpty(fileObjectImpl.getUploadedBy())) {
+		if (StringUtils.isEmpty(request.getUploadedBy())) {
 			throw new FileStorageException("The uploadedBy is required.");
 		}
+
+		in.clouthink.daas.fss.mongodb.model.FileObject fileObjectImpl = (in.clouthink.daas.fss.mongodb.model.FileObject) fileObject;
+		//only the file part is merged
+		fileObjectImpl.setOriginalFilename(request.getOriginalFilename());
+		fileObjectImpl.setPrettyFilename(request.getPrettyFilename());
+		fileObjectImpl.setContentType(request.getContentType());
+		fileObjectImpl.setSize(request.getSize());
+		fileObjectImpl.setUploadedBy(request.getUploadedBy());
+		fileObjectImpl.setUploadedAt(new Date());
+		if (StringUtils.isEmpty(fileObjectImpl.getPrettyFilename())) {
+			fileObjectImpl.setPrettyFilename(fileObjectImpl.getOriginalFilename());
+		}
+		if (fileObjectImpl.getVersion() == 0) {
+			fileObjectImpl.setVersion(1);
+		}
+		else {
+			fileObjectImpl.setVersion(fileObjectImpl.getVersion() + 1);
+		}
+
+		return fileObjectImpl;
+	}
+
+	@Override
+	public FileObject save(FileObject fileObject) {
+		if (StringUtils.isEmpty(fileObject.getOriginalFilename())) {
+			throw new FileStorageException("The originalFilename is required.");
+		}
+		if (StringUtils.isEmpty(fileObject.getUploadedBy())) {
+			throw new FileStorageException("The uploadedBy is required.");
+		}
+
+		in.clouthink.daas.fss.mongodb.model.FileObject fileObjectImpl = null;
+		if (fileObject instanceof in.clouthink.daas.fss.mongodb.model.FileObject) {
+			fileObjectImpl = (in.clouthink.daas.fss.mongodb.model.FileObject) fileObject;
+		}
+		else {
+			fileObjectImpl = in.clouthink.daas.fss.mongodb.model.FileObject.from(fileObject);
+		}
+
 		if (fileObjectImpl.getUploadedAt() == null) {
 			fileObjectImpl.setUploadedAt(new Date());
 		}
@@ -69,30 +106,17 @@ public class FileObjectServiceImpl implements FileObjectService, FileObjectServi
 	}
 
 	@Override
-	public FileObject deleteByFinalFilename(String finalFilename) {
-		in.clouthink.daas.fss.mongodb.model.FileObject result = fileObjectRepository.findByFinalFilename(finalFilename);
-		if (result != null) {
-			fileObjectRepository.delete(result);
-			Edms.getEdm().dispatch("in.clouthink.daas.fss#delete", result);
-		}
-		return result;
-	}
-
-	@Override
 	public FileObjectHistory saveAsHistory(FileObject fileObject) {
-		in.clouthink.daas.fss.mongodb.model.FileObject fileObjectImpl = (in.clouthink.daas.fss.mongodb.model.FileObject) fileObject;
-		in.clouthink.daas.fss.mongodb.model.FileObjectHistory result = new in.clouthink.daas.fss.mongodb.model.FileObjectHistory();
+		in.clouthink.daas.fss.mongodb.model.FileObject fileObjectImpl = null;
+		if (fileObject instanceof in.clouthink.daas.fss.mongodb.model.FileObject) {
+			fileObjectImpl = (in.clouthink.daas.fss.mongodb.model.FileObject) fileObject;
+		}
+		else {
+			fileObjectImpl = in.clouthink.daas.fss.mongodb.model.FileObject.from(fileObject);
+		}
 
-		result.setFileObject(fileObjectImpl);
-		result.setFinalFilename(fileObjectImpl.getFinalFilename());
-		result.setOriginalFilename(fileObjectImpl.getOriginalFilename());
-		result.setPrettyFilename(fileObjectImpl.getPrettyFilename());
-
-		result.setContentType(fileObjectImpl.getContentType());
-		result.setUploadedBy(fileObjectImpl.getUploadedBy());
-		result.setUploadedAt(fileObjectImpl.getUploadedAt());
-		result.setVersion(fileObjectImpl.getVersion());
-
+		in.clouthink.daas.fss.mongodb.model.FileObjectHistory result = in.clouthink.daas.fss.mongodb.model.FileObjectHistory
+				.from(fileObjectImpl);
 		return fileObjectHistoryRepository.save(result);
 	}
 
@@ -103,4 +127,5 @@ public class FileObjectServiceImpl implements FileObjectService, FileObjectServi
 		result.addAll(fileObjectHistoryRepository.findByFileObject(fileObjectImpl));
 		return result;
 	}
+
 }

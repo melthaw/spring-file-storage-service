@@ -1,9 +1,12 @@
 package in.clouthink.daas.fss.core;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
- * Created by dz on 16/3/28.
+ * The file object update history (version management), the category, code, bizId can't be changed.
+ *
+ * @author dz
  */
 public interface FileObjectHistory {
 
@@ -23,6 +26,10 @@ public interface FileObjectHistory {
 
 	Date getUploadedAt();
 
+	long getSize();
+
 	int getVersion();
+
+	Map<String,String> getAttributes();
 
 }

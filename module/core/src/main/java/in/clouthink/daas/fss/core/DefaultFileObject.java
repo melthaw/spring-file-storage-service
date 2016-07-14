@@ -1,14 +1,32 @@
 package in.clouthink.daas.fss.core;
 
+import org.springframework.beans.BeanUtils;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The default implementation for the <code>FileStorageRequest</code>
- *
  * @author dz
  */
-public class DefaultFileStorageRequest implements FileStorageRequest {
+public class DefaultFileObject implements MutableFileObject {
+
+	public static DefaultFileObject from(FileStorageRequest request) {
+		if (request == null) {
+			return null;
+		}
+		if (request instanceof DefaultFileObject) {
+			return (DefaultFileObject) request;
+		}
+		DefaultFileObject fileObject = new DefaultFileObject();
+		BeanUtils.copyProperties(request, fileObject);
+		if (fileObject.getAttributes() == null) {
+			fileObject.setAttributes(new HashMap<String,String>());
+		}
+		return fileObject;
+	}
+
+	private String id;
 
 	private String category;
 
@@ -20,17 +38,32 @@ public class DefaultFileStorageRequest implements FileStorageRequest {
 
 	private String bizId;
 
+	private String finalFilename;
+
 	private String originalFilename;
 
 	private String prettyFilename;
 
 	private String contentType;
 
-	private String uploadedBy;
-
 	private long size;
 
+	private Date uploadedAt;
+
+	private String uploadedBy;
+
+	private int version;
+
 	private Map<String,String> attributes = new HashMap<String,String>();
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	@Override
 	public String getCategory() {
@@ -78,6 +111,15 @@ public class DefaultFileStorageRequest implements FileStorageRequest {
 	}
 
 	@Override
+	public String getFinalFilename() {
+		return finalFilename;
+	}
+
+	public void setFinalFilename(String finalFilename) {
+		this.finalFilename = finalFilename;
+	}
+
+	@Override
 	public String getOriginalFilename() {
 		return originalFilename;
 	}
@@ -105,6 +147,24 @@ public class DefaultFileStorageRequest implements FileStorageRequest {
 	}
 
 	@Override
+	public long getSize() {
+		return size;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
+	}
+
+	@Override
+	public Date getUploadedAt() {
+		return uploadedAt;
+	}
+
+	public void setUploadedAt(Date uploadedAt) {
+		this.uploadedAt = uploadedAt;
+	}
+
+	@Override
 	public String getUploadedBy() {
 		return uploadedBy;
 	}
@@ -114,12 +174,12 @@ public class DefaultFileStorageRequest implements FileStorageRequest {
 	}
 
 	@Override
-	public long getSize() {
-		return size;
+	public int getVersion() {
+		return version;
 	}
 
-	public void setSize(long size) {
-		this.size = size;
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 	@Override
@@ -130,4 +190,5 @@ public class DefaultFileStorageRequest implements FileStorageRequest {
 	public void setAttributes(Map<String,String> attributes) {
 		this.attributes = attributes;
 	}
+
 }

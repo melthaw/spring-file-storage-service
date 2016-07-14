@@ -1,22 +1,39 @@
 package in.clouthink.daas.fss.spi;
 
+import in.clouthink.daas.fss.core.FileObject;
 import in.clouthink.daas.fss.core.FileStorage;
-import in.clouthink.daas.fss.core.FileStorageMetadata;
 import in.clouthink.daas.fss.core.FileStorageRequest;
 
 import java.io.InputStream;
+import java.util.Map;
 
 /**
- * Created by dz on 16/3/28.
+ * The file storage service abstraction which service for the store and withdraw the file object.
+ * <p>
+ *
+ * @author dz on 16/3/28.
  */
 public interface FileStorageService {
 
 	/**
-	 * Get the file storage metadata of the implementation
-	 *
+	 * @param id the id of the file object
 	 * @return
 	 */
-	FileStorageMetadata getStorageMetadata();
+	FileStorage findById(String id);
+
+	/**
+	 * @param filename the final filename of the file object
+	 * @return
+	 */
+	FileStorage findByFilename(String filename);
+
+	/**
+	 * The extra attributes for the file object
+	 *
+	 * @param fileObject
+	 * @return
+	 */
+	Map<String,Object> buildExtraAttributes(FileObject fileObject);
 
 	/**
 	 * Store the file object
@@ -36,17 +53,5 @@ public interface FileStorageService {
 	 * @return
 	 */
 	FileStorage restore(String previousId, InputStream inputStream, FileStorageRequest request);
-
-	/**
-	 * @param id the id of the file object
-	 * @return
-	 */
-	FileStorage findById(String id);
-
-	/**
-	 * @param filename the final filename of the file object
-	 * @return
-	 */
-	FileStorage findByFilename(String filename);
 
 }

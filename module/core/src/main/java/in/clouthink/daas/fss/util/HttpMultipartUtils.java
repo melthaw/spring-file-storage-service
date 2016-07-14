@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Iterator;
 
 /**
- * Created by dz on 16/3/29.
+* @author dz
  */
 public abstract class HttpMultipartUtils {
 

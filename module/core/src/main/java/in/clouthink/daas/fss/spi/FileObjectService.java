@@ -6,22 +6,18 @@ import in.clouthink.daas.fss.core.FileObjectHistory;
 import java.util.List;
 
 /**
- * Created by dz on 16/3/28.
+ * The file object and the associated attributes is stored in the file storage server.
+ * To improve the file object(not physical object) access performance,
+ * we need the file object service which save the file object attributes on the local database.
+ * <p>
+* @author dz on 16/3/28.
  */
 public interface FileObjectService {
-
-	FileObject save(FileObject fileObject);
 
 	FileObject findById(String id);
 
 	FileObject findByFinalFilename(String finalFileName);
 
-	FileObject deleteById(String id);
-
-	FileObject deleteByFinalFilename(String finalFileName);
-
-	FileObjectHistory saveAsHistory(FileObject fileObject);
-
-	List<FileObjectHistory> findHistoryById(String fileObjectId);
+	List<FileObjectHistory> findHistoryById(String id);
 
 }

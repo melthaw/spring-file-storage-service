@@ -1,7 +1,7 @@
 package in.clouthink.daas.fss.core;
 
 /**
- * Created by dz on 16/3/29.
+* @author dz
  */
 public class FileStorageException extends RuntimeException {
 

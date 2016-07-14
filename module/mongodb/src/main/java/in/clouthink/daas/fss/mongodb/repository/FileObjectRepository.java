@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Date;
 
 /**
- * Created by dz on 16/3/29.
+* @author dz
  */
 public interface FileObjectRepository extends AbstractRepository<FileObject>, FileObjectRepositoryCustom {
 

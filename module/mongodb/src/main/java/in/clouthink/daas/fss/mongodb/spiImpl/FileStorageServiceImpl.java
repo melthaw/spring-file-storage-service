@@ -7,51 +7,50 @@ import com.mongodb.gridfs.GridFSInputFile;
 import in.clouthink.daas.edm.Edms;
 import in.clouthink.daas.edm.EventListener;
 import in.clouthink.daas.fss.core.*;
-import in.clouthink.daas.fss.core.FileObject;
-import in.clouthink.daas.fss.mongodb.model.*;
-import in.clouthink.daas.fss.mongodb.service.GridFSDBFileProvider;
 import in.clouthink.daas.fss.mongodb.service.GridFSService;
-import in.clouthink.daas.fss.spi.FileObjectService;
 import in.clouthink.daas.fss.spi.FileStorageService;
+import in.clouthink.daas.fss.spi.MutableFileObjectService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
- * Created by dz on 16/3/29.
+ * @author dz
  */
 public class FileStorageServiceImpl implements FileStorageService, EventListener<FileObject>, InitializingBean {
 
-	private final DefaultFileStorageMetadata metadata = new DefaultFileStorageMetadata();
+	private static final Log logger = LogFactory.getLog(FileStorageServiceImpl.class);
 
 	@Autowired
-	private FileObjectService fileObjectService;
+	private MutableFileObjectService fileObjectService;
 
 	@Autowired
 	private GridFSService gridFSService;
 
 	@Override
-	public FileStorageMetadata getStorageMetadata() {
-		return metadata;
+	public Map<String,Object> buildExtraAttributes(FileObject fileObject) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("downloadUrl", String.format("/api/files/%s/download", fileObject.getId()));
+		return result;
 	}
 
 	@Override
 	public FileStorage store(InputStream inputStream, FileStorageRequest request) {
-		final in.clouthink.daas.fss.mongodb.model.FileObject fileObject = new in.clouthink.daas.fss.mongodb.model.FileObject();
-		copy(request, fileObject);
-
-		GridFSInputFile gridFSInputFile = storeFile(inputStream, request);
+		final in.clouthink.daas.fss.mongodb.model.FileObject fileObject = createMongodbFileObject(request);
+		updateGridfsPart(fileObject);
+		doStore(inputStream, fileObject);
 		fileObjectService.save(fileObject);
 
-		return new FileStorageImpl(fileObject, new GridFSDBFileProvider() {
-			@Override
-			public GridFSDBFile getGridFSDBFile() {
-				return gridFSService.getGridFS().findOne(fileObject.getFinalFilename());
-			}
-		});
+		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getFinalFilename());
+		return new FileStorageImpl(fileObject, gridFSDBFile);
 	}
 
 	@Override
@@ -59,25 +58,20 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		if (StringUtils.isEmpty(id)) {
 			throw new FileStorageException("The file object id is required.");
 		}
-		final in.clouthink.daas.fss.mongodb.model.FileObject fileObject = (in.clouthink.daas.fss.mongodb.model.FileObject) fileObjectService
-				.findById(id);
+		FileObject fileObject = fileObjectService.findById(id);
 		if (fileObject == null) {
 			throw new FileStorageException("The file object of specified id is not found.");
 		}
 
-		GridFSInputFile gridFSInputFile = storeFile(inputStream, request);
-
 		fileObjectService.saveAsHistory(fileObject);
 
-		merge(request, fileObject);
+		fileObject = fileObjectService.merge(request, fileObject);
+		updateGridfsPart((MutableFileObject) fileObject);
+		fileObject = doStore(inputStream, fileObject);
 		fileObjectService.save(fileObject);
 
-		return new FileStorageImpl(fileObject, new GridFSDBFileProvider() {
-			@Override
-			public GridFSDBFile getGridFSDBFile() {
-				return gridFSService.getGridFS().findOne(fileObject.getFinalFilename());
-			}
-		});
+		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getFinalFilename());
+		return new FileStorageImpl(fileObject, gridFSDBFile);
 	}
 
 	@Override
@@ -86,12 +80,9 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		if (fileObject == null) {
 			return null;
 		}
-		return new FileStorageImpl(fileObject, new GridFSDBFileProvider() {
-			@Override
-			public GridFSDBFile getGridFSDBFile() {
-				return gridFSService.getGridFS().findOne(fileObject.getFinalFilename());
-			}
-		});
+
+		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getFinalFilename());
+		return new FileStorageImpl(fileObject, gridFSDBFile);
 	}
 
 	@Override
@@ -100,12 +91,9 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		if (fileObject == null) {
 			return null;
 		}
-		return new FileStorageImpl(fileObject, new GridFSDBFileProvider() {
-			@Override
-			public GridFSDBFile getGridFSDBFile() {
-				return gridFSService.getGridFS().findOne(fileObject.getFinalFilename());
-			}
-		});
+
+		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getFinalFilename());
+		return new FileStorageImpl(fileObject, gridFSDBFile);
 	}
 
 	@Override
@@ -113,57 +101,62 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		gridFSService.getGridFS().remove(fileObject.getFinalFilename());
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		Edms.getEdm().register("in.clouthink.daas.fss#delete", this);
-	}
+	private in.clouthink.daas.fss.mongodb.model.FileObject createMongodbFileObject(FileStorageRequest request) {
+		//validate
+		if (StringUtils.isEmpty(request.getOriginalFilename())) {
+			throw new FileStorageException("The originalFilename is required.");
+		}
+		if (StringUtils.isEmpty(request.getUploadedBy())) {
+			throw new FileStorageException("The uploadedBy is required.");
+		}
 
-	private void copy(FileStorageRequest request, in.clouthink.daas.fss.mongodb.model.FileObject fileObject) {
-		fileObject.setCode(request.getCode());
-		fileObject.setBizId(request.getBizId());
-		fileObject.setCategory(request.getCategory());
-		fileObject.setAttributes(request.getAttributes());
-		fileObject.setOriginalFilename(request.getOriginalFilename());
-		fileObject.setPrettyFilename(request.getPrettyFilename());
-		fileObject.setFinalFilename(request.getFinalFilename());
-		fileObject.setContentType(request.getContentType());
-		fileObject.setUploadedBy(request.getUploadedBy());
-		fileObject.setUploadedAt(new Date());
+		//create file object from request
+		in.clouthink.daas.fss.mongodb.model.FileObject fileObject = in.clouthink.daas.fss.mongodb.model.FileObject.from(
+				request);
+
+		//pretty filename
+		if (StringUtils.isEmpty(fileObject.getPrettyFilename())) {
+			fileObject.setPrettyFilename(fileObject.getOriginalFilename());
+		}
+
+		//version
 		fileObject.setVersion(1);
+
+		//uploaded at
+		Date uploadedAt = new Date();
+		fileObject.setUploadedAt(uploadedAt);
+		//
+
+		return fileObject;
 	}
 
-	private void merge(FileStorageRequest request, in.clouthink.daas.fss.mongodb.model.FileObject fileObject) {
-		if (!StringUtils.isEmpty(request.getCode())) {
-			fileObject.setCode(request.getCode());
+	private void updateGridfsPart(MutableFileObject fileObject) {
+		//gridfs filename
+		String finalFilename = UUID.randomUUID().toString().replace("-", "");
+		String extName = in.clouthink.daas.fss.repackage.org.apache.commons.io.FilenameUtils.getExtension(fileObject.getOriginalFilename());
+		if (!StringUtils.isEmpty(extName)) {
+			finalFilename += "." + extName;
 		}
-		if (!StringUtils.isEmpty(request.getBizId())) {
-			fileObject.setBizId(request.getBizId());
-		}
-		if (!StringUtils.isEmpty(request.getCategory())) {
-			fileObject.setCategory(request.getCategory());
-		}
-		if (request.getAttributes() != null) {
-			fileObject.getAttributes().putAll(request.getAttributes());
-		}
-		fileObject.setOriginalFilename(request.getOriginalFilename());
-		fileObject.setPrettyFilename(request.getPrettyFilename());
-		fileObject.setFinalFilename(request.getFinalFilename());
-		fileObject.setContentType(request.getContentType());
-		fileObject.setUploadedBy(request.getUploadedBy());
-		fileObject.setUploadedAt(new Date());
-		fileObject.setVersion(fileObject.getVersion() + 1);
+		fileObject.setFinalFilename(finalFilename);
+		//extra attributes
+		fileObject.getAttributes().put("fss-provider", "gridfs");
 	}
 
-	private GridFSInputFile storeFile(InputStream inputStream, FileStorageRequest request) {
+	private FileObject doStore(InputStream inputStream, FileObject fileObject) {
 		GridFSInputFile gfsInputFile = gridFSService.getGridFS().createFile(inputStream);
-		gfsInputFile.setFilename(request.getFinalFilename());
-		gfsInputFile.setContentType(request.getContentType());
-		if (request.getAttributes() != null) {
-			DBObject dbObject = new BasicDBObject(request.getAttributes());
+		gfsInputFile.setFilename(fileObject.getFinalFilename());
+		gfsInputFile.setContentType(fileObject.getContentType());
+		if (fileObject.getAttributes() != null) {
+			DBObject dbObject = new BasicDBObject(fileObject.getAttributes());
 			gfsInputFile.setMetaData(dbObject);
 		}
 		gfsInputFile.save();
-		return gfsInputFile;
+		return fileObject;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		Edms.getEdm().register("in.clouthink.daas.fss#delete", this);
 	}
 
 }

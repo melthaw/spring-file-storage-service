@@ -3,7 +3,10 @@ package in.clouthink.daas.fss.core;
 import java.util.Map;
 
 /**
- * Created by dz on 16/3/29.
+ * The
+ * <p>
+ *
+ * @author dz
  */
 public interface FileStorageRequest {
 
@@ -14,20 +17,74 @@ public interface FileStorageRequest {
 	 */
 	String getCategory();
 
-	String getFinalFilename();
-
-	String getOriginalFilename();
-
-	String getPrettyFilename();
-
-	String getContentType();
-
-	String getUploadedBy();
-
+	/**
+	 * The auxiliary file object code can help to quick find the file object.
+	 *
+	 * @return
+	 */
 	String getCode();
 
+	/**
+	 * The display name for the file object
+	 *
+	 * @return
+	 */
+	String getName();
+
+	/**
+	 * The description of the file object
+	 *
+	 * @return
+	 */
+	String getDescription();
+
+	/**
+	 * The biz object id which the uploaded file associated with.
+	 *
+	 * @return
+	 */
 	String getBizId();
 
-	Map<String, String> getAttributes();
+	/**
+	 * The original file name of store request
+	 *
+	 * @return
+	 */
+	String getOriginalFilename();
+
+	/**
+	 * The store request can specify the pretty file name for download in the future.
+	 *
+	 * @return
+	 */
+	String getPrettyFilename();
+
+	/**
+	 * The value of http header content type ( when download in the future , we will set it back to http response)
+	 *
+	 * @return
+	 */
+	String getContentType();
+
+	/**
+	 * Who upload the file
+	 *
+	 * @return
+	 */
+	String getUploadedBy();
+
+	/**
+	 * The size of uploaded file
+	 *
+	 * @return
+	 */
+	long getSize();
+
+	/**
+	 * The customized attributes which as extra metadata for the uploaded file
+	 *
+	 * @return
+	 */
+	Map<String,String> getAttributes();
 
 }

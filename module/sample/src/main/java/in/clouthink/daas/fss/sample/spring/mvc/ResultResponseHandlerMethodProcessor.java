@@ -1,6 +1,5 @@
 package in.clouthink.daas.fss.sample.spring.mvc;
 
-import in.clouthink.daas.fss.rest.ResultResponseBody;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;

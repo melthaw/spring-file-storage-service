@@ -3,7 +3,7 @@ package in.clouthink.daas.fss.util;
 import java.util.UUID;
 
 /**
- * Created by dz on 16/3/29.
+* @author dz
  */
 public abstract class IdentityUtils {
 

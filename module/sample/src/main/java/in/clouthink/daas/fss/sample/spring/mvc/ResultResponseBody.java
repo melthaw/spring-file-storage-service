@@ -1,4 +1,4 @@
-package in.clouthink.daas.fss.rest;
+package in.clouthink.daas.fss.sample.spring.mvc;
 
 import java.lang.annotation.*;
 

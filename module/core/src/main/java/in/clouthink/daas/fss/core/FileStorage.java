@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Created by dz on 16/3/28.
+ * The underlying file storage , which wrapped the uploaded file object with implementation
+ *
+* @author dz on 16/3/28.
  */
 public interface FileStorage {
 
