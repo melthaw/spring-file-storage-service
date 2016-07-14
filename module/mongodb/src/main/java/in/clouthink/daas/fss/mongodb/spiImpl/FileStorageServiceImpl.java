@@ -44,8 +44,8 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 
 	@Override
 	public FileStorage store(InputStream inputStream, FileStorageRequest request) {
-		final in.clouthink.daas.fss.mongodb.model.FileObject fileObject = createMongodbFileObject(request);
-		updateGridfsPart(fileObject);
+		FileObject fileObject = createMongodbFileObject(request);
+		updateGridfsPart((MutableFileObject) fileObject);
 		fileObject = doStore(inputStream, fileObject);
 		fileObject = fileObjectService.save(fileObject);
 
