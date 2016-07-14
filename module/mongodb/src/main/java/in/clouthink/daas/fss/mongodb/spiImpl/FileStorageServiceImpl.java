@@ -46,8 +46,8 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 	public FileStorage store(InputStream inputStream, FileStorageRequest request) {
 		final in.clouthink.daas.fss.mongodb.model.FileObject fileObject = createMongodbFileObject(request);
 		updateGridfsPart(fileObject);
-		doStore(inputStream, fileObject);
-		fileObjectService.save(fileObject);
+		fileObject = doStore(inputStream, fileObject);
+		fileObject = fileObjectService.save(fileObject);
 
 		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getFinalFilename());
 		return new FileStorageImpl(fileObject, gridFSDBFile);
@@ -68,7 +68,7 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		fileObject = fileObjectService.merge(request, fileObject);
 		updateGridfsPart((MutableFileObject) fileObject);
 		fileObject = doStore(inputStream, fileObject);
-		fileObjectService.save(fileObject);
+		fileObject = fileObjectService.save(fileObject);
 
 		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getFinalFilename());
 		return new FileStorageImpl(fileObject, gridFSDBFile);
