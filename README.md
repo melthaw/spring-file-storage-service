@@ -11,9 +11,10 @@ So far the following version is available
 
 module name | latest version
 ------|------
-daas-fss-core | 2.0.0
-daas-fss-mongodb| 2.0.0
-daas-fss-alioss| 2.0.0
+daas-fss-core | 3.0.0
+daas-fss-zimg| 3.0.0
+daas-fss-mongodb| 3.0.0
+daas-fss-alioss| 3.0.0
 
 ## Maven
 
@@ -37,6 +38,12 @@ daas-fss-alioss| 2.0.0
     
     <dependency>
         <groupId>in.clouthink.daas</groupId>
+        <artifactId>daas-fss-zimg</artifactId>
+        <version>${daas.fss.zimg.version}</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>in.clouthink.daas</groupId>
         <artifactId>daas-edm</artifactId>
         <version>1.0.1</version>
     </dependency>
@@ -44,9 +51,76 @@ daas-fss-alioss| 2.0.0
 ## Gradle
 
     compile "in.clouthink.daas:daas-fss-core:${daas_fss_core_version}"
+    compile "in.clouthink.daas:daas-fss-zimg:${daas_fss_zimg_version}"
     compile "in.clouthink.daas:daas-fss-mongodb:${daas_fss_mongodb_version}"
     compile "in.clouthink.daas:daas-fss-alioss:${daas_fss_alioss_version}"
     compile "in.clouthink.daas:daas-edm:1.0.1"
+
+
+# Usage 
+
+
+## Zimg
+
+
+### Quick Start
+
+Here is the sample code using in your application most frequently. 
+
+```java
+
+
+```
+
+Now let's make an explain how to make it running.
+
+### Prepare zimg server
+
+Let's quick start it by docker-compose 
+
+```yml
+
+
+
+```
+
+```bash
+
+```
+
+### Spring boot it
+
+Add new Java class named FssConfiguration annotated with `@Configuration` and create the `@Bean` 
+
+* FilePipe
+* FileStoreService
+* FileStoreRepository
+* ZimgClient
+
+Here is the sample:
+
+```java
+
+```
+
+### Zimg client Properties Configuration
+
+
+application.yml
+
+```yml
+
+```
+
+application.properties
+
+```properties
+
+```
+
+
+
+
 
 # Alioss configuration for example
 
@@ -103,6 +177,36 @@ Please populate the property value from the alioss you configured
 
 `TODO`
 
-# Appendix - SPI
+# Appendix - Build the source
 
-`TODO`
+Build all
+
+```shell
+mvn clean build
+```
+
+Build single project
+
+* core
+
+```shell
+mvn clean build -pl :modules/core -am
+```
+
+* zimg
+
+```shell
+mvn clean build -pl :modules/zimg -am
+```
+
+* alioss
+
+```shell
+mvn clean build -pl :modules/alioss -am
+```
+
+* mongodb
+
+```shell
+mvn clean build -pl :modules/mongodb -am
+```
