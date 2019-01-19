@@ -17,21 +17,21 @@ public interface FileStorageService {
 
 	/**
 	 * @param id the id of the file object
-	 * @return
+	 * @return FileStorage
 	 */
 	FileStorage findById(String id);
 
 	/**
 	 * @param filename the final filename of the file object
-	 * @return
+	 * @return FileStorage
 	 */
 	FileStorage findByFilename(String filename);
 
 	/**
 	 * The extra attributes for the file object
 	 *
-	 * @param fileObject
-	 * @return
+	 * @param fileObject the file object
+	 * @return Map<String,Object>
 	 */
 	Map<String,Object> buildExtraAttributes(FileObject fileObject);
 
@@ -39,8 +39,8 @@ public interface FileStorageService {
 	 * Store the file object
 	 *
 	 * @param inputStream just read from the input stream , but never close it
-	 * @param request
-	 * @return
+	 * @param request the file store request
+	 * @return FileStorage
 	 */
 	FileStorage store(InputStream inputStream, FileStorageRequest request);
 
@@ -49,8 +49,8 @@ public interface FileStorageService {
 	 *
 	 * @param previousId  the id of previous stored file object
 	 * @param inputStream just read from the input stream , but never close it
-	 * @param request
-	 * @return
+	 * @param request the file store request
+	 * @return FileStorage
 	 */
 	FileStorage restore(String previousId, InputStream inputStream, FileStorageRequest request);
 

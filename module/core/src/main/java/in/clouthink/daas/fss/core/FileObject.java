@@ -13,21 +13,21 @@ public interface FileObject extends FileStorageRequest {
 	/**
 	 * The identifier of the file object
 	 *
-	 * @return
+	 * @return id
 	 */
 	String getId();
 
 	/**
 	 * The final stored physical file name in backend (the final file name must be unique)
 	 *
-	 * @return
+	 * @return final file name
 	 */
 	String getFinalFilename();
 
 	/**
 	 * The date time when the file is uploaded
 	 *
-	 * @return
+	 * @return the time uploaded at
 	 */
 	Date getUploadedAt();
 
@@ -35,7 +35,7 @@ public interface FileObject extends FileStorageRequest {
 	 * The version of the uploaded file if the implementation
 	 * support the file object version management
 	 *
-	 * @return
+	 * @return version
 	 */
 	int getVersion();
 

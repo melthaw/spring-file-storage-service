@@ -27,8 +27,6 @@ public interface FileObjectDescriptor {
 
 	/**
 	 * The download url is based on the implementation, so it may be various in extra attributes .
-	 *
-	 * @return
 	 */
 	Map<String,Object> getExtraAttrs();
 

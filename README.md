@@ -173,7 +173,7 @@ Please populate the property value from the alioss you configured
     
     }
 
-# Gridfs configuration for example
+# Mongodb GridFS configuration for example
 
 `TODO`
 
@@ -182,7 +182,7 @@ Please populate the property value from the alioss you configured
 Build all
 
 ```shell
-mvn clean build
+mvn clean package
 ```
 
 Build single project
@@ -190,23 +190,31 @@ Build single project
 * core
 
 ```shell
-mvn clean build -pl :modules/core -am
+mvn -pl module/core clean package
+# or
+mvn --projects module/core clean package
 ```
 
 * zimg
 
 ```shell
-mvn clean build -pl :modules/zimg -am
+mvn -pl module/zimg lean package -am
+# or
+mvn --projects module/zimg clean package --also-make
 ```
 
 * alioss
 
 ```shell
-mvn clean build -pl :modules/alioss -am
+mvn -pl module/alioss clean package -am
+# or
+mvn --projects module/alioss clean package --also-make
 ```
 
 * mongodb
 
 ```shell
-mvn clean build -pl :modules/mongodb -am
+mvn -pl module/mongodb clean package -am
+# or
+mvn --projects module/mongodb clean package --also-make
 ```

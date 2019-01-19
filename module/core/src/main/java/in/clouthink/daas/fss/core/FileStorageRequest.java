@@ -13,77 +13,77 @@ public interface FileStorageRequest {
 	/**
 	 * for example :  android, ad, album, etc. we suggest to organize the file object by biz category
 	 *
-	 * @return
+	 * @return category
 	 */
 	String getCategory();
 
 	/**
 	 * The auxiliary file object code can help to quick find the file object.
 	 *
-	 * @return
+	 * @return code
 	 */
 	String getCode();
 
 	/**
 	 * The display name for the file object
 	 *
-	 * @return
+	 * @return name
 	 */
 	String getName();
 
 	/**
 	 * The description of the file object
 	 *
-	 * @return
+	 * @return description
 	 */
 	String getDescription();
 
 	/**
 	 * The biz object id which the uploaded file associated with.
 	 *
-	 * @return
+	 * @return the id of referenced biz object
 	 */
 	String getBizId();
 
 	/**
 	 * The original file name of store request
 	 *
-	 * @return
+	 * @return original file name
 	 */
 	String getOriginalFilename();
 
 	/**
 	 * The store request can specify the pretty file name for download in the future.
 	 *
-	 * @return
+	 * @return pretty file name
 	 */
 	String getPrettyFilename();
 
 	/**
 	 * The value of http header content type ( when download in the future , we will set it back to http response)
 	 *
-	 * @return
+	 * @return http header Content-Type
 	 */
 	String getContentType();
 
 	/**
 	 * Who upload the file
 	 *
-	 * @return
+	 * @return who
 	 */
 	String getUploadedBy();
 
 	/**
 	 * The size of uploaded file
 	 *
-	 * @return
+	 * @return size
 	 */
 	long getSize();
 
 	/**
 	 * The customized attributes which as extra metadata for the uploaded file
 	 *
-	 * @return
+	 * @return attributes
 	 */
 	Map<String,String> getAttributes();
 

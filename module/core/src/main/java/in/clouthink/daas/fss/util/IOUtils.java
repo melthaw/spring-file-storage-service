@@ -14,9 +14,6 @@ public abstract class IOUtils {
 
 	public static final int BUFFER_SIZE = 4 * 1024;
 
-	/**
-	 * @param x
-	 */
 	public final static void flush(Flushable x) {
 		if (x != null) {
 			try {
@@ -27,10 +24,6 @@ public abstract class IOUtils {
 		}
 	}
 
-
-	/**
-	 * @param x
-	 */
 	public final static void close(Closeable x) {
 		if (x != null) {
 			try {
@@ -41,11 +34,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param in
-	 * @return
-	 * @throws IOException
-	 */
 	public static byte[] copyToByteArray(File in) throws IOException {
 		if (in == null) {
 			throw new IllegalArgumentException("No input File specified");
@@ -53,12 +41,6 @@ public abstract class IOUtils {
 		return copyToByteArrayAndClose(new BufferedInputStream(new FileInputStream(in)));
 	}
 
-	/**
-	 * @param in
-	 * @param out
-	 * @return
-	 * @throws IOException
-	 */
 	public static int copy(InputStream in, OutputStream out) throws IOException {
 		if (in == null) {
 			throw new IllegalArgumentException("No InputStream specified");
@@ -78,12 +60,6 @@ public abstract class IOUtils {
 		return byteCount;
 	}
 
-	/**
-	 * @param in
-	 * @param out
-	 * @return
-	 * @throws IOException
-	 */
 	public static int copyAndClose(InputStream in, OutputStream out) throws IOException {
 		try {
 			return copy(in, out);
@@ -93,11 +69,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param in
-	 * @param out
-	 * @throws IOException
-	 */
 	public static void copy(byte[] in, OutputStream out) throws IOException {
 		if (in == null) {
 			throw new IllegalArgumentException("No input byte array specified");
@@ -108,11 +79,6 @@ public abstract class IOUtils {
 		out.write(in);
 	}
 
-	/**
-	 * @param in
-	 * @param out
-	 * @throws IOException
-	 */
 	public static void copyAndClose(byte[] in, OutputStream out) throws IOException {
 		try {
 			copy(in, out);
@@ -121,11 +87,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param in
-	 * @return
-	 * @throws IOException
-	 */
 	public static byte[] copyToByteArray(InputStream in) throws IOException {
 		ByteArrayOutputStream out = null;
 		try {
@@ -137,11 +98,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param in
-	 * @return
-	 * @throws IOException
-	 */
 	public static byte[] copyToByteArrayAndClose(InputStream in) throws IOException {
 		ByteArrayOutputStream out = null;
 		try {
@@ -154,12 +110,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param in
-	 * @param out
-	 * @return
-	 * @throws IOException
-	 */
 	public static int copy(Reader in, Writer out) throws IOException {
 		if (in == null) {
 			throw new IllegalArgumentException("No Reader specified");
@@ -179,12 +129,6 @@ public abstract class IOUtils {
 		return byteCount;
 	}
 
-	/**
-	 * @param in
-	 * @param out
-	 * @return
-	 * @throws IOException
-	 */
 	public static int copyAndClose(Reader in, Writer out) throws IOException {
 		try {
 			return copy(in, out);
@@ -194,11 +138,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param in
-	 * @param out
-	 * @throws IOException
-	 */
 	public static void copy(String in, Writer out) throws IOException {
 		if (in == null) {
 			throw new IllegalArgumentException("No input String specified");
@@ -210,11 +149,6 @@ public abstract class IOUtils {
 		out.write(in);
 	}
 
-	/**
-	 * @param in
-	 * @param out
-	 * @throws IOException
-	 */
 	public static void copyAndClose(String in, Writer out) throws IOException {
 		try {
 			copy(in, out);
@@ -223,11 +157,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param in
-	 * @return
-	 * @throws IOException
-	 */
 	public static String copyToString(Reader in) throws IOException {
 		StringWriter out = null;
 		try {
@@ -239,11 +168,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param in
-	 * @return
-	 * @throws IOException
-	 */
 	public static String copyToStringAndClose(Reader in) throws IOException {
 		try {
 			return copyToString(in);
@@ -252,10 +176,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param in
-	 * @return
-	 */
 	public static String readAsString(InputStream in) throws IOException {
 		InputStreamReader reader;
 		try {
@@ -266,10 +186,6 @@ public abstract class IOUtils {
 		return readAsString(reader);
 	}
 
-	/**
-	 * @param in
-	 * @return
-	 */
 	public static String readAsStringAndClose(InputStream in) throws IOException {
 		try {
 			return readAsString(in);
@@ -278,11 +194,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param resource
-	 * @return
-	 * @throws IOException
-	 */
 	public static String readAsString(String resource) throws IOException {
 		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
 		if (in == null) {
@@ -292,11 +203,6 @@ public abstract class IOUtils {
 		return readAsStringAndClose(in);
 	}
 
-	/**
-	 * @param resource
-	 * @return
-	 * @throws IOException
-	 */
 	public static byte[] readAsByteArray(String resource) throws IOException {
 		InputStream in = null;
 		try {
@@ -311,11 +217,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param input
-	 * @return
-	 * @throws IOException
-	 */
 	public static byte[] readAsByteArray(InputStream input) throws IOException {
 		ByteArrayOutputStream out = null;
 		try {
@@ -327,11 +228,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param input
-	 * @return
-	 * @throws IOException
-	 */
 	public static byte[] readAsByteArrayAndClose(InputStream input) throws IOException {
 		try {
 			return readAsByteArray(input);
@@ -340,10 +236,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param reader
-	 * @return
-	 */
 	public static String readAsString(Reader reader) throws IOException {
 		StringWriter writer = new StringWriter();
 		try {
@@ -359,10 +251,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param reader
-	 * @return
-	 */
 	public static String readAsStringAndClose(Reader reader) throws IOException {
 		try {
 			return readAsString(reader);
@@ -371,11 +259,6 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param reader
-	 * @param length
-	 * @return
-	 */
 	public static String readAsString(Reader reader, int length) throws IOException {
 		char[] buffer = new char[length];
 
@@ -394,11 +277,6 @@ public abstract class IOUtils {
 		return new String(buffer, 0, length - rest);
 	}
 
-	/**
-	 * @param reader
-	 * @param length
-	 * @return
-	 */
 	public static String readAsStringAndClose(Reader reader, int length) throws IOException {
 		try {
 			return readAsString(reader, length);
@@ -407,20 +285,12 @@ public abstract class IOUtils {
 		}
 	}
 
-	/**
-	 * @param ex
-	 * @return
-	 */
 	public static String getStackTrace(Throwable ex) {
 		StringWriter buf = new StringWriter();
 		ex.printStackTrace(new PrintWriter(buf));
 		return buf.toString();
 	}
 
-	/**
-	 * @param stackTrace
-	 * @return
-	 */
 	public static String toString(StackTraceElement[] stackTrace) {
 		StringBuilder buf = new StringBuilder();
 		for (StackTraceElement item : stackTrace) {
