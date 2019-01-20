@@ -42,22 +42,21 @@ daas-fss-alioss| 3.0.0
         <version>${daas.fss.zimg.version}</version>
     </dependency>
     
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-edm</artifactId>
-        <version>1.0.1</version>
-    </dependency>
-
 ## Gradle
 
     compile "in.clouthink.daas:daas-fss-core:${daas_fss_core_version}"
     compile "in.clouthink.daas:daas-fss-zimg:${daas_fss_zimg_version}"
     compile "in.clouthink.daas:daas-fss-mongodb:${daas_fss_mongodb_version}"
     compile "in.clouthink.daas:daas-fss-alioss:${daas_fss_alioss_version}"
-    compile "in.clouthink.daas:daas-edm:1.0.1"
 
 
 # Usage 
+
+## Spring Mvc
+
+```java
+
+```
 
 
 ## Zimg

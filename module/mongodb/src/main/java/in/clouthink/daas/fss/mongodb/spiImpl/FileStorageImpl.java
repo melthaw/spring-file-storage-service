@@ -1,7 +1,7 @@
 package in.clouthink.daas.fss.mongodb.spiImpl;
 
 import com.mongodb.gridfs.GridFSDBFile;
-import in.clouthink.daas.fss.core.FileObject;
+import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.core.FileStorage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -1,10 +1,10 @@
-package in.clouthink.daas.fss.core;
+package in.clouthink.daas.fss.domain.model;
 
 import java.util.Date;
 import java.util.Map;
 
 /**
- * The file object update history (version management), the category, code, bizId can't be changed.
+ * The file object update history (version management).
  *
  * @author dz
  */

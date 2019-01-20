@@ -14,12 +14,12 @@ import java.util.Map;
  * @author dz
  */
 @Document(collection = "FileObjectHistories")
-public class FileObjectHistory implements in.clouthink.daas.fss.core.FileObjectHistory {
+public class FileObjectHistory implements in.clouthink.daas.fss.domain.model.FileObjectHistory {
 
 	public static FileObjectHistory from(FileObject fileObjectImpl) {
 		FileObjectHistory result = new FileObjectHistory();
 		result.setFileObject(fileObjectImpl);
-		result.setFinalFilename(fileObjectImpl.getFinalFilename());
+		result.setFinalFilename(fileObjectImpl.getStoredFilename());
 		result.setOriginalFilename(fileObjectImpl.getOriginalFilename());
 		result.setPrettyFilename(fileObjectImpl.getPrettyFilename());
 

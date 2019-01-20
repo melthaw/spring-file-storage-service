@@ -1,7 +1,7 @@
-package in.clouthink.daas.fss.alioss.spiImpl;
+package in.clouthink.daas.fss.alioss.service.impl;
 
 import com.aliyun.oss.model.OSSObject;
-import in.clouthink.daas.fss.core.FileObject;
+import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.core.FileStorage;
 import in.clouthink.daas.fss.util.IOUtils;
 

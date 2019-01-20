@@ -2,7 +2,7 @@ package in.clouthink.daas.fss.mongodb;
 
 import in.clouthink.daas.fss.mongodb.service.GridFSService;
 import in.clouthink.daas.fss.mongodb.service.impl.GridFSServiceImpl;
-import in.clouthink.daas.fss.spi.FileObjectService;
+import in.clouthink.daas.fss.domain.service.FileObjectService;
 import in.clouthink.daas.fss.spi.FileStorageService;
 import in.clouthink.daas.fss.mongodb.spiImpl.FileObjectServiceImpl;
 import in.clouthink.daas.fss.mongodb.spiImpl.FileStorageServiceImpl;

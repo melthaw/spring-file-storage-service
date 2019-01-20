@@ -1,6 +1,6 @@
 package in.clouthink.daas.fss.mongodb.model;
 
-import in.clouthink.daas.fss.core.FileStorageRequest;
+import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.core.MutableFileObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
@@ -17,8 +17,9 @@ import java.util.Map;
 @Document(collection = "FileObjects")
 public class FileObject implements MutableFileObject {
 
-	public static FileObject from(in.clouthink.daas.fss.core.FileObject fromObject) {
-		FileObject result = new FileObject();
+	public static in.clouthink.daas.fss.mongodb.model.FileObject from(
+            in.clouthink.daas.fss.domain.model.FileObject fromObject) {
+		in.clouthink.daas.fss.mongodb.model.FileObject result = new in.clouthink.daas.fss.mongodb.model.FileObject();
 		BeanUtils.copyProperties(fromObject, result);
 		if (result.getAttributes() == null) {
 			result.setAttributes(new HashMap<String,String>());
@@ -26,8 +27,8 @@ public class FileObject implements MutableFileObject {
 		return result;
 	}
 
-	public static FileObject from(FileStorageRequest request) {
-		FileObject result = new FileObject();
+	public static in.clouthink.daas.fss.mongodb.model.FileObject from(StoreFileRequest request) {
+		in.clouthink.daas.fss.mongodb.model.FileObject result = new in.clouthink.daas.fss.mongodb.model.FileObject();
 		BeanUtils.copyProperties(request, result);
 		if (result.getAttributes() == null) {
 			result.setAttributes(new HashMap<String,String>());
@@ -126,7 +127,7 @@ public class FileObject implements MutableFileObject {
 	}
 
 	@Override
-	public String getFinalFilename() {
+	public String getStoredFilename() {
 		return finalFilename;
 	}
 

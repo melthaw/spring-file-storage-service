@@ -8,42 +8,7 @@ import java.util.Map;
  *
  * @author dz
  */
-public interface FileStorageRequest {
-
-	/**
-	 * for example :  android, ad, album, etc. we suggest to organize the file object by biz category
-	 *
-	 * @return category
-	 */
-	String getCategory();
-
-	/**
-	 * The auxiliary file object code can help to quick find the file object.
-	 *
-	 * @return code
-	 */
-	String getCode();
-
-	/**
-	 * The display name for the file object
-	 *
-	 * @return name
-	 */
-	String getName();
-
-	/**
-	 * The description of the file object
-	 *
-	 * @return description
-	 */
-	String getDescription();
-
-	/**
-	 * The biz object id which the uploaded file associated with.
-	 *
-	 * @return the id of referenced biz object
-	 */
-	String getBizId();
+public interface StoreFileRequest {
 
 	/**
 	 * The original file name of store request
@@ -85,6 +50,6 @@ public interface FileStorageRequest {
 	 *
 	 * @return attributes
 	 */
-	Map<String,String> getAttributes();
+	Map<String, String> getAttributes();
 
 }

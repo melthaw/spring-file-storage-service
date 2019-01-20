@@ -1,10 +1,10 @@
 package in.clouthink.daas.fss.mongodb.spiImpl;
 
 import in.clouthink.daas.edm.Edms;
-import in.clouthink.daas.fss.core.FileObject;
-import in.clouthink.daas.fss.core.FileObjectHistory;
-import in.clouthink.daas.fss.core.FileStorageException;
-import in.clouthink.daas.fss.core.FileStorageRequest;
+import in.clouthink.daas.fss.domain.model.FileObject;
+import in.clouthink.daas.fss.domain.model.FileObjectHistory;
+import in.clouthink.daas.fss.core.StoreFileException;
+import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectHistoryRepository;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectRepository;
 import in.clouthink.daas.fss.spi.MutableFileObjectService;
@@ -27,12 +27,12 @@ public class FileObjectServiceImpl implements MutableFileObjectService {
 	private FileObjectHistoryRepository fileObjectHistoryRepository;
 
 	@Override
-	public FileObject merge(FileStorageRequest request, FileObject fileObject) {
+	public FileObject merge(StoreFileRequest request, FileObject fileObject) {
 		if (StringUtils.isEmpty(request.getOriginalFilename())) {
-			throw new FileStorageException("The originalFilename is required.");
+			throw new StoreFileException("The originalFilename is required.");
 		}
 		if (StringUtils.isEmpty(request.getUploadedBy())) {
-			throw new FileStorageException("The uploadedBy is required.");
+			throw new StoreFileException("The uploadedBy is required.");
 		}
 
 		in.clouthink.daas.fss.mongodb.model.FileObject fileObjectImpl = (in.clouthink.daas.fss.mongodb.model.FileObject) fileObject;
@@ -59,10 +59,10 @@ public class FileObjectServiceImpl implements MutableFileObjectService {
 	@Override
 	public FileObject save(FileObject fileObject) {
 		if (StringUtils.isEmpty(fileObject.getOriginalFilename())) {
-			throw new FileStorageException("The originalFilename is required.");
+			throw new StoreFileException("The originalFilename is required.");
 		}
 		if (StringUtils.isEmpty(fileObject.getUploadedBy())) {
-			throw new FileStorageException("The uploadedBy is required.");
+			throw new StoreFileException("The uploadedBy is required.");
 		}
 
 		in.clouthink.daas.fss.mongodb.model.FileObject fileObjectImpl = null;
@@ -91,8 +91,8 @@ public class FileObjectServiceImpl implements MutableFileObjectService {
 	}
 
 	@Override
-	public FileObject findByFinalFilename(String finalFilename) {
-		return fileObjectRepository.findByFinalFilename(finalFilename);
+	public FileObject findByStoredFilename(String storedFileName) {
+		return fileObjectRepository.findByFinalFilename(storedFileName);
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class FileObjectServiceImpl implements MutableFileObjectService {
 	}
 
 	@Override
-	public List<FileObjectHistory> findHistoryById(String fileObjectId) {
+	public List<FileObjectHistory> findHistoryByFileObjectId(String fileObjectId) {
 		in.clouthink.daas.fss.mongodb.model.FileObject fileObjectImpl = fileObjectRepository.findById(fileObjectId);
 		List<FileObjectHistory> result = new ArrayList<FileObjectHistory>();
 		result.addAll(fileObjectHistoryRepository.findByFileObject(fileObjectImpl));

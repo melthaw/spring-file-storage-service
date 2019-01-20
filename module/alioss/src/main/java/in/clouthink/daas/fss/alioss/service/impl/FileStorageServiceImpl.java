@@ -1,15 +1,17 @@
-package in.clouthink.daas.fss.alioss.spiImpl;
+package in.clouthink.daas.fss.alioss.service.impl;
 
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
 import in.clouthink.daas.edm.Edms;
 import in.clouthink.daas.edm.EventListener;
-import in.clouthink.daas.fss.alioss.OssStorageException;
+import in.clouthink.daas.fss.alioss.exception.AliossStoreException;
 import in.clouthink.daas.fss.alioss.support.OssService;
 import in.clouthink.daas.fss.alioss.util.FileObjectUtils;
 import in.clouthink.daas.fss.core.*;
+import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.spi.FileStorageService;
 import in.clouthink.daas.fss.spi.MutableFileObjectService;
+import in.clouthink.daas.fss.support.DefaultFileObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -48,13 +50,13 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 				.append(".")
 				.append(ossService.getOssProperties().getImgDomain())
 				.append("/")
-				.append(fileObject.getFinalFilename());
+				.append(fileObject.getStoredFilename());
 
 		fileUrl.append(bucket)
 			   .append(".")
 			   .append(ossService.getOssProperties().getOssDomain())
 			   .append("/")
-			   .append(fileObject.getFinalFilename());
+			   .append(fileObject.getStoredFilename());
 
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("imageUrl", imageUrl.toString());
@@ -74,7 +76,7 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 
 	@Override
 	public FileStorage findByFilename(String finalFilename) {
-		FileObject fileObject = fileObjectService.findByFinalFilename(finalFilename);
+		FileObject fileObject = fileObjectService.findByStoredFilename(finalFilename);
 		if (fileObject == null) {
 			return null;
 		}
@@ -83,7 +85,7 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 	}
 
 	@Override
-	public FileStorage store(InputStream inputStream, FileStorageRequest request) {
+	public FileStorage store(InputStream inputStream, StoreFileRequest request) {
 		FileObject fileObject = createDefaultFileObject(request);
 		updateOssStoragePart((MutableFileObject) fileObject);
 		fileObject = doStore(inputStream, fileObject);
@@ -94,10 +96,10 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 	}
 
 	@Override
-	public FileStorage restore(String previousId, InputStream inputStream, FileStorageRequest request) {
+	public FileStorage restore(String previousId, InputStream inputStream, StoreFileRequest request) {
 		FileObject fileObject = fileObjectService.findById(previousId);
 		if (fileObject == null) {
-			throw new FileStorageException(String.format("The file object[id=%s] is not found.", previousId));
+			throw new StoreFileException(String.format("The file object[id=%s] is not found.", previousId));
 		}
 		fileObjectService.saveAsHistory(fileObject);
 
@@ -118,11 +120,11 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 	private FileObject doStore(InputStream inputStream, FileObject fileObject) {
 		String ossBucket = FileObjectUtils.getOssBucket(fileObject);
 		if (StringUtils.isEmpty(ossBucket)) {
-			throw new OssStorageException("The oss bucket is not supplied.");
+			throw new AliossStoreException("The oss bucket is not supplied.");
 		}
 		String ossKey = FileObjectUtils.getOssKey(fileObject);
 		if (StringUtils.isEmpty(ossKey)) {
-			throw new OssStorageException("The oss key is not supplied.");
+			throw new AliossStoreException("The oss key is not supplied.");
 		}
 
 		ObjectMetadata objectMetadata = ossService.createObjectMetadata(fileObject);
@@ -130,13 +132,13 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		return fileObject;
 	}
 
-	private DefaultFileObject createDefaultFileObject(FileStorageRequest request) {
+	private DefaultFileObject createDefaultFileObject(StoreFileRequest request) {
 		//validate
 		if (StringUtils.isEmpty(request.getOriginalFilename())) {
-			throw new FileStorageException("The originalFilename is required.");
+			throw new StoreFileException("The originalFilename is required.");
 		}
 		if (StringUtils.isEmpty(request.getUploadedBy())) {
-			throw new FileStorageException("The uploadedBy is required.");
+			throw new StoreFileException("The uploadedBy is required.");
 		}
 
 		//create file object from request

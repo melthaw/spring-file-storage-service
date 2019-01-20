@@ -1,5 +1,7 @@
-package in.clouthink.daas.fss.core;
+package in.clouthink.daas.fss.support;
 
+import in.clouthink.daas.fss.core.MutableFileObject;
+import in.clouthink.daas.fss.core.StoreFileRequest;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
@@ -11,7 +13,7 @@ import java.util.Map;
  */
 public class DefaultFileObject implements MutableFileObject {
 
-	public static DefaultFileObject from(FileStorageRequest request) {
+	public static DefaultFileObject from(StoreFileRequest request) {
 		if (request == null) {
 			return null;
 		}
@@ -25,8 +27,6 @@ public class DefaultFileObject implements MutableFileObject {
 		}
 		return fileObject;
 	}
-
-	private String id;
 
 	private String category;
 
@@ -57,61 +57,7 @@ public class DefaultFileObject implements MutableFileObject {
 	private Map<String,String> attributes = new HashMap<String,String>();
 
 	@Override
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	@Override
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	@Override
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	@Override
-	public String getBizId() {
-		return bizId;
-	}
-
-	public void setBizId(String bizId) {
-		this.bizId = bizId;
-	}
-
-	@Override
-	public String getFinalFilename() {
+	public String getStoredFilename() {
 		return finalFilename;
 	}
 

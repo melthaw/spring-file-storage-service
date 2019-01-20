@@ -3,8 +3,8 @@ package in.clouthink.daas.fss.alioss.support;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
-import in.clouthink.daas.fss.core.FileObject;
-import in.clouthink.daas.fss.core.FileStorageRequest;
+import in.clouthink.daas.fss.domain.model.FileObject;
+import in.clouthink.daas.fss.core.StoreFileRequest;
 
 /**
  * The oss access service abstraction.
@@ -37,13 +37,13 @@ public interface OssService {
 	 * @param request
 	 * @return
 	 */
-	String resolveBucket(FileStorageRequest request);
+	String resolveBucket(StoreFileRequest request);
 
 	/**
 	 * @param request
 	 * @return
 	 */
-	String generateKey(FileStorageRequest request);
+	String generateKey(StoreFileRequest request);
 
 	/**
 	 * Create an object meta from a FileStorageRequest
@@ -51,6 +51,6 @@ public interface OssService {
 	 * @param request
 	 * @return
 	 */
-	ObjectMetadata createObjectMetadata(FileStorageRequest request);
+	ObjectMetadata createObjectMetadata(StoreFileRequest request);
 
 }

@@ -1,5 +1,7 @@
 package in.clouthink.daas.fss.core;
 
+import in.clouthink.daas.fss.domain.model.FileObject;
+
 import java.util.Date;
 
 /**

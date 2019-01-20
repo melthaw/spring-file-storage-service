@@ -1,8 +1,8 @@
 package in.clouthink.daas.fss.spi;
 
-import in.clouthink.daas.fss.core.FileObject;
+import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.core.FileStorage;
-import in.clouthink.daas.fss.core.FileStorageRequest;
+import in.clouthink.daas.fss.core.StoreFileRequest;
 
 import java.io.InputStream;
 import java.util.Map;
@@ -42,7 +42,7 @@ public interface FileStorageService {
 	 * @param request the file store request
 	 * @return FileStorage
 	 */
-	FileStorage store(InputStream inputStream, FileStorageRequest request);
+	FileStorage store(InputStream inputStream, StoreFileRequest request);
 
 	/**
 	 * Restore the file object, the previous file object will be moved into history
@@ -52,6 +52,6 @@ public interface FileStorageService {
 	 * @param request the file store request
 	 * @return FileStorage
 	 */
-	FileStorage restore(String previousId, InputStream inputStream, FileStorageRequest request);
+	FileStorage restore(String previousId, InputStream inputStream, StoreFileRequest request);
 
 }

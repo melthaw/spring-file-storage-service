@@ -6,7 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import java.io.*;
 
 /**
- *
+ * The utilities for IO
  */
 public abstract class IOUtils {
 

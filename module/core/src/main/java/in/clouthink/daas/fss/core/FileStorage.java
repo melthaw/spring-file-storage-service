@@ -1,5 +1,7 @@
 package in.clouthink.daas.fss.core;
 
+import in.clouthink.daas.fss.domain.model.FileObject;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -27,4 +29,11 @@ public interface FileStorage {
 	 */
 	void writeTo(OutputStream outputStream, long bufferSize) throws IOException;
 
+	/**
+	 *
+	 * @param request the file store request
+	 * @return StoreFileResponse
+	 * @throws StoreFileException
+	 */
+	StoreFileResponse store(StoreFileRequest request) throws StoreFileException;
 }
