@@ -8,12 +8,12 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
-* @author dz
+ * @author dz
  */
 public interface FileObjectHistoryRepository extends AbstractRepository<FileObjectHistory> {
 
-	Page<FileObjectHistory> findByFileObject(FileObject fileObject, Pageable pageable);
+    Page<FileObjectHistory> findByFileObject(FileObject fileObject, Pageable pageable);
 
-	List<FileObjectHistory> findByFileObject(FileObject fileObject);
+    List<FileObjectHistory> findByFileObject(FileObject fileObject);
 
 }

@@ -35,21 +35,7 @@
         <url>git://git.coding.net/melthaw/daas-fss.git</url>
     </scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.7</java.version>
-        <maven.compiler.source>1.6</maven.compiler.source>
-        <maven.compiler.target>1.6</maven.compiler.target>
-        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
-    </properties>
-
     <dependencies>
-        <dependency>
-            <groupId>in.clouthink.daas</groupId>
-            <artifactId>daas-edm</artifactId>
-            <version>1.0.1</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -59,9 +45,14 @@
 
         <dependency>
             <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
+            <artifactId>spring-data-mongodb</artifactId>
             <version>1.7.1.RELEASE</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
         </dependency>
 
         <dependency>
@@ -72,13 +63,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-            <version>1.7.1.RELEASE</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

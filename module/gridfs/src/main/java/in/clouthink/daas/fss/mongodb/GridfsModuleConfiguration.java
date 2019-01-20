@@ -1,37 +1,26 @@
 package in.clouthink.daas.fss.mongodb;
 
 import in.clouthink.daas.fss.core.FileStorage;
+import in.clouthink.daas.fss.mongodb.impl.FileStorageImpl;
 import in.clouthink.daas.fss.mongodb.service.GridFSService;
 import in.clouthink.daas.fss.mongodb.service.impl.GridFSServiceImpl;
-import in.clouthink.daas.fss.domain.service.FileObjectService;
-import in.clouthink.daas.fss.core.FileStorageService;
-import in.clouthink.daas.fss.mongodb.spiImpl.FileObjectServiceImpl;
-import in.clouthink.daas.fss.mongodb.spiImpl.FileStorageServiceImpl;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 /**
-* @author dz
+ * @author dz
  */
 @Configuration
 public class GridfsModuleConfiguration {
 
-	public FileStorage gridfsStorage() {
+    @Bean
+    public FileStorage gridfsStorage() {
+        return new FileStorageImpl();
+    }
 
-	}
-
-	@Bean
-	@DependsOn("gridFSServiceImpl")
-	public FileStorageService fileStorageServiceMongoImpl() {
-		return new FileStorageServiceImpl();
-	}
-
-	@Bean
-	public GridFSService gridFSServiceImpl() {
-		return new GridFSServiceImpl();
-	}
+    @Bean
+    public GridFSService gridFSServiceImpl() {
+        return new GridFSServiceImpl();
+    }
 
 }

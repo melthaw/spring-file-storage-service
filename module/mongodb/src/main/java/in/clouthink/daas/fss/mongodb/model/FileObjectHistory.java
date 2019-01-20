@@ -13,148 +13,147 @@ import java.util.Map;
 /**
  * @author dz
  */
-@Document(collection = "FileObjectHistories")
+@Document(collection = "FssFileObjectHistories")
 public class FileObjectHistory implements in.clouthink.daas.fss.domain.model.FileObjectHistory {
 
-	public static FileObjectHistory from(FileObject fileObjectImpl) {
-		FileObjectHistory result = new FileObjectHistory();
-		result.setFileObject(fileObjectImpl);
-		result.setFinalFilename(fileObjectImpl.getStoredFilename());
-		result.setOriginalFilename(fileObjectImpl.getOriginalFilename());
-		result.setPrettyFilename(fileObjectImpl.getPrettyFilename());
+    public static FileObjectHistory from(FileObject fileObjectImpl) {
+        FileObjectHistory result = new FileObjectHistory();
+        result.setFileObject(fileObjectImpl);
+        result.setStoredFilename(fileObjectImpl.getStoredFilename());
+        result.setOriginalFilename(fileObjectImpl.getOriginalFilename());
+        result.setPrettyFilename(fileObjectImpl.getPrettyFilename());
 
-		result.setContentType(fileObjectImpl.getContentType());
-		result.setUploadedBy(fileObjectImpl.getUploadedBy());
-		result.setUploadedAt(fileObjectImpl.getUploadedAt());
-		result.setVersion(fileObjectImpl.getVersion());
-		result.setSize(fileObjectImpl.getSize());
-		result.setAttributes(fileObjectImpl.getAttributes());
-		return result;
-	}
+        result.setContentType(fileObjectImpl.getContentType());
+        result.setUploadedBy(fileObjectImpl.getUploadedBy());
+        result.setUploadedAt(fileObjectImpl.getUploadedAt());
+        result.setVersion(fileObjectImpl.getVersion());
+        result.setSize(fileObjectImpl.getSize());
+        result.setAttributes(fileObjectImpl.getAttributes());
+        return result;
+    }
 
-	@Id
-	private String id;
+    @Id
+    private String id;
 
-	@JsonIgnore
-	@Indexed
-	@DBRef(lazy = true)
-	private FileObject fileObject;
+    @JsonIgnore
+    @Indexed
+    @DBRef(lazy = true)
+    private FileObject fileObject;
 
-	@Indexed
-	private String finalFilename;
+    @Indexed
+    private String storedFilename;
 
-	private String originalFilename;
+    private String originalFilename;
 
-	private String prettyFilename;
+    private String prettyFilename;
 
-	private String contentType;
+    private String contentType;
 
-	private String uploadedBy;
+    private String uploadedBy;
 
-	private Date uploadedAt;
+    private Date uploadedAt;
 
-	private long size;
+    private long size;
 
-	private int version;
+    private int version;
 
-	private Map<String,String> attributes = new HashMap<String,String>();
+    private Map<String, String> attributes = new HashMap<String, String>();
 
-	@Override
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	@Override
-	public FileObject getFileObject() {
-		return fileObject;
-	}
+    @Override
+    public FileObject getFileObject() {
+        return fileObject;
+    }
 
-	public void setFileObject(FileObject fileObject) {
-		this.fileObject = fileObject;
-	}
+    public void setFileObject(FileObject fileObject) {
+        this.fileObject = fileObject;
+    }
 
-	@Override
-	public String getFinalFilename() {
-		return finalFilename;
-	}
+    @Override
+    public String getStoredFilename() {
+        return storedFilename;
+    }
 
-	public void setFinalFilename(String finalFilename) {
-		this.finalFilename = finalFilename;
-	}
+    public void setStoredFilename(String storedFilename) {
+        this.storedFilename = storedFilename;
+    }
 
-	@Override
-	public String getOriginalFilename() {
-		return originalFilename;
-	}
+    @Override
+    public String getOriginalFilename() {
+        return originalFilename;
+    }
 
-	public void setOriginalFilename(String originalFilename) {
-		this.originalFilename = originalFilename;
-	}
+    public void setOriginalFilename(String originalFilename) {
+        this.originalFilename = originalFilename;
+    }
 
-	@Override
-	public String getPrettyFilename() {
-		return prettyFilename;
-	}
+    @Override
+    public String getPrettyFilename() {
+        return prettyFilename;
+    }
 
-	public void setPrettyFilename(String prettyFilename) {
-		this.prettyFilename = prettyFilename;
-	}
+    public void setPrettyFilename(String prettyFilename) {
+        this.prettyFilename = prettyFilename;
+    }
 
-	@Override
-	public String getContentType() {
-		return contentType;
-	}
+    @Override
+    public String getContentType() {
+        return contentType;
+    }
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 
-	@Override
-	public String getUploadedBy() {
-		return uploadedBy;
-	}
+    @Override
+    public String getUploadedBy() {
+        return uploadedBy;
+    }
 
-	public void setUploadedBy(String uploadedBy) {
-		this.uploadedBy = uploadedBy;
-	}
+    public void setUploadedBy(String uploadedBy) {
+        this.uploadedBy = uploadedBy;
+    }
 
-	@Override
-	public Date getUploadedAt() {
-		return uploadedAt;
-	}
+    @Override
+    public Date getUploadedAt() {
+        return uploadedAt;
+    }
 
-	public void setUploadedAt(Date uploadedAt) {
-		this.uploadedAt = uploadedAt;
-	}
+    public void setUploadedAt(Date uploadedAt) {
+        this.uploadedAt = uploadedAt;
+    }
 
-	@Override
-	public int getVersion() {
-		return version;
-	}
+    @Override
+    public int getVersion() {
+        return version;
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
-	@Override
-	public long getSize() {
-		return size;
-	}
+    @Override
+    public long getSize() {
+        return size;
+    }
 
-	public void setSize(long size) {
-		this.size = size;
-	}
+    public void setSize(long size) {
+        this.size = size;
+    }
 
-	@Override
-	public Map<String,String> getAttributes() {
-		return attributes;
-	}
+    @Override
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
 
-	public void setAttributes(Map<String,String> attributes) {
-		this.attributes = attributes;
-	}
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
 }

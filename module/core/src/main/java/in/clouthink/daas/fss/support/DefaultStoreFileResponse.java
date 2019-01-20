@@ -5,18 +5,18 @@ import in.clouthink.daas.fss.core.StoredFileObject;
 
 public class DefaultStoreFileResponse implements StoreFileResponse {
 
-    private String provider;
+    private String providerName;
 
     private StoredFileObject fileObject;
 
     public DefaultStoreFileResponse(String provider, StoredFileObject fileObject) {
-        this.provider = provider;
+        this.providerName = provider;
         this.fileObject = fileObject;
     }
 
     @Override
     public String getProviderName() {
-        return provider;
+        return providerName;
     }
 
     @Override

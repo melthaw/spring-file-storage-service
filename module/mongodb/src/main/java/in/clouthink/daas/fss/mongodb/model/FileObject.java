@@ -14,196 +14,201 @@ import java.util.Map;
 /**
  * @author dz
  */
-@Document(collection = "FileObjects")
+@Document(collection = "FssFileObjects")
 public class FileObject implements MutableFileObject {
 
-	public static in.clouthink.daas.fss.mongodb.model.FileObject from(
+    public static in.clouthink.daas.fss.mongodb.model.FileObject from(
             in.clouthink.daas.fss.domain.model.FileObject fromObject) {
-		in.clouthink.daas.fss.mongodb.model.FileObject result = new in.clouthink.daas.fss.mongodb.model.FileObject();
-		BeanUtils.copyProperties(fromObject, result);
-		if (result.getAttributes() == null) {
-			result.setAttributes(new HashMap<String,String>());
-		}
-		return result;
-	}
+        in.clouthink.daas.fss.mongodb.model.FileObject result = new in.clouthink.daas.fss.mongodb.model.FileObject();
+        BeanUtils.copyProperties(fromObject, result);
+        if (result.getAttributes() == null) {
+            result.setAttributes(new HashMap<String, String>());
+        }
+        return result;
+    }
 
-	public static in.clouthink.daas.fss.mongodb.model.FileObject from(StoreFileRequest request) {
-		in.clouthink.daas.fss.mongodb.model.FileObject result = new in.clouthink.daas.fss.mongodb.model.FileObject();
-		BeanUtils.copyProperties(request, result);
-		if (result.getAttributes() == null) {
-			result.setAttributes(new HashMap<String,String>());
-		}
-		return result;
-	}
+    public static in.clouthink.daas.fss.mongodb.model.FileObject from(StoreFileRequest request) {
+        in.clouthink.daas.fss.mongodb.model.FileObject result = new in.clouthink.daas.fss.mongodb.model.FileObject();
+        BeanUtils.copyProperties(request, result);
+        if (result.getAttributes() == null) {
+            result.setAttributes(new HashMap<String, String>());
+        }
+        return result;
+    }
 
-	@Id
-	private String id;
+    @Id
+    private String id;
 
-	private String category;
+    private String category;
 
-	private String code;
+    private String code;
 
-	@Indexed
-	private String name;
+    @Indexed
+    private String name;
 
-	private String description;
+    private String description;
 
-	@Indexed
-	private String bizId;
+    @Indexed
+    private String bizId;
 
-	@Indexed
-	private String finalFilename;
+    @Indexed
+    private String storedFilename;
 
-	private String originalFilename;
+    private String originalFilename;
 
-	private String prettyFilename;
+    private String prettyFilename;
 
-	private String contentType;
+    private String url;
 
-	@Indexed
-	private String uploadedBy;
+    private String contentType;
 
-	@Indexed
-	private Date uploadedAt;
+    @Indexed
+    private String uploadedBy;
 
-	private long size;
+    @Indexed
+    private Date uploadedAt;
 
-	private int version;
+    private long size;
 
-	private Map<String,String> attributes = new HashMap<String,String>();
+    private int version;
 
-	@Override
-	public String getId() {
-		return id;
-	}
+    private Map<String, String> attributes = new HashMap<String, String>();
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	@Override
-	public String getCategory() {
-		return category;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    public String getCategory() {
+        return category;
+    }
 
-	@Override
-	public String getCode() {
-		return code;
-	}
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String getDescription() {
-		return description;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	@Override
-	public String getBizId() {
-		return bizId;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setBizId(String bizId) {
-		this.bizId = bizId;
-	}
+    public String getBizId() {
+        return bizId;
+    }
 
-	@Override
-	public String getStoredFilename() {
-		return finalFilename;
-	}
+    public void setBizId(String bizId) {
+        this.bizId = bizId;
+    }
 
-	public void setFinalFilename(String finalFilename) {
-		this.finalFilename = finalFilename;
-	}
+    @Override
+    public String getStoredFilename() {
+        return storedFilename;
+    }
 
-	@Override
-	public String getOriginalFilename() {
-		return originalFilename;
-	}
+    public void setStoredFilename(String storedFilename) {
+        this.storedFilename = storedFilename;
+    }
 
-	public void setOriginalFilename(String originalFilename) {
-		this.originalFilename = originalFilename;
-	}
+    @Override
+    public String getOriginalFilename() {
+        return originalFilename;
+    }
 
-	@Override
-	public String getPrettyFilename() {
-		return prettyFilename;
-	}
+    public void setOriginalFilename(String originalFilename) {
+        this.originalFilename = originalFilename;
+    }
 
-	public void setPrettyFilename(String prettyFilename) {
-		this.prettyFilename = prettyFilename;
-	}
+    @Override
+    public String getPrettyFilename() {
+        return prettyFilename;
+    }
 
-	@Override
-	public String getContentType() {
-		return contentType;
-	}
+    public void setPrettyFilename(String prettyFilename) {
+        this.prettyFilename = prettyFilename;
+    }
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
+    @Override
+    public String getUrl() {
+        return url;
+    }
 
-	@Override
-	public String getUploadedBy() {
-		return uploadedBy;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public void setUploadedBy(String uploadedBy) {
-		this.uploadedBy = uploadedBy;
-	}
+    @Override
+    public String getContentType() {
+        return contentType;
+    }
 
-	@Override
-	public Date getUploadedAt() {
-		return uploadedAt;
-	}
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 
-	public void setUploadedAt(Date uploadedAt) {
-		this.uploadedAt = uploadedAt;
-	}
+    @Override
+    public String getUploadedBy() {
+        return uploadedBy;
+    }
 
-	@Override
-	public long getSize() {
-		return size;
-	}
+    public void setUploadedBy(String uploadedBy) {
+        this.uploadedBy = uploadedBy;
+    }
 
-	public void setSize(long size) {
-		this.size = size;
-	}
+    @Override
+    public Date getUploadedAt() {
+        return uploadedAt;
+    }
 
-	@Override
-	public int getVersion() {
-		return version;
-	}
+    public void setUploadedAt(Date uploadedAt) {
+        this.uploadedAt = uploadedAt;
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+    @Override
+    public long getSize() {
+        return size;
+    }
 
-	@Override
-	public Map<String,String> getAttributes() {
-		return attributes;
-	}
+    public void setSize(long size) {
+        this.size = size;
+    }
 
-	public void setAttributes(Map<String,String> attributes) {
-		this.attributes = attributes;
-	}
+    @Override
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    @Override
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
 }
