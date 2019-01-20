@@ -36,18 +36,32 @@ public interface FileObjectService {
      */
     List<FileObjectHistory> findHistoryByFileObjectId(String id);
 
-
+    /**
+     *
+     * @param request
+     * @param fileObject
+     * @return
+     */
     FileObject merge(StoreFileRequest request, FileObject fileObject);
 
+    /**
+     *
+     * @param fileObject
+     * @return
+     */
     FileObjectHistory saveAsHistory(FileObject fileObject);
 
     /**
+     * Delete the file object from database (not physically) .
+     *
      * @param id the id of file object
      * @return FileObject
      */
     FileObject deleteById(String id);
 
     /**
+     * Delete the file object from database (not physically) .
+     *
      * @param storedFileName full stored file name, partial is not supported
      * @return FileObject
      */

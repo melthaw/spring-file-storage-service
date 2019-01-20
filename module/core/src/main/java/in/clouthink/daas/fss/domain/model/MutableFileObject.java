@@ -1,7 +1,5 @@
 package in.clouthink.daas.fss.domain.model;
 
-import in.clouthink.daas.fss.domain.model.FileObject;
-
 import java.util.Date;
 
 /**
@@ -9,7 +7,7 @@ import java.util.Date;
  */
 public interface MutableFileObject extends FileObject {
 
-	void setFinalFilename(String finalFilename);
+	void setStoredFilename(String storedFilename);
 
 	void setUploadedAt(Date uploadedAt);
 

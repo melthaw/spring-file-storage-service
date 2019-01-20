@@ -14,10 +14,10 @@ public interface FileObjectSearchRequest {
 
     String getProviderName();
 
+    String getUploadedBy();
+
     Date getUploadedAtFrom();
 
     Date getUploadedAtTo();
-
-    String getUploadedBy();
 
 }

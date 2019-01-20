@@ -167,7 +167,7 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 
 		//oss key & final filename
 		String ossKey = ossService.generateKey(fileObject);
-		fileObject.setFinalFilename(ossKey); //oss key as the final filename for ali-oss
+		fileObject.setStoredFilename(ossKey); //oss key as the final filename for ali-oss
 		FileObjectUtils.setOssKey(fileObject, ossKey);
 
 		//backend

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 
 /**
- * The file storage abstraction
+ * The file storage abstraction ( store, search , delete physically )
  *
  * @author dz on 16/3/28.
  */
@@ -40,22 +40,17 @@ public interface FileStorage {
     StoreFileResponse store(byte[] bytes, StoreFileRequest request) throws StoreFileException;
 
     /**
-     * @param id the id of the file object
+     * @param filename the final stored filename of the file object
      * @return StoredFileObject
      */
-    StoredFileObject findById(String id);
-
-    /**
-     * @param filename the final filename of the file object
-     * @return StoredFileObject
-     */
-    StoredFileObject findByFilename(String filename);
+    StoredFileObject findByStoredFilename(String filename);
 
     /**
      * Delete the stored file object physically.
      *
-     * @param fileObject the file to delete
+     * @param filename the final stored filename of the file to delete
+     * @return StoredFileObject ( the writeTo method is not supported since the file is deleted )
      */
-    void delete(StoredFileObject fileObject);
+    StoredFileObject delete(String filename);
 
 }

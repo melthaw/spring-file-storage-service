@@ -1,26 +1,26 @@
 package in.clouthink.daas.fss.support;
 
 import in.clouthink.daas.fss.core.StoreFileResponse;
-import in.clouthink.daas.fss.domain.model.FileObject;
+import in.clouthink.daas.fss.core.StoredFileObject;
 
 public class DefaultStoreFileResponse implements StoreFileResponse {
 
     private String provider;
 
-    private FileObject fileObject;
+    private StoredFileObject fileObject;
 
-    public DefaultStoreFileResponse(String provider, FileObject fileObject) {
+    public DefaultStoreFileResponse(String provider, StoredFileObject fileObject) {
         this.provider = provider;
         this.fileObject = fileObject;
     }
 
     @Override
-    public String getProvider() {
+    public String getProviderName() {
         return provider;
     }
 
     @Override
-    public FileObject getStoredFileObject() {
+    public StoredFileObject getStoredFileObject() {
         return fileObject;
     }
 }

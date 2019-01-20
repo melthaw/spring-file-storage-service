@@ -10,26 +10,54 @@ import java.util.Map;
  */
 public interface FileObjectHistory {
 
-	String getId();
+    /**
+     * @return the main file object
+     */
+    FileObject getFileObject();
 
-	FileObject getFileObject();
+    /**
+     * @return stored file name
+     */
+    String getStoredFilename();
 
-	String getFinalFilename();
+    /**
+     * @return original file name
+     */
+    String getOriginalFilename();
 
-	String getOriginalFilename();
+    /**
+     * @return pretty file name
+     */
+    String getPrettyFilename();
 
-	String getPrettyFilename();
+    /**
+     * @return content type
+     */
+    String getContentType();
 
-	String getContentType();
+    /**
+     * @return uploader
+     */
+    String getUploadedBy();
 
-	String getUploadedBy();
+    /**
+     * @return the uploaded time
+     */
+    Date getUploadedAt();
 
-	Date getUploadedAt();
+    /**
+     * @return the size of file
+     */
+    long getSize();
 
-	long getSize();
+    /**
+     * @return the version of file
+     */
+    int getVersion();
 
-	int getVersion();
-
-	Map<String,String> getAttributes();
+    /**
+     * @return the extended attributes
+     */
+    Map<String, String> getAttributes();
 
 }

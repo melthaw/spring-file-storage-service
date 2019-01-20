@@ -13,128 +13,114 @@ import java.util.Map;
  */
 public class DefaultFileObject implements MutableFileObject {
 
-	public static DefaultFileObject from(StoreFileRequest request) {
-		if (request == null) {
-			return null;
-		}
-		if (request instanceof DefaultFileObject) {
-			return (DefaultFileObject) request;
-		}
-		DefaultFileObject fileObject = new DefaultFileObject();
-		BeanUtils.copyProperties(request, fileObject);
-		if (fileObject.getAttributes() == null) {
-			fileObject.setAttributes(new HashMap<String,String>());
-		}
-		return fileObject;
-	}
+    private String storedFilename;
 
-	private String category;
+    private String originalFilename;
 
-	private String code;
+    private String prettyFilename;
 
-	private String name;
+    private String fullFilename;
 
-	private String description;
+    private String contentType;
 
-	private String bizId;
+    private long size;
 
-	private String finalFilename;
+    private Date uploadedAt;
 
-	private String originalFilename;
+    private String uploadedBy;
 
-	private String prettyFilename;
+    private int version;
 
-	private String contentType;
+    private Map<String, String> attributes = new HashMap<String, String>();
 
-	private long size;
+    @Override
+    public String getStoredFilename() {
+        return storedFilename;
+    }
 
-	private Date uploadedAt;
+    public void setStoredFilename(String storedFilename) {
+        this.storedFilename = storedFilename;
+    }
 
-	private String uploadedBy;
+    @Override
+    public String getOriginalFilename() {
+        return originalFilename;
+    }
 
-	private int version;
+    public void setOriginalFilename(String originalFilename) {
+        this.originalFilename = originalFilename;
+    }
 
-	private Map<String,String> attributes = new HashMap<String,String>();
+    @Override
+    public String getPrettyFilename() {
+        return prettyFilename;
+    }
 
-	@Override
-	public String getStoredFilename() {
-		return finalFilename;
-	}
+    public void setPrettyFilename(String prettyFilename) {
+        this.prettyFilename = prettyFilename;
+    }
 
-	public void setFinalFilename(String finalFilename) {
-		this.finalFilename = finalFilename;
-	}
+    @Override
+    public String getUrl() {
+        return fullFilename;
+    }
 
-	@Override
-	public String getOriginalFilename() {
-		return originalFilename;
-	}
+    public void setFullFilename(String fullFilename) {
+        this.fullFilename = fullFilename;
+    }
 
-	public void setOriginalFilename(String originalFilename) {
-		this.originalFilename = originalFilename;
-	}
+    @Override
+    public String getContentType() {
+        return contentType;
+    }
 
-	@Override
-	public String getPrettyFilename() {
-		return prettyFilename;
-	}
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 
-	public void setPrettyFilename(String prettyFilename) {
-		this.prettyFilename = prettyFilename;
-	}
+    @Override
+    public long getSize() {
+        return size;
+    }
 
-	@Override
-	public String getContentType() {
-		return contentType;
-	}
+    public void setSize(long size) {
+        this.size = size;
+    }
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
+    @Override
+    public Date getUploadedAt() {
+        return uploadedAt;
+    }
 
-	@Override
-	public long getSize() {
-		return size;
-	}
+    public void setUploadedAt(Date uploadedAt) {
+        this.uploadedAt = uploadedAt;
+    }
 
-	public void setSize(long size) {
-		this.size = size;
-	}
+    @Override
+    public String getUploadedBy() {
+        return uploadedBy;
+    }
 
-	@Override
-	public Date getUploadedAt() {
-		return uploadedAt;
-	}
+    public void setUploadedBy(String uploadedBy) {
+        this.uploadedBy = uploadedBy;
+    }
 
-	public void setUploadedAt(Date uploadedAt) {
-		this.uploadedAt = uploadedAt;
-	}
+    @Override
+    public int getVersion() {
+        return version;
+    }
 
-	@Override
-	public String getUploadedBy() {
-		return uploadedBy;
-	}
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
-	public void setUploadedBy(String uploadedBy) {
-		this.uploadedBy = uploadedBy;
-	}
+    @Override
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
 
-	@Override
-	public int getVersion() {
-		return version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
-	}
-
-	@Override
-	public Map<String,String> getAttributes() {
-		return attributes;
-	}
-
-	public void setAttributes(Map<String,String> attributes) {
-		this.attributes = attributes;
-	}
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
 
 }
