@@ -1,4 +1,4 @@
-package in.clouthink.daas.fss.mongodb.impl;
+package in.clouthink.daas.fss.gridfs.impl;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;

@@ -1,4 +1,4 @@
-package in.clouthink.daas.fss.mongodb.spiImpl;
+package in.clouthink.daas.fss.gridfs.spiImpl;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -9,7 +9,7 @@ import in.clouthink.daas.edm.EventListener;
 import in.clouthink.daas.fss.core.*;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.domain.model.MutableFileObject;
-import in.clouthink.daas.fss.mongodb.impl.FileStorageImpl;
+import in.clouthink.daas.fss.gridfs.impl.FileStorageImpl;
 import in.clouthink.daas.fss.core.FileStorageService;
 import in.clouthink.daas.fss.spi.MutableFileObjectService;
 import org.apache.commons.logging.Log;
@@ -48,7 +48,7 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		fileObject = fileObjectService.save(fileObject);
 
 		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getStoredFilename());
-		return new in.clouthink.daas.fss.mongodb.impl.FileStorageImpl(fileObject, gridFSDBFile);
+		return new FileStorageImpl(fileObject, gridFSDBFile);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		fileObject = fileObjectService.save(fileObject);
 
 		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getStoredFilename());
-		return new in.clouthink.daas.fss.mongodb.impl.FileStorageImpl(fileObject, gridFSDBFile);
+		return new FileStorageImpl(fileObject, gridFSDBFile);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		}
 
 		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getStoredFilename());
-		return new in.clouthink.daas.fss.mongodb.impl.FileStorageImpl(fileObject, gridFSDBFile);
+		return new FileStorageImpl(fileObject, gridFSDBFile);
 	}
 
 	@Override

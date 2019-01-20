@@ -1,7 +1,7 @@
-package in.clouthink.daas.fss.mongodb;
+package in.clouthink.daas.fss.gridfs;
 
 import in.clouthink.daas.fss.core.FileStorage;
-import in.clouthink.daas.fss.mongodb.impl.FileStorageImpl;
+import in.clouthink.daas.fss.gridfs.impl.FileStorageImpl;
 import in.clouthink.daas.fss.mongodb.service.GridFSService;
 import in.clouthink.daas.fss.mongodb.service.impl.GridFSServiceImpl;
 import org.springframework.context.annotation.Bean;
