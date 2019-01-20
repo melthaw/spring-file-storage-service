@@ -59,7 +59,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     @Override
     public void writeTo(OutputStream outputStream, long bufferSize) throws IOException {
         if (getImplementation() == null) {
-            throw new UnsupportedOperationException("The stored file implementation is null.");
+            throw new UnsupportedOperationException("The stored file implementation is not supplied.");
         }
         logger.warn(String.format("The bufferSize is not supported in current provider, the value[%d] will be ignored.",
                                   bufferSize));
