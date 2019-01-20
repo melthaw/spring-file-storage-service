@@ -11,46 +11,14 @@ So far the following version is available
 
 module name | latest version
 ------|------
-daas-fss-core | 3.0.0
-daas-fss-zimg| 3.0.0
-daas-fss-mongodb| 3.0.0
-daas-fss-alioss| 3.0.0
+daas-fss-core | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-core/3.0.0)
+daas-fss-zimg | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-zimg/3.0.0)
+daas-fss-gridfs | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-gridfs/3.0.0)
+daas-fss-alioss | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.0)
+daas-fss-data-mysql | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-data-mysql/3.0.0)
+daas-fss-data-mongodb | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-data-mongodb/3.0.0)
 
 > Now 2.0.0 is deprecated.  
-
-## Maven
-
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-fss-core</artifactId>
-        <version>${daas.fss.core.version}</version>
-    </dependency>
-
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-fss-mongodb</artifactId>
-        <version>${daas.fss.mongodb.version}</version>
-    </dependency>
-    
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-fss-alioss</artifactId>
-        <version>${daas.fss.alioss.version}</version>
-    </dependency>
-    
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-fss-zimg</artifactId>
-        <version>${daas.fss.zimg.version}</version>
-    </dependency>
-    
-## Gradle
-
-    compile "in.clouthink.daas:daas-fss-core:${daas_fss_core_version}"
-    compile "in.clouthink.daas:daas-fss-zimg:${daas_fss_zimg_version}"
-    compile "in.clouthink.daas:daas-fss-mongodb:${daas_fss_mongodb_version}"
-    compile "in.clouthink.daas:daas-fss-alioss:${daas_fss_alioss_version}"
-
 
 # Usage 
 
