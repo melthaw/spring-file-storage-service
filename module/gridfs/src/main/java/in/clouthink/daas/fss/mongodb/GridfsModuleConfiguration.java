@@ -1,5 +1,6 @@
 package in.clouthink.daas.fss.mongodb;
 
+import in.clouthink.daas.fss.core.FileStorage;
 import in.clouthink.daas.fss.mongodb.service.GridFSService;
 import in.clouthink.daas.fss.mongodb.service.impl.GridFSServiceImpl;
 import in.clouthink.daas.fss.domain.service.FileObjectService;
@@ -16,9 +17,11 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 * @author dz
  */
 @Configuration
-@ComponentScan({"in.clouthink.daas.fss.mongodb.model"})
-@EnableMongoRepositories({"in.clouthink.daas.fss.mongodb.repository"})
 public class GridfsModuleConfiguration {
+
+	public FileStorage gridfsStorage() {
+
+	}
 
 	@Bean
 	@DependsOn("gridFSServiceImpl")

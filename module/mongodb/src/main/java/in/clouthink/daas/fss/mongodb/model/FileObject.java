@@ -1,7 +1,7 @@
 package in.clouthink.daas.fss.mongodb.model;
 
 import in.clouthink.daas.fss.core.StoreFileRequest;
-import in.clouthink.daas.fss.core.MutableFileObject;
+import in.clouthink.daas.fss.domain.model.MutableFileObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

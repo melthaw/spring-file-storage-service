@@ -1,4 +1,4 @@
-package in.clouthink.daas.fss.support;
+package in.clouthink.daas.fss.web;
 
 import in.clouthink.daas.fss.core.StoreFileException;
 import in.clouthink.daas.fss.core.StoreFileRequest;

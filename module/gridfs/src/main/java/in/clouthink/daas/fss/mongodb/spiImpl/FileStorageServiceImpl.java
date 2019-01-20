@@ -8,7 +8,8 @@ import in.clouthink.daas.edm.Edms;
 import in.clouthink.daas.edm.EventListener;
 import in.clouthink.daas.fss.core.*;
 import in.clouthink.daas.fss.domain.model.FileObject;
-import in.clouthink.daas.fss.mongodb.service.GridFSService;
+import in.clouthink.daas.fss.domain.model.MutableFileObject;
+import in.clouthink.daas.fss.mongodb.impl.FileStorageImpl;
 import in.clouthink.daas.fss.core.FileStorageService;
 import in.clouthink.daas.fss.spi.MutableFileObjectService;
 import org.apache.commons.logging.Log;
@@ -21,7 +22,6 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author dz
@@ -32,9 +32,6 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 
 	@Autowired
 	private MutableFileObjectService fileObjectService;
-
-	@Autowired
-	private GridFSService gridFSService;
 
 	@Override
 	public Map<String,Object> buildExtraAttributes(FileObject fileObject) {
@@ -51,7 +48,7 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		fileObject = fileObjectService.save(fileObject);
 
 		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getStoredFilename());
-		return new FileStorageImpl(fileObject, gridFSDBFile);
+		return new in.clouthink.daas.fss.mongodb.impl.FileStorageImpl(fileObject, gridFSDBFile);
 	}
 
 	@Override
@@ -72,7 +69,7 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		fileObject = fileObjectService.save(fileObject);
 
 		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getStoredFilename());
-		return new FileStorageImpl(fileObject, gridFSDBFile);
+		return new in.clouthink.daas.fss.mongodb.impl.FileStorageImpl(fileObject, gridFSDBFile);
 	}
 
 	@Override
@@ -83,7 +80,7 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 		}
 
 		GridFSDBFile gridFSDBFile = gridFSService.getGridFS().findOne(fileObject.getStoredFilename());
-		return new FileStorageImpl(fileObject, gridFSDBFile);
+		return new in.clouthink.daas.fss.mongodb.impl.FileStorageImpl(fileObject, gridFSDBFile);
 	}
 
 	@Override
@@ -134,17 +131,15 @@ public class FileStorageServiceImpl implements FileStorageService, EventListener
 
 	private void updateGridfsPart(MutableFileObject fileObject) {
 		//gridfs filename
-		String finalFilename = UUID.randomUUID().toString().replace("-", "");
-		String extName = in.clouthink.daas.fss.repackage.org.apache.commons.io.FilenameUtils.getExtension(fileObject.getOriginalFilename());
-		if (!StringUtils.isEmpty(extName)) {
-			finalFilename += "." + extName;
-		}
-		fileObject.setFinalFilename(finalFilename);
+
 		//extra attributes
 		fileObject.getAttributes().put("fss-provider", "gridfs");
 	}
 
 	private FileObject doStore(InputStream inputStream, FileObject fileObject) {
+
+
+
 		GridFSInputFile gfsInputFile = gridFSService.getGridFS().createFile(inputStream);
 		gfsInputFile.setFilename(fileObject.getStoredFilename());
 		gfsInputFile.setContentType(fileObject.getContentType());

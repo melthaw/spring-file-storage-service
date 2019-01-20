@@ -1,6 +1,6 @@
 package in.clouthink.daas.fss.support;
 
-import in.clouthink.daas.fss.core.MutableFileObject;
+import in.clouthink.daas.fss.domain.model.MutableFileObject;
 import in.clouthink.daas.fss.core.StoreFileRequest;
 import org.springframework.beans.BeanUtils;
 

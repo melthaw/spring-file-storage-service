@@ -14,7 +14,7 @@ import java.io.OutputStream;
  */
 public class FileStorageImpl implements FileStorage {
 
-	private static final Log logger = LogFactory.getLog(FileStorageImpl.class);
+	private static final Log logger = LogFactory.getLog(in.clouthink.daas.fss.mongodb.impl.FileStorageImpl.class);
 
 	private FileObject fileObject;
 

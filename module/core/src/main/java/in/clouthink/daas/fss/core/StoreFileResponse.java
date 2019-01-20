@@ -1,11 +1,9 @@
 package in.clouthink.daas.fss.core;
 
-import in.clouthink.daas.fss.domain.model.FileObject;
-
 public interface StoreFileResponse {
 
-    String getStoreProvider();
+    String getProvider();
 
-    FileObject getStoreFileObject();
+    StoredFileObject getStoredFileObject();
 
 }

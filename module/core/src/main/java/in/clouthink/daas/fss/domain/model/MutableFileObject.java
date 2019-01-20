@@ -1,4 +1,4 @@
-package in.clouthink.daas.fss.core;
+package in.clouthink.daas.fss.domain.model;
 
 import in.clouthink.daas.fss.domain.model.FileObject;
 

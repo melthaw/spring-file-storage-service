@@ -1,10 +1,12 @@
-package in.clouthink.daas.fss.support;
+package in.clouthink.daas.fss.web;
 
 import in.clouthink.daas.fss.core.*;
 import in.clouthink.daas.fss.repackage.org.apache.commons.io.FilenameUtils;
+import in.clouthink.daas.fss.support.DefaultStoreFileRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class StorePipe {
@@ -51,14 +53,14 @@ public class StorePipe {
         return this;
     }
 
-    public void store() {
+    public void store() throws IOException {
         store(null);
     }
 
-    public void store(Map<String, String> metadata) {
+    public void store(Map<String, String> metadata) throws IOException {
         StoreFileRequest request = buildFileStorageRequest(multipartFile, metadata);
         try {
-            StoreFileResponse response = fileStorage.store(request);
+            StoreFileResponse response = fileStorage.store(multipartFile.getInputStream(), request);
             if (this.successHandler != null) {
                 this.successHandler.onStoreSuccess(request, response);
             }
