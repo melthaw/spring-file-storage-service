@@ -42,8 +42,9 @@
     <modules>
         <module>module/core</module>
         <module>module/alioss</module>
-        <module>module/mongodb</module>
+        <module>module/gridfs</module>
         <module>module/zimg</module>
+        <module>module/mongodb</module>
     </modules>
 
     <dependencyManagement>

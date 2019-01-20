@@ -5,6 +5,7 @@ import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.domain.model.FileObjectHistory;
 import in.clouthink.daas.fss.core.StoreFileException;
 import in.clouthink.daas.fss.core.StoreFileRequest;
+import in.clouthink.daas.fss.domain.service.FileObjectService;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectHistoryRepository;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectRepository;
 import in.clouthink.daas.fss.spi.MutableFileObjectService;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * @author dz
  */
-public class FileObjectServiceImpl implements MutableFileObjectService {
+public class FileObjectServiceImpl implements FileObjectService {
 
 	@Autowired
 	private FileObjectRepository fileObjectRepository;
