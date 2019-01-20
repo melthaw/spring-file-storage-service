@@ -1,7 +1,6 @@
 package in.clouthink.daas.fss.mongodb.model;
 
 import in.clouthink.daas.fss.core.StoreFileRequest;
-import in.clouthink.daas.fss.domain.model.MutableFileObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -15,7 +14,7 @@ import java.util.Map;
  * @author dz
  */
 @Document(collection = "FssFileObjects")
-public class FileObject implements MutableFileObject {
+public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject {
 
     public static in.clouthink.daas.fss.mongodb.model.FileObject from(
             in.clouthink.daas.fss.domain.model.FileObject fromObject) {
@@ -194,7 +193,6 @@ public class FileObject implements MutableFileObject {
         this.size = size;
     }
 
-    @Override
     public int getVersion() {
         return version;
     }

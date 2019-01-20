@@ -39,13 +39,6 @@ public interface StoreFileRequest {
 	String getUploadedBy();
 
 	/**
-	 * The size of uploaded file
-	 *
-	 * @return size
-	 */
-	long getSize();
-
-	/**
 	 * The customized attributes which as extra metadata for the uploaded file
 	 *
 	 * @return attributes

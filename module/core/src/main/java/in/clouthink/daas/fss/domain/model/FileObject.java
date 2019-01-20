@@ -61,15 +61,6 @@ public interface FileObject {
      */
     long getSize();
 
-
-    /**
-     * The version of the uploaded file if the implementation
-     * support the file object version management
-     *
-     * @return version
-     */
-    int getVersion();
-
     /**
      * The customized attributes which as extra metadata for the uploaded file
      *

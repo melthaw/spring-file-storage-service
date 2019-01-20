@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBObject;
 import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
 import in.clouthink.daas.fss.core.*;
 import in.clouthink.daas.fss.support.DefaultStoreFileResponse;
@@ -15,6 +16,8 @@ import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -31,12 +34,13 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     @Autowired
     private MongoDbFactory mongoDbFactory;
 
+    //auto created after the bean is initialized.
     private GridFS gridFS;
 
     private String collectionName = GRIDFS_COLLECTION_NAME;
 
     public String getCollectionName() {
-        return collectionName;
+        return this.collectionName;
     }
 
     public void setCollectionName(String collectionName) {
@@ -47,7 +51,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     public GridFS getGridFS() {
-        return gridFS;
+        return this.gridFS;
     }
 
     @Override
@@ -67,16 +71,21 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         GridFSInputFile gfsInputFile = this.gridFS.createFile(inputStream);
         gfsInputFile.setFilename(filenameToStore);
         gfsInputFile.setContentType(request.getContentType());
-        if (request.getAttributes() != null) {
-            DBObject dbObject = new BasicDBObject(request.getAttributes());
-            gfsInputFile.setMetaData(dbObject);
-        }
+        Map<String, Object> metadata = buildMetadata(request);
+        DBObject dbObject = new BasicDBObject(metadata);
+        gfsInputFile.setMetaData(dbObject);
         gfsInputFile.save();
 
+        logger.debug(String.format("%s is stored", filenameToStore));
+
+        GridFSDBFile gridFSDBFile = this.gridFS.findOne(filenameToStore);
+
         DefaultStoredFileObject fileObject = DefaultStoredFileObject.from(request);
+        fileObject.setSize(gridFSDBFile.getChunkSize());
+        fileObject.setUploadedAt(gridFSDBFile.getUploadDate());
         fileObject.setStoredFilename(filenameToStore);
         fileObject.setProviderName(PROVIDER_NAME);
-        fileObject.setImplementation(gfsInputFile);
+        fileObject.setImplementation(gridFSDBFile);
 
         return new DefaultStoreFileResponse(PROVIDER_NAME, fileObject);
     }
@@ -97,12 +106,84 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoredFileObject findByStoredFilename(String filename) {
-        return null;
+        GridFSDBFile gridFSDBFile = this.gridFS.findOne(filename);
+
+        if (gridFSDBFile == null) {
+            return null;
+        }
+
+        DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
+        buildStoreFileObject(gridFSDBFile, fileObject);
+
+        fileObject.setProviderName(PROVIDER_NAME);
+        fileObject.setImplementation(gridFSDBFile);
+
+        return fileObject;
     }
 
     @Override
     public StoredFileObject delete(String filename) {
-        return null;
+        GridFSDBFile gridFSDBFile = this.gridFS.findOne(filename);
+
+        if (gridFSDBFile == null) {
+            return null;
+        }
+
+        DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
+        buildStoreFileObject(gridFSDBFile, fileObject);
+
+        fileObject.setProviderName(PROVIDER_NAME);
+        fileObject.setImplementation(null);
+
+        this.gridFS.remove(filename);
+
+        return fileObject;
+    }
+
+    private void buildStoreFileObject(GridFSDBFile gridFSDBFile, DefaultStoredFileObject fileObject) {
+        fileObject.setUploadedAt(gridFSDBFile.getUploadDate());
+        fileObject.setSize(gridFSDBFile.getChunkSize());
+        fileObject.setStoredFilename(gridFSDBFile.getFilename());
+
+        DBObject dbObject = gridFSDBFile.getMetaData();
+
+        if (dbObject == null) {
+            return;
+        }
+
+        try {
+            fileObject.setOriginalFilename((String) dbObject.get("fo-originalFilename"));
+            fileObject.setPrettyFilename((String) dbObject.get("fo-prettyFilename"));
+            fileObject.setContentType((String) dbObject.get("fo-contentType"));
+            fileObject.setUploadedBy((String) dbObject.get("fo-uploadedBy"));
+        } catch (Throwable e) {
+            logger.error(e, e);
+        }
+
+        try {
+            Map<String, String> attributes = new HashMap<>();
+            dbObject.keySet().stream().filter(key -> key.startsWith("fo-attrs-")).forEach(key -> {
+                String attributeName = key.substring("fo-attrs-".length());
+                attributes.put(attributeName, (String) dbObject.get(key));
+            });
+            fileObject.setAttributes(attributes);
+        } catch (Throwable e) {
+            logger.error(e, e);
+        }
+    }
+
+    private Map<String, Object> buildMetadata(StoreFileRequest request) {
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put("fo-contentType", request.getContentType());
+        metadata.put("fo-originalFilename", request.getOriginalFilename());
+        metadata.put("fo-prettyFilename", request.getPrettyFilename());
+        metadata.put("fo-uploadedBy", request.getUploadedBy());
+        if (request.getAttributes() != null) {
+            request.getAttributes().entrySet().forEach(key -> {
+                metadata.put("fo-attrs-" + key, request.getAttributes().get(key));
+            });
+        }
+        return metadata;
     }
 
     @Override

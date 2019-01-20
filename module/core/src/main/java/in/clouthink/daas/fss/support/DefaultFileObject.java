@@ -1,8 +1,6 @@
 package in.clouthink.daas.fss.support;
 
-import in.clouthink.daas.fss.domain.model.MutableFileObject;
-import in.clouthink.daas.fss.core.StoreFileRequest;
-import org.springframework.beans.BeanUtils;
+import in.clouthink.daas.fss.domain.model.FileObject;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -11,7 +9,7 @@ import java.util.Map;
 /**
  * @author dz
  */
-public class DefaultFileObject implements MutableFileObject {
+public class DefaultFileObject implements FileObject {
 
     private String storedFilename;
 
@@ -29,7 +27,6 @@ public class DefaultFileObject implements MutableFileObject {
 
     private String uploadedBy;
 
-    private int version;
 
     private Map<String, String> attributes = new HashMap<String, String>();
 
@@ -103,15 +100,6 @@ public class DefaultFileObject implements MutableFileObject {
 
     public void setUploadedBy(String uploadedBy) {
         this.uploadedBy = uploadedBy;
-    }
-
-    @Override
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
     }
 
     @Override
