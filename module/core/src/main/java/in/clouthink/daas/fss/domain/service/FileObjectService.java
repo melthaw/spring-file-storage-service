@@ -1,5 +1,6 @@
 package in.clouthink.daas.fss.domain.service;
 
+import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.domain.model.FileObjectHistory;
 import in.clouthink.daas.fss.domain.request.FileObjectSearchRequest;
@@ -34,6 +35,11 @@ public interface FileObjectService {
      * @return the history of the FileObject
      */
     List<FileObjectHistory> findHistoryByFileObjectId(String id);
+
+
+    FileObject merge(StoreFileRequest request, FileObject fileObject);
+
+    FileObjectHistory saveAsHistory(FileObject fileObject);
 
     /**
      * @param id the id of file object

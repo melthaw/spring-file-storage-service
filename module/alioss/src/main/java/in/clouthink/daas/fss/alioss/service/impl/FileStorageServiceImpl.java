@@ -9,7 +9,7 @@ import in.clouthink.daas.fss.alioss.support.OssService;
 import in.clouthink.daas.fss.alioss.util.FileObjectUtils;
 import in.clouthink.daas.fss.core.*;
 import in.clouthink.daas.fss.domain.model.FileObject;
-import in.clouthink.daas.fss.spi.FileStorageService;
+import in.clouthink.daas.fss.core.FileStorageService;
 import in.clouthink.daas.fss.spi.MutableFileObjectService;
 import in.clouthink.daas.fss.support.DefaultFileObject;
 import org.apache.commons.logging.Log;

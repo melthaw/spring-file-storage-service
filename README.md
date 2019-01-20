@@ -16,6 +16,8 @@ daas-fss-zimg| 3.0.0
 daas-fss-mongodb| 3.0.0
 daas-fss-alioss| 3.0.0
 
+> Now 2.0.0 is deprecated.  
+
 ## Maven
 
     <dependency>

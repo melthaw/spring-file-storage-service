@@ -9,7 +9,7 @@ import in.clouthink.daas.edm.EventListener;
 import in.clouthink.daas.fss.core.*;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.mongodb.service.GridFSService;
-import in.clouthink.daas.fss.spi.FileStorageService;
+import in.clouthink.daas.fss.core.FileStorageService;
 import in.clouthink.daas.fss.spi.MutableFileObjectService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
