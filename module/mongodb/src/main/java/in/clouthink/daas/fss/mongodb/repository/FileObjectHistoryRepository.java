@@ -16,4 +16,5 @@ public interface FileObjectHistoryRepository extends AbstractRepository<FileObje
 
     List<FileObjectHistory> findByFileObject(FileObject fileObject);
 
+    List<FileObjectHistory> findByFileObjectId(String id);
 }

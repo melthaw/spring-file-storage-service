@@ -1,6 +1,7 @@
 package in.clouthink.daas.fss.mongodb.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import in.clouthink.daas.fss.mysql.model.FileObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -16,8 +17,9 @@ import java.util.Map;
 @Document(collection = "FssFileObjectHistories")
 public class FileObjectHistory implements in.clouthink.daas.fss.domain.model.FileObjectHistory {
 
-    public static FileObjectHistory from(FileObject fileObjectImpl) {
-        FileObjectHistory result = new FileObjectHistory();
+    public static in.clouthink.daas.fss.mysql.model.FileObjectHistory from(
+            in.clouthink.daas.fss.mysql.model.FileObject fileObjectImpl) {
+        in.clouthink.daas.fss.mysql.model.FileObjectHistory result = new in.clouthink.daas.fss.mysql.model.FileObjectHistory();
         result.setFileObject(fileObjectImpl);
         result.setStoredFilename(fileObjectImpl.getStoredFilename());
         result.setOriginalFilename(fileObjectImpl.getOriginalFilename());
@@ -38,7 +40,7 @@ public class FileObjectHistory implements in.clouthink.daas.fss.domain.model.Fil
     @JsonIgnore
     @Indexed
     @DBRef(lazy = true)
-    private FileObject fileObject;
+    private in.clouthink.daas.fss.mysql.model.FileObject fileObject;
 
     @Indexed
     private String storedFilename;
@@ -68,7 +70,7 @@ public class FileObjectHistory implements in.clouthink.daas.fss.domain.model.Fil
     }
 
     @Override
-    public FileObject getFileObject() {
+    public in.clouthink.daas.fss.mysql.model.FileObject getFileObject() {
         return fileObject;
     }
 

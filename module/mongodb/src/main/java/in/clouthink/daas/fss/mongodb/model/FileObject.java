@@ -16,9 +16,9 @@ import java.util.Map;
 @Document(collection = "FssFileObjects")
 public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject {
 
-    public static in.clouthink.daas.fss.mongodb.model.FileObject from(
+    public static FileObject from(
             in.clouthink.daas.fss.domain.model.FileObject fromObject) {
-        in.clouthink.daas.fss.mongodb.model.FileObject result = new in.clouthink.daas.fss.mongodb.model.FileObject();
+        FileObject result = new FileObject();
         BeanUtils.copyProperties(fromObject, result);
         if (result.getAttributes() == null) {
             result.setAttributes(new HashMap<String, String>());
@@ -26,8 +26,8 @@ public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject
         return result;
     }
 
-    public static in.clouthink.daas.fss.mongodb.model.FileObject from(StoreFileRequest request) {
-        in.clouthink.daas.fss.mongodb.model.FileObject result = new in.clouthink.daas.fss.mongodb.model.FileObject();
+    public static FileObject from(StoreFileRequest request) {
+        FileObject result = new FileObject();
         BeanUtils.copyProperties(request, result);
         if (result.getAttributes() == null) {
             result.setAttributes(new HashMap<String, String>());

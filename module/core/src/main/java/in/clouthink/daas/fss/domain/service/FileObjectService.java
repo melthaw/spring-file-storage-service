@@ -37,7 +37,12 @@ public interface FileObjectService {
     List<FileObjectHistory> findHistoryByFileObjectId(String id);
 
     /**
-     *
+     * @param storeFileRequest the request to store file
+     * @return FileObject
+     */
+    FileObject save(StoreFileRequest storeFileRequest);
+
+    /**
      * @param request
      * @param fileObject
      * @return
@@ -45,7 +50,6 @@ public interface FileObjectService {
     FileObject merge(StoreFileRequest request, FileObject fileObject);
 
     /**
-     *
      * @param fileObject
      * @return
      */

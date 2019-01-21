@@ -45,6 +45,7 @@
         <module>module/gridfs</module>
         <module>module/zimg</module>
         <module>module/mongodb</module>
+        <module>module/mysql</module>
     </modules>
 
     <dependencyManagement>

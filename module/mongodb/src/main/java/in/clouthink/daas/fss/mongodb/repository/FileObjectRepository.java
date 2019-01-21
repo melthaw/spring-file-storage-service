@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public interface FileObjectRepository extends AbstractRepository<FileObject>, FileObjectRepositoryCustom {
 
-    FileObject findByFinalFilename(String finalFilename);
+    FileObject findByStoredFilename(String finalFilename);
 
     Page<FileObject> findByCategory(String category, Pageable pageable);
 
