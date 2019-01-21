@@ -27,7 +27,6 @@ public class DefaultFileObject implements FileObject {
 
     private String uploadedBy;
 
-
     private Map<String, String> attributes = new HashMap<String, String>();
 
     @Override

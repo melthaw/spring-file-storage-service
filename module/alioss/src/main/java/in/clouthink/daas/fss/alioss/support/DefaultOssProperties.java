@@ -1,6 +1,5 @@
-package in.clouthink.daas.fss.alioss.support.impl;
+package in.clouthink.daas.fss.alioss.support;
 
-import in.clouthink.daas.fss.alioss.support.OssProperties;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 

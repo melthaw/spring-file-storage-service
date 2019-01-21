@@ -8,6 +8,7 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
 import in.clouthink.daas.fss.core.*;
 import in.clouthink.daas.fss.support.DefaultStoreFileResponse;
+import in.clouthink.daas.fss.util.MetadataUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -71,7 +72,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         GridFSInputFile gfsInputFile = this.gridFS.createFile(inputStream);
         gfsInputFile.setFilename(filenameToStore);
         gfsInputFile.setContentType(request.getContentType());
-        Map<String, Object> metadata = buildMetadata(request);
+        Map<String, String> metadata = MetadataUtils.buildMetadata(request);
         DBObject dbObject = new BasicDBObject(metadata);
         gfsInputFile.setMetaData(dbObject);
         gfsInputFile.save();
@@ -135,7 +136,12 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(null);
 
-        this.gridFS.remove(filename);
+        try {
+            this.gridFS.remove(filename);
+            logger.info(String.format("The gridfs file %s is deleted.", filename));
+        } catch (Throwable e) {
+            logger.error(String.format("Delete gridfs file %s failed.", filename), e);
+        }
 
         return fileObject;
     }
@@ -152,38 +158,24 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         }
 
         try {
-            fileObject.setOriginalFilename((String) dbObject.get("fo-originalFilename"));
-            fileObject.setPrettyFilename((String) dbObject.get("fo-prettyFilename"));
-            fileObject.setContentType((String) dbObject.get("fo-contentType"));
-            fileObject.setUploadedBy((String) dbObject.get("fo-uploadedBy"));
+            fileObject.setOriginalFilename((String) dbObject.get("fss-originalFilename"));
+            fileObject.setPrettyFilename((String) dbObject.get("fss-prettyFilename"));
+            fileObject.setContentType((String) dbObject.get("fss-contentType"));
+            fileObject.setUploadedBy((String) dbObject.get("fss-uploadedBy"));
         } catch (Throwable e) {
             logger.error(e, e);
         }
 
         try {
             Map<String, String> attributes = new HashMap<>();
-            dbObject.keySet().stream().filter(key -> key.startsWith("fo-attrs-")).forEach(key -> {
-                String attributeName = key.substring("fo-attrs-".length());
+            dbObject.keySet().stream().filter(key -> key.startsWith("fss-attrs-")).forEach(key -> {
+                String attributeName = key.substring("fss-attrs-".length());
                 attributes.put(attributeName, (String) dbObject.get(key));
             });
             fileObject.setAttributes(attributes);
         } catch (Throwable e) {
             logger.error(e, e);
         }
-    }
-
-    private Map<String, Object> buildMetadata(StoreFileRequest request) {
-        Map<String, Object> metadata = new HashMap<>();
-        metadata.put("fo-contentType", request.getContentType());
-        metadata.put("fo-originalFilename", request.getOriginalFilename());
-        metadata.put("fo-prettyFilename", request.getPrettyFilename());
-        metadata.put("fo-uploadedBy", request.getUploadedBy());
-        if (request.getAttributes() != null) {
-            request.getAttributes().entrySet().forEach(key -> {
-                metadata.put("fo-attrs-" + key, request.getAttributes().get(key));
-            });
-        }
-        return metadata;
     }
 
     @Override

@@ -77,6 +77,7 @@ public class StorePipe {
     private StoreFileRequest buildFileStorageRequest(MultipartFile multipartFile,
                                                      Map<String, String> uploadFileRequest) {
         DefaultStoreFileRequest result = new DefaultStoreFileRequest();
+        result.setSize(multipartFile.getSize());
         result.setUploadedBy(this.requestBy);
         result.setAttributes(uploadFileRequest);
 
@@ -107,7 +108,6 @@ public class StorePipe {
             }
         }
         result.setContentType(contentType);
-        result.setSize(multipartFile.getSize());
 
         return result;
     }
