@@ -17,4 +17,8 @@ public interface FileObjectHistoryRepository extends AbstractRepository<FileObje
     List<FileObjectHistory> findByFileObject(FileObject fileObject);
 
     List<FileObjectHistory> findByFileObjectId(String id);
+
+    void deleteByFileObjectId(String id);
+
+    void deleteByFileObject(FileObject result);
 }

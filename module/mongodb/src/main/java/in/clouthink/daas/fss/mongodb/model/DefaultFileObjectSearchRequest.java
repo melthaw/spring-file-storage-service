@@ -1,6 +1,5 @@
 package in.clouthink.daas.fss.mongodb.model;
 
-import in.clouthink.daas.fss.mysql.model.FileObjectSearchRequest;
 import in.clouthink.daas.fss.support.FileObjectSearchParam;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

@@ -16,16 +16,6 @@ import java.util.Map;
 @Document(collection = "FssFileObjects")
 public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject {
 
-    public static FileObject from(
-            in.clouthink.daas.fss.domain.model.FileObject fromObject) {
-        FileObject result = new FileObject();
-        BeanUtils.copyProperties(fromObject, result);
-        if (result.getAttributes() == null) {
-            result.setAttributes(new HashMap<String, String>());
-        }
-        return result;
-    }
-
     public static FileObject from(StoreFileRequest request) {
         FileObject result = new FileObject();
         BeanUtils.copyProperties(request, result);

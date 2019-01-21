@@ -49,27 +49,52 @@ public class FileObjectServiceImpl implements FileObjectService {
 
     @Override
     public FileObject save(StoreFileRequest storeFileRequest) {
-        FileObject fileObject = FileObject
-        return null;
+        in.clouthink.daas.fss.mongodb.model.FileObject fileObject =
+                in.clouthink.daas.fss.mongodb.model.FileObject.from(storeFileRequest);
+
+        return fileObjectRepository.save(fileObject);
     }
 
     @Override
     public FileObjectHistory saveAsHistory(FileObject fileObject) {
-        return null;
+        in.clouthink.daas.fss.mongodb.model.FileObject mongdbFileObject =
+                (in.clouthink.daas.fss.mongodb.model.FileObject) fileObject;
+
+        in.clouthink.daas.fss.mongodb.model.FileObjectHistory result =
+                in.clouthink.daas.fss.mongodb.model.FileObjectHistory.from(mongdbFileObject);
+
+        return fileObjectHistoryRepository.save(result);
     }
 
     @Override
     public FileObject deleteById(String id) {
-        return null;
+        in.clouthink.daas.fss.mongodb.model.FileObject result = fileObjectRepository.findById(id);
+        if (result == null) {
+            return null;
+        }
+
+        fileObjectHistoryRepository.deleteByFileObjectId(id);
+        fileObjectRepository.delete(result);
+
+        return result;
     }
 
     @Override
     public FileObject deleteByStoredFilename(String storedFileName) {
-        return null;
+        in.clouthink.daas.fss.mongodb.model.FileObject result = fileObjectRepository.findByStoredFilename(storedFileName);
+        if (result == null) {
+            return null;
+        }
+
+        fileObjectHistoryRepository.deleteByFileObject(result);
+        fileObjectRepository.delete(result);
+
+        return result;
     }
 
     @Override
     public Page<FileObject> search(FileObjectSearchRequest searchRequest) {
-        return null;
+        return fileObjectRepository.findPage((in.clouthink.daas.fss.mongodb.model.FileObjectSearchRequest) searchRequest)
+                                   .map(item -> (FileObject) item);
     }
 }
