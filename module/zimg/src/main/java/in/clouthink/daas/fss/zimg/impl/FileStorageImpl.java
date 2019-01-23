@@ -28,8 +28,15 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     @Autowired
     private ZimgProperties zimgProperties;
 
-    @Autowired
-    private ZimgClient zimgClient;
+    private ZimgClient zimgClient = new ZimgClient();
+
+    public void setZimgProperties(ZimgProperties zimgProperties) {
+        this.zimgProperties = zimgProperties;
+    }
+
+    public void setZimgClient(ZimgClient zimgClient) {
+        this.zimgClient = zimgClient;
+    }
 
     @Override
     public String getName() {

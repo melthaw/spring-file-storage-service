@@ -14,21 +14,29 @@ public class ZimgClientTest {
 
     private String storedFilename;
 
-    //    @Test
-    public void testUpload() {
-        File file = new File("/Users/dz/project/mimilu.studio/1.jpg");
-        ZimgResult result = zimgClient.upload(file, "jpeg1", "http://127.0.0.1:4869/upload");
-        Assert.assertEquals(true, result.isRet());
-    }
-
-        @Test
-    public void testDelete() {
-        zimgClient.delete("ok", "http://127.0.0.1:4869/admin");
-    }
-
     @Test
-    public void testDownload() throws IOException {
-        zimgClient.download("2db146432e77efdb04ae4e7537600939", "http://127.0.0.1:4869", new FileOutputStream(new File("/tmp/hello.jpg")));
+    public void testAll() throws IOException {
+        test1Upload();
+        test2Download();
+        test3Delete();
+    }
+
+
+    public void test1Upload() {
+        File file = new File("/Users/dz/project/mimilu.studio/1.jpg");
+        ZimgResult result = zimgClient.upload(file, "jpeg", "http://127.0.0.1:4869/upload");
+        Assert.assertEquals(true, result.isRet());
+        storedFilename = result.getInfo().getMd5();
+    }
+
+    public void test2Download() throws IOException {
+        zimgClient.download(storedFilename,
+                            "http://127.0.0.1:4869",
+                            new FileOutputStream(new File("/tmp/hello.jpg")));
+    }
+
+    public void test3Delete() {
+        zimgClient.delete(storedFilename, "http://127.0.0.1:4869/admin");
     }
 
 }

@@ -27,6 +27,10 @@ public class ZimgClient {
 
     private HttpClient httpClient = new HttpClient();
 
+    public void setHttpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
+
     public ZimgResult upload(InputStream inputStream, String contentType, long size, String uploadEndpoint) {
         checkContentType(contentType);
         try {

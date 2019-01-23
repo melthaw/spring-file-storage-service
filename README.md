@@ -148,6 +148,12 @@ Please populate the property value from the alioss you configured
 
 # Appendix - Build the source
 
+Install all (skip test)
+
+```shell
+mvn clean install -Dmaven.test.skip=true
+```
+
 Build all
 
 ```shell
