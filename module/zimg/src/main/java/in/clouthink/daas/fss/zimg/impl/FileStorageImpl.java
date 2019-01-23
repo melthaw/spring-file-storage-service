@@ -36,8 +36,15 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
+        String contentType = request.getContentType();
+        if (contentType.indexOf("/") > 0) {
+            contentType = contentType.split("/")[1];
+        }
 
-        ZimgResult zimgResult = zimgClient.upload(inputStream, zimgProperties.getUploadEndpoint());
+        ZimgResult zimgResult = zimgClient.upload(inputStream,
+                                                  contentType,
+                                                  request.getSize(),
+                                                  zimgProperties.getUploadEndpoint());
 
         if (!zimgResult.isRet()) {
             throw new StoreFileException(zimgResult.getError().getMessage());

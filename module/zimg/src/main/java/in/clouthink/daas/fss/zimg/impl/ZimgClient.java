@@ -1,75 +1,92 @@
 package in.clouthink.daas.fss.zimg.impl;
 
+import com.google.api.client.json.GenericJson;
+import com.google.api.client.util.ArrayMap;
 import in.clouthink.daas.fss.zimg.client.ZimgError;
+import in.clouthink.daas.fss.zimg.client.ZimgInfo;
 import in.clouthink.daas.fss.zimg.client.ZimgResult;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import in.clouthink.daas.fss.zimg.exception.UnsupportedContentTypeException;
+import in.clouthink.daas.fss.zimg.exception.ZimgDeleteException;
+import in.clouthink.daas.fss.zimg.exception.ZimgHttpException;
+import in.clouthink.daas.fss.zimg.exception.ZimgStoreException;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 
 @Component
 public class ZimgClient {
 
-    private static final Log logger = LogFactory.getLog(ZimgClient.class);
+    /**
+     * Zimg Raw Post allowed Content-Type
+     */
+    private static final String[] ZIMG_RAW_POST_ALLOWED_TYPE = new String[]{"jpeg", "jpg", "png", "gif", "webp"};
 
-    private RestTemplate restTemplate = new RestTemplate();
-
-    public ZimgResult upload(InputStream inputStream, String uploadEndpoint) {
-        HttpHeaders headers = new HttpHeaders();
-
-        InputStreamResource resource = new InputStreamResource(inputStream);
-        MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-        param.add("fileImg", resource);
-
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(param,
-                                                                                                             headers);
-
-        return doUpload(httpEntity, uploadEndpoint);
+    private void checkContentType(String contentType) {
+        for (String item : ZIMG_RAW_POST_ALLOWED_TYPE) {
+            if (item.equals(contentType)) {
+                return;
+            }
+        }
+        throw new UnsupportedContentTypeException(contentType);
     }
 
-    public ZimgResult upload(File file, String uploadEndpoint) {
-        HttpHeaders headers = new HttpHeaders();
+    public ZimgResult upload(InputStream inputStream, String contentType, long size, String uploadEndpoint) {
+        checkContentType(contentType);
 
-        FileSystemResource resource = new FileSystemResource(file);
-        MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-        param.add("userfile", resource);
+        GenericJson genericJson = HttpClient.upload(uploadEndpoint, contentType, size, inputStream);
 
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(param,
-                                                                                                             headers);
-
-        return doUpload(httpEntity, uploadEndpoint);
+        return buildZimgResult(genericJson);
     }
 
-    public ZimgResult doUpload(HttpEntity<MultiValueMap<String, Object>> httpEntity, String uploadEndpoint) {
+    public ZimgResult upload(File file, String contentType, String uploadEndpoint) {
+        checkContentType(contentType);
+
+        if (!file.exists()) {
+            throw new ZimgStoreException(String.format("The file %s is not existed", file.getPath()));
+        }
+
         try {
-            ResponseEntity<ZimgResult> responseEntity = restTemplate.exchange(uploadEndpoint,
-                                                                              HttpMethod.POST,
-                                                                              httpEntity,
-                                                                              ZimgResult.class);
+            GenericJson genericJson = HttpClient.upload(uploadEndpoint,
+                                                        contentType,
+                                                        file.length(),
+                                                        new FileInputStream(file));
 
-            logger.info(String.format("POST to %s and the status code is %s",
-                                      uploadEndpoint,
-                                      responseEntity.getStatusCode()));
+            return buildZimgResult(genericJson);
 
-            return responseEntity.getBody();
-        } catch (Throwable e) {
-            logger.error(e, e);
-            return new ZimgResult(false, new ZimgError(500, e.getMessage()));
+        } catch (IOException e) {
+            throw new ZimgStoreException(e);
         }
     }
 
-    public void delete(String filename, String downloadEndpoint) {
-
+    public void delete(String md5, String adminEndpoint) {
+        try {
+            HttpClient.delete(String.format("%s?md5=%s&t=1", adminEndpoint, md5));
+        } catch (ZimgHttpException e) {
+            throw new ZimgDeleteException(e);
+        }
     }
+
+    private ZimgResult buildZimgResult(GenericJson genericJson) {
+        ZimgResult result = new ZimgResult();
+        result.setRet((Boolean) genericJson.get("ret"));
+        ArrayMap<String, Object> info = (ArrayMap) genericJson.get("info");
+        if (info != null) {
+            String md5 = (String) info.get("md5");
+            BigDecimal size = (BigDecimal) info.get("size");
+            result.setInfo(new ZimgInfo(md5, size.toBigInteger().intValue()));
+        }
+
+        ArrayMap<String, Object> error = (ArrayMap) genericJson.get("error");
+        if (error != null) {
+            BigDecimal code = (BigDecimal) error.get("code");
+            String message = (String) error.get("message");
+            result.setError(new ZimgError(code.toBigInteger().intValue(), message));
+        }
+        return result;
+    }
+
 }

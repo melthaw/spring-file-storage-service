@@ -6,6 +6,14 @@ public class ZimgInfo {
 
     private int size;
 
+    public ZimgInfo() {
+    }
+
+    public ZimgInfo(String md5, int size) {
+        this.md5 = md5;
+        this.size = size;
+    }
+
     public String getMd5() {
         return md5;
     }
