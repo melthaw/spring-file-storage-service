@@ -1,34 +1,40 @@
 package in.clouthink.daas.fss.zimg.impl;
 
-import org.springframework.web.client.RestTemplate;
+import java.io.IOException;
+import java.io.OutputStream;
 
+/**
+ * @author dz
+ * @since 3
+ */
 public class Zimg {
 
-    private String downloadUrl;
+    private String filename;
 
-    private RestTemplate restTemplate ;
+    private String downloadEndpoint;
 
-    public Zimg() {
+    private ZimgClient zimgClient;
+
+    public Zimg(String filename, String downloadEndpoint, ZimgClient zimgClient) {
+        this.filename = filename;
+        this.downloadEndpoint = downloadEndpoint;
+        this.zimgClient = zimgClient;
     }
 
-    public Zimg(String downloadUrl, RestTemplate restTemplate) {
-        this.downloadUrl = downloadUrl;
-        this.restTemplate = restTemplate;
+    public String getFilename() {
+        return filename;
     }
 
-    public String getDownloadUrl() {
-        return downloadUrl;
+    public String getDownloadEndpoint() {
+        return downloadEndpoint;
     }
 
-    public void setDownloadUrl(String downloadUrl) {
-        this.downloadUrl = downloadUrl;
+    public ZimgClient getZimgClient() {
+        return zimgClient;
     }
 
-    public RestTemplate getRestTemplate() {
-        return restTemplate;
+    public void writeTo(OutputStream outputStream) throws IOException {
+        zimgClient.download(filename, downloadEndpoint, outputStream);
     }
 
-    public void setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 }

@@ -10,12 +10,14 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.util.Date;
 
 /**
- * @author LiangBin & dz
+ * @author dz
+ * @since 3
  */
 public class FileStorageImpl implements FileStorage, InitializingBean {
 
@@ -60,8 +62,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
         fileObject.setStoredFilename(zimgResult.getInfo().getMd5());
         fileObject.setProviderName(PROVIDER_NAME);
-        //TODO
-//        fileObject.setImplementation();
+        fileObject.setImplementation(new Zimg(zimgResult.getInfo().getMd5(),
+                                              zimgProperties.getDownloadEndpoint(),
+                                              zimgClient));
 
         return new DefaultStoreFileResponse(PROVIDER_NAME, fileObject);
     }
@@ -82,18 +85,44 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoredFileObject findByStoredFilename(String filename) {
+        if (StringUtils.isEmpty(filename)) {
+            return null;
+        }
+
+        if (filename.indexOf("?") > 0) {
+            filename = filename.substring(0, filename.indexOf("?"));
+        }
+
+        if (!zimgClient.exists(filename, zimgProperties.getInfoEndpoint())) {
+            return null;
+        }
+
         DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
         fileObject.setStoredFilename(filename);
         fileObject.setProviderName(PROVIDER_NAME);
-        //TODO
-//        fileObject.setImplementation();
+
+        fileObject.setImplementation(new Zimg(filename,
+                                              zimgProperties.getDownloadEndpoint(),
+                                              zimgClient));
 
         return fileObject;
     }
 
     @Override
     public StoredFileObject delete(String filename) {
+        if (StringUtils.isEmpty(filename)) {
+            return null;
+        }
+
+        if (filename.indexOf("?") > 0) {
+            filename = filename.substring(0, filename.indexOf("?"));
+        }
+
+        if (!zimgClient.exists(filename, zimgProperties.getInfoEndpoint())) {
+            return null;
+        }
+
         DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
         fileObject.setStoredFilename(filename);

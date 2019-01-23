@@ -2,6 +2,7 @@ package in.clouthink.daas.fss.zimg.exception;
 
 /**
  * @author dz
+ * @since 3
  */
 public class UnsupportedContentTypeException extends ZimgStoreException {
 

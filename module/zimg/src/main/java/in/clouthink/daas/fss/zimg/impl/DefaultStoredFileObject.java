@@ -11,6 +11,10 @@ import org.springframework.beans.BeanUtils;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * @author dz
+ * @since 3
+ */
 public class DefaultStoredFileObject extends DefaultFileObject implements StoredFileObject {
 
     public static DefaultStoredFileObject from(StoreFileRequest request) {
@@ -61,7 +65,10 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
             throw new UnsupportedOperationException("The stored file implementation is not supplied.");
         }
 
-        //TODO
+        logger.warn(String.format("The bufferSize is not supported in current provider, the value[%d] will be ignored.",
+                                  bufferSize));
+
+        zimg.writeTo(outputStream);
     }
 
 }

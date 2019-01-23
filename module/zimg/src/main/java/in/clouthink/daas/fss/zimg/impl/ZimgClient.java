@@ -5,41 +5,37 @@ import com.google.api.client.util.ArrayMap;
 import in.clouthink.daas.fss.zimg.client.ZimgError;
 import in.clouthink.daas.fss.zimg.client.ZimgInfo;
 import in.clouthink.daas.fss.zimg.client.ZimgResult;
-import in.clouthink.daas.fss.zimg.exception.UnsupportedContentTypeException;
-import in.clouthink.daas.fss.zimg.exception.ZimgDeleteException;
-import in.clouthink.daas.fss.zimg.exception.ZimgHttpException;
-import in.clouthink.daas.fss.zimg.exception.ZimgStoreException;
-import org.springframework.stereotype.Component;
+import in.clouthink.daas.fss.zimg.exception.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
 
-@Component
+/**
+ * @author dz
+ * @since 3
+ */
 public class ZimgClient {
+
+    private static final Log logger = LogFactory.getLog(ZimgClient.class);
 
     /**
      * Zimg Raw Post allowed Content-Type
      */
     private static final String[] ZIMG_RAW_POST_ALLOWED_TYPE = new String[]{"jpeg", "jpg", "png", "gif", "webp"};
 
-    private void checkContentType(String contentType) {
-        for (String item : ZIMG_RAW_POST_ALLOWED_TYPE) {
-            if (item.equals(contentType)) {
-                return;
-            }
-        }
-        throw new UnsupportedContentTypeException(contentType);
-    }
+    private HttpClient httpClient = new HttpClient();
 
     public ZimgResult upload(InputStream inputStream, String contentType, long size, String uploadEndpoint) {
         checkContentType(contentType);
+        try {
+            GenericJson genericJson = httpClient.upload(uploadEndpoint, contentType, size, inputStream);
 
-        GenericJson genericJson = HttpClient.upload(uploadEndpoint, contentType, size, inputStream);
-
-        return buildZimgResult(genericJson);
+            return buildZimgResult(genericJson);
+        } catch (IOException e) {
+            throw new ZimgStoreException(e);
+        }
     }
 
     public ZimgResult upload(File file, String contentType, String uploadEndpoint) {
@@ -50,7 +46,7 @@ public class ZimgClient {
         }
 
         try {
-            GenericJson genericJson = HttpClient.upload(uploadEndpoint,
+            GenericJson genericJson = httpClient.upload(uploadEndpoint,
                                                         contentType,
                                                         file.length(),
                                                         new FileInputStream(file));
@@ -64,8 +60,30 @@ public class ZimgClient {
 
     public void delete(String md5, String adminEndpoint) {
         try {
-            HttpClient.delete(String.format("%s?md5=%s&t=1", adminEndpoint, md5));
+            httpClient.delete(String.format("%s?md5=%s&t=1", adminEndpoint, md5));
         } catch (ZimgHttpException e) {
+            throw new ZimgDeleteException(e);
+        } catch (IOException e) {
+            throw new ZimgDeleteException(e);
+        }
+    }
+
+    public boolean exists(String md5, String infoEndpoint) {
+        try {
+            GenericJson genericJson = httpClient.info(String.format("%s?md5=%s", infoEndpoint, md5));
+            return (Boolean) genericJson.get("ret");
+        } catch (Throwable e) {
+            logger.error(e, e);
+            return false;
+        }
+    }
+
+    public void download(String filename, String downloadEndpoint, OutputStream outputStream) {
+        try {
+            httpClient.download(String.format("%s/%s", downloadEndpoint, filename), outputStream);
+        } catch (ZimgHttpException e) {
+            throw new ZimgDownloadException(e);
+        } catch (IOException e) {
             throw new ZimgDeleteException(e);
         }
     }
@@ -87,6 +105,15 @@ public class ZimgClient {
             result.setError(new ZimgError(code.toBigInteger().intValue(), message));
         }
         return result;
+    }
+
+    private void checkContentType(String contentType) {
+        for (String item : ZIMG_RAW_POST_ALLOWED_TYPE) {
+            if (item.equals(contentType)) {
+                return;
+            }
+        }
+        throw new UnsupportedContentTypeException(contentType);
     }
 
 }

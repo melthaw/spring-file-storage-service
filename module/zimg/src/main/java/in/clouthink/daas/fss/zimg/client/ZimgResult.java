@@ -1,5 +1,9 @@
 package in.clouthink.daas.fss.zimg.client;
 
+/**
+ * @author dz
+ * @since 3
+ */
 public class ZimgResult {
 
     private boolean ret;
