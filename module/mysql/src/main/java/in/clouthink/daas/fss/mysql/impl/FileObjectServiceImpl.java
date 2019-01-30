@@ -105,4 +105,5 @@ public class FileObjectServiceImpl implements FileObjectService {
         return fileObjectRepository.findPage((in.clouthink.daas.fss.mysql.model.FileObjectSearchRequest) searchRequest)
                                    .map(item -> (FileObject) item);
     }
+
 }

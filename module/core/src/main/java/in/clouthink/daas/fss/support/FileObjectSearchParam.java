@@ -1,27 +1,33 @@
 package in.clouthink.daas.fss.support;
 
 import in.clouthink.daas.fss.domain.request.FileObjectSearchRequest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
 public class FileObjectSearchParam implements FileObjectSearchRequest {
 
-    int start = 0;
+    private int start = 0;
 
     // limit to 1, max to 100
-    int limit = 20;
+    private int limit = 20;
 
-    String uploadedFilename;
+    private String sortExpr;
 
-    String storedFilename;
+    private String uploadedFilename;
 
-    String providerName;
+    private String storedFilename;
 
-    Date uploadedAtFrom;
+    private String providerName;
 
-    Date uploadedAtTo;
+    private Date uploadedAtFrom;
 
-    String uploadedBy;
+    private Date uploadedAtTo;
+
+    private String uploadedBy;
 
     @Override
     public int getStart() {
@@ -45,6 +51,15 @@ public class FileObjectSearchParam implements FileObjectSearchRequest {
             limit = 100;
         }
         this.limit = limit;
+    }
+
+    @Override
+    public String getSortExpr() {
+        return sortExpr;
+    }
+
+    public void setSortExpr(String sortExpr) {
+        this.sortExpr = sortExpr;
     }
 
     @Override
@@ -100,4 +115,27 @@ public class FileObjectSearchParam implements FileObjectSearchRequest {
     public void setUploadedBy(String uploadedBy) {
         this.uploadedBy = uploadedBy;
     }
+
+    @Override
+    public Pageable toPageable() {
+        if (StringUtils.isEmpty(this.sortExpr)) {
+            return new PageRequest(this.start, this.limit);
+        }
+
+        //try parse sort expr
+        String[] splitSortExpr = this.sortExpr.split(":");
+
+        if (splitSortExpr.length != 2) {
+            return new PageRequest(this.start, this.limit);
+        }
+
+        String sortField = splitSortExpr[0];
+        Sort.Direction sortDirection = Sort.Direction.fromStringOrNull(splitSortExpr[1]);
+        if (sortDirection == null) {
+            return new PageRequest(this.start, this.limit);
+        }
+
+        return new PageRequest(this.start, this.limit, new Sort(sortDirection, sortField));
+    }
+
 }
