@@ -1,4 +1,4 @@
-package in.clouthink.daas.fss.alioss.impl;
+package in.clouthink.daas.fss.fastdfs.impl;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.OSSObject;
@@ -24,16 +24,16 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * @author LiangBin & dz
+ * @author dz
  */
 public class FileStorageImpl implements FileStorage, InitializingBean {
 
     private static final Log logger = LogFactory.getLog(FileStorageImpl.class);
 
-    public static final String PROVIDER_NAME = "alioss";
+    public static final String PROVIDER_NAME = "fastdfs";
 
     @Autowired
-    private OssProperties ossProperties;
+    private FastdfsProperties ossProperties;
 
     @Autowired
     private OSSClient ossClient;
@@ -142,6 +142,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
         return fileObject;
     }
+
 
     private void buildStoreFileObject(OSSObject ossObject, DefaultStoredFileObject fileObject) {
         Map<String, String> userMetadata = ossObject.getObjectMetadata().getUserMetadata();

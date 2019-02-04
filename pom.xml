@@ -43,13 +43,13 @@
     <modules>
         <module>module/core</module>
         <module>module/alioss</module>
+        <module>module/qiniu</module>
         <module>module/gridfs</module>
         <module>module/zimg</module>
         <module>module/ceph</module>
         <module>module/glusterfs</module>
         <module>module/tfs</module>
         <module>module/fastdfs</module>
-        <module>module/moosefs</module>
         <module>module/webdav</module>
         <module>module/mongodb</module>
         <module>module/mysql</module>
@@ -165,8 +165,12 @@
             <url>http://repo.spring.io/milestone</url>
         </repository>
         <repository>
-            <id>akka</id>
-            <url>http://repo.akka.io/releases/</url>
+            <id>YonYouCloud</id>
+            <name>YonYouCloud Repository</name>
+            <url>http://maven.yonyoucloud.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
     </repositories>
     <pluginRepositories>

@@ -1,5 +1,6 @@
 package in.clouthink.daas.fss.zimg.impl;
 
+import in.clouthink.daas.fss.zimg.client.ZimgClient;
 import in.clouthink.daas.fss.zimg.client.ZimgResult;
 import org.junit.Assert;
 import org.junit.Test;

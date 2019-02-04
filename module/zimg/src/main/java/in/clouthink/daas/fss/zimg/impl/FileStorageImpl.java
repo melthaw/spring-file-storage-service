@@ -2,6 +2,7 @@ package in.clouthink.daas.fss.zimg.impl;
 
 import in.clouthink.daas.fss.core.*;
 import in.clouthink.daas.fss.support.DefaultStoreFileResponse;
+import in.clouthink.daas.fss.zimg.client.ZimgClient;
 import in.clouthink.daas.fss.zimg.client.ZimgResult;
 import in.clouthink.daas.fss.zimg.exception.ZimgStoreException;
 import in.clouthink.daas.fss.zimg.support.ZimgProperties;
@@ -69,9 +70,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
         fileObject.setStoredFilename(zimgResult.getInfo().getMd5());
         fileObject.setProviderName(PROVIDER_NAME);
-        fileObject.setImplementation(new Zimg(zimgResult.getInfo().getMd5(),
-                                              zimgProperties.getDownloadEndpoint(),
-                                              zimgClient));
+        fileObject.setImplementation(new ZimgFile(zimgResult.getInfo().getMd5(),
+                                                  zimgProperties.getDownloadEndpoint(),
+                                                  zimgClient));
 
         return new DefaultStoreFileResponse(PROVIDER_NAME, fileObject);
     }
@@ -109,9 +110,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         fileObject.setStoredFilename(filename);
         fileObject.setProviderName(PROVIDER_NAME);
 
-        fileObject.setImplementation(new Zimg(filename,
-                                              zimgProperties.getDownloadEndpoint(),
-                                              zimgClient));
+        fileObject.setImplementation(new ZimgFile(filename,
+                                                  zimgProperties.getDownloadEndpoint(),
+                                                  zimgClient));
 
         return fileObject;
     }

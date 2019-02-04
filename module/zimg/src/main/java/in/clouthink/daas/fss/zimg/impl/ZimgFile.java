@@ -1,5 +1,7 @@
 package in.clouthink.daas.fss.zimg.impl;
 
+import in.clouthink.daas.fss.zimg.client.ZimgClient;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -7,7 +9,7 @@ import java.io.OutputStream;
  * @author dz
  * @since 3
  */
-public class Zimg {
+public class ZimgFile {
 
     private String filename;
 
@@ -15,7 +17,7 @@ public class Zimg {
 
     private ZimgClient zimgClient;
 
-    public Zimg(String filename, String downloadEndpoint, ZimgClient zimgClient) {
+    public ZimgFile(String filename, String downloadEndpoint, ZimgClient zimgClient) {
         this.filename = filename;
         this.downloadEndpoint = downloadEndpoint;
         this.zimgClient = zimgClient;

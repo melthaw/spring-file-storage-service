@@ -1,11 +1,9 @@
-package in.clouthink.daas.fss.zimg.impl;
+package in.clouthink.daas.fss.zimg.client;
 
 import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.ArrayMap;
-import in.clouthink.daas.fss.zimg.client.ZimgError;
-import in.clouthink.daas.fss.zimg.client.ZimgInfo;
-import in.clouthink.daas.fss.zimg.client.ZimgResult;
 import in.clouthink.daas.fss.zimg.exception.*;
+import in.clouthink.daas.fss.zimg.impl.HttpClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

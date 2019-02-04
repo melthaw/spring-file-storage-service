@@ -39,7 +39,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
 
     private String providerName;
 
-    private Zimg zimg;
+    private ZimgFile zimg;
 
     @Override
     public String getProviderName() {
@@ -51,11 +51,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     }
 
     @Override
-    public Zimg getImplementation() {
+    public ZimgFile getImplementation() {
         return this.zimg;
     }
 
-    public void setImplementation(Zimg zimg) {
+    public void setImplementation(ZimgFile zimg) {
         this.zimg = zimg;
     }
 

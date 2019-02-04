@@ -1,17 +1,16 @@
-package in.clouthink.daas.fss.alioss.impl;
+package in.clouthink.daas.fss.fastdfs.impl;
 
-import com.aliyun.oss.model.OSSObject;
 import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.core.StoredFileObject;
 import in.clouthink.daas.fss.domain.model.FileObject;
+import in.clouthink.daas.fss.fastdfs.exception.FastdfsStoreException;
 import in.clouthink.daas.fss.support.DefaultFileObject;
-import in.clouthink.daas.fss.util.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.csource.common.MyException;
 import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DefaultStoredFileObject extends DefaultFileObject implements StoredFileObject {
@@ -34,9 +33,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         return result;
     }
 
+    private static final Log logger = LogFactory.getLog(DefaultStoredFileObject.class);
+
     private String providerName;
 
-    private OSSObject ossObject;
+    private FastFile fastFile;
 
     @Override
     public String getProviderName() {
@@ -48,12 +49,12 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     }
 
     @Override
-    public OSSObject getImplementation() {
-        return ossObject;
+    public FastFile getImplementation() {
+        return fastFile;
     }
 
-    public void setImplementation(OSSObject ossObject) {
-        this.ossObject = ossObject;
+    public void setImplementation(FastFile ossObject) {
+        this.fastFile = ossObject;
     }
 
     @Override
@@ -64,13 +65,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         if (bufferSize <= 0) {
             bufferSize = 1024 * 4;
         }
-        InputStream is = ossObject.getObjectContent();
-        int length = -1;
-        byte[] bytes = new byte[(int) bufferSize];
-        while ((length = is.read(bytes)) > 0) {
-            outputStream.write(bytes, 0, length);
+        try {
+            fastFile.writeTo(outputStream);
+        } catch (MyException e) {
+            throw new FastdfsStoreException("Fail to write to output stream", e);
         }
-        IOUtils.close(is);
     }
 
 }

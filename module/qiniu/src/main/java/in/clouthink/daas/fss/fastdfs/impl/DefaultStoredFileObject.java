@@ -34,6 +34,8 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         return result;
     }
 
+    private static final Log logger = LogFactory.getLog(DefaultStoredFileObject.class);
+
     private String providerName;
 
     private OSSObject ossObject;
