@@ -29,6 +29,6 @@ public interface StoredFileObject extends FileObject {
      * @param bufferSize   default 4 * 1024b, if equal or less than 0, the default value is choosed
      * @throws IOException
      */
-    void writeTo(OutputStream outputStream, long bufferSize) throws IOException;
+    void writeTo(OutputStream outputStream, int bufferSize) throws IOException;
 
 }

@@ -42,6 +42,10 @@ public abstract class IOUtils {
     }
 
     public static int copy(InputStream in, OutputStream out) throws IOException {
+        return copy(in, out, BUFFER_SIZE);
+    }
+
+    public static int copy(InputStream in, OutputStream out, int bufferSize) throws IOException {
         if (in == null) {
             throw new IllegalArgumentException("No InputStream specified");
         }
@@ -50,7 +54,7 @@ public abstract class IOUtils {
         }
 
         int byteCount = 0;
-        byte[] buffer = new byte[BUFFER_SIZE];
+        byte[] buffer = new byte[bufferSize];
         int bytesRead = -1;
         while ((bytesRead = in.read(buffer)) != -1) {
             out.write(buffer, 0, bytesRead);
@@ -59,6 +63,7 @@ public abstract class IOUtils {
         out.flush();
         return byteCount;
     }
+
 
     public static int copyAndClose(InputStream in, OutputStream out) throws IOException {
         try {

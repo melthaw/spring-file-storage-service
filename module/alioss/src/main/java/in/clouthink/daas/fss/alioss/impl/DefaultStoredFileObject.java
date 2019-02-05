@@ -57,20 +57,16 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     }
 
     @Override
-    public void writeTo(OutputStream outputStream, long bufferSize) throws IOException {
+    public void writeTo(OutputStream outputStream, int bufferSize) throws IOException {
         if (getImplementation() == null) {
             throw new UnsupportedOperationException("The stored file implementation is not supplied.");
         }
         if (bufferSize <= 0) {
             bufferSize = 1024 * 4;
         }
+
         InputStream is = ossObject.getObjectContent();
-        int length = -1;
-        byte[] bytes = new byte[(int) bufferSize];
-        while ((length = is.read(bytes)) > 0) {
-            outputStream.write(bytes, 0, length);
-        }
+        IOUtils.copy(is, outputStream, bufferSize);
         IOUtils.close(is);
     }
-
 }

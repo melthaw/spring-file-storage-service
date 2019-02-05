@@ -46,7 +46,7 @@
         <module>module/qiniu</module>
         <module>module/gridfs</module>
         <module>module/zimg</module>
-        <module>module/ceph</module>
+        <module>module/s3</module>
         <module>module/glusterfs</module>
         <module>module/tfs</module>
         <module>module/fastdfs</module>

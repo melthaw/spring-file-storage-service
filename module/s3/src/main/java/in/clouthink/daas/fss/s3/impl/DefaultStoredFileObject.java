@@ -1,14 +1,15 @@
-package in.clouthink.daas.fss.qiniu.impl;
+package in.clouthink.daas.fss.s3.impl;
 
+import com.amazonaws.services.s3.model.S3Object;
 import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.core.StoredFileObject;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.support.DefaultFileObject;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import in.clouthink.daas.fss.util.IOUtils;
 import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DefaultStoredFileObject extends DefaultFileObject implements StoredFileObject {
@@ -31,11 +32,9 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         return result;
     }
 
-    private static final Log logger = LogFactory.getLog(DefaultStoredFileObject.class);
-
     private String providerName;
-    
-    private QiniuFile qiniuFile;
+
+    private S3Object s3Object;
 
     @Override
     public String getProviderName() {
@@ -47,12 +46,12 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     }
 
     @Override
-    public QiniuFile getImplementation() {
-        return qiniuFile;
+    public S3Object getImplementation() {
+        return s3Object;
     }
 
-    public void setImplementation(QiniuFile qiniuFile) {
-        this.qiniuFile = qiniuFile;
+    public void setImplementation(S3Object s3Object) {
+        this.s3Object = s3Object;
     }
 
     @Override
@@ -63,7 +62,10 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         if (bufferSize <= 0) {
             bufferSize = 1024 * 4;
         }
-        qiniuFile.writeTo(outputStream);
+
+        InputStream is = s3Object.getObjectContent();
+        IOUtils.copy(is, outputStream, bufferSize);
+        IOUtils.close(is);
     }
 
 }

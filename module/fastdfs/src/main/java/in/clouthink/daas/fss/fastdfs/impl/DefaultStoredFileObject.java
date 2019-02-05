@@ -58,7 +58,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     }
 
     @Override
-    public void writeTo(OutputStream outputStream, long bufferSize) throws IOException {
+    public void writeTo(OutputStream outputStream, int bufferSize) throws IOException {
         if (getImplementation() == null) {
             throw new UnsupportedOperationException("The stored file implementation is not supplied.");
         }
