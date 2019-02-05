@@ -12,9 +12,7 @@ public class DefaultWebDavProperties implements WebDavProperties, InitializingBe
 
     private String password;
 
-    private String uploadEndpoint;
-
-    private String downloadEndpoint;
+    private String endpoint;
 
     @Override
     public String getUsername() {
@@ -35,29 +33,19 @@ public class DefaultWebDavProperties implements WebDavProperties, InitializingBe
     }
 
     @Override
-    public String getUploadEndpoint() {
-        return uploadEndpoint;
+    public String getEndpoint() {
+        return endpoint;
     }
 
-    public void setUploadEndpoint(String uploadEndpoint) {
-        this.uploadEndpoint = uploadEndpoint;
-    }
-
-    @Override
-    public String getDownloadEndpoint() {
-        return downloadEndpoint;
-    }
-
-    public void setDownloadEndpoint(String downloadEndpoint) {
-        this.downloadEndpoint = downloadEndpoint;
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         Assert.notNull(username);
         Assert.notNull(password);
-        Assert.notNull(uploadEndpoint);
-        Assert.notNull(downloadEndpoint);
+        Assert.notNull(endpoint);
     }
 
 }

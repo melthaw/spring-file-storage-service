@@ -11,8 +11,6 @@ public interface WebDavProperties {
 
 	String getPassword();
 
-	String getUploadEndpoint();
-
-	String getDownloadEndpoint();
+	String getEndpoint();
 
 }

@@ -54,7 +54,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String filenameToSave = MetadataUtils.generateKey(request);
 
-        String uploadEndpoint = webDavProperties.getUploadEndpoint();
+        String uploadEndpoint = webDavProperties.getEndpoint();
         if (!uploadEndpoint.endsWith("/")) {
             uploadEndpoint = uploadEndpoint.concat("/");
         }
@@ -107,7 +107,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             filename = filename.substring(0, filename.indexOf("?"));
         }
 
-        String uploadEndpoint = webDavProperties.getUploadEndpoint();
+        String uploadEndpoint = webDavProperties.getEndpoint();
         if (!uploadEndpoint.endsWith("/")) {
             uploadEndpoint = uploadEndpoint.concat("/");
         }
@@ -144,7 +144,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             filename = filename.substring(0, filename.indexOf("?"));
         }
 
-        String uploadEndpoint = webDavProperties.getUploadEndpoint();
+        String uploadEndpoint = webDavProperties.getEndpoint();
         if (!uploadEndpoint.endsWith("/")) {
             uploadEndpoint = uploadEndpoint.concat("/");
         }
