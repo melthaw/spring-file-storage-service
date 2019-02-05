@@ -43,13 +43,18 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
     private StorageClient client;
 
-    public void setFastdfsProperties(FastdfsProperties fastdfsProperties) {
-        this.fastdfsProperties = fastdfsProperties;
+    public FastdfsProperties getFastdfsProperties() {
+        return fastdfsProperties;
     }
 
     @Override
     public String getName() {
         return PROVIDER_NAME;
+    }
+
+    @Override
+    public boolean isMetadataSupported() {
+        return true;
     }
 
     @Override
@@ -140,7 +145,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
             buildStoreFileObject(metadata, fileObject);
             fileObject.getAttributes().put("fastdfs-group", group_name);
-
             fileObject.setStoredFilename(filename);
             fileObject.setProviderName(PROVIDER_NAME);
             fileObject.setImplementation(new FastFile(group_name,
@@ -175,62 +179,21 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             }
 
             DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
+
             buildStoreFileObject(metadata, fileObject);
             fileObject.getAttributes().put("fastdfs-group", group_name);
-
             fileObject.setStoredFilename(filename);
             fileObject.setProviderName(PROVIDER_NAME);
             fileObject.setImplementation(null);
-
 
             client.delete_file(group_name, remote_filename);
             logger.info(String.format("The file [%s] is deleted.", filename));
 
             return fileObject;
         } catch (Throwable e) {
-            logger.error(String.format("Delete the file [%s] failed.", filename), e);
+            logger.error(String.format("Fail to delete the file [%s]", filename), e);
         }
         return null;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Assert.notNull(this.fastdfsProperties);
-
-        try {
-            ClientGlobal.setG_anti_steal_token(fastdfsProperties.isHttpAntiStealToken());
-            ClientGlobal.setG_charset(fastdfsProperties.getCharset());
-            ClientGlobal.setG_connect_timeout(fastdfsProperties.getConnectTimeoutInseconds());
-            ClientGlobal.setG_network_timeout(fastdfsProperties.getNetworkTimeoutInSeconds());
-            ClientGlobal.setG_secret_key(fastdfsProperties.getHttpSecretKey());
-
-            TrackerGroup trackerGroup =
-                    new TrackerGroup(fastdfsProperties.getTrackerServers()
-                                                      .stream()
-                                                      .map(server -> {
-                                                          try {
-                                                              return InetSocketAddress.createUnresolved(
-                                                                      server.split(":")[0],
-                                                                      Integer.parseInt(server.split(":")[1]));
-                                                          } catch (Throwable e) {
-                                                              logger.error("Unresolvable tracker server" +
-                                                                                   server, e);
-                                                          }
-                                                          return null;
-                                                      })
-                                                      .filter(address -> address != null)
-                                                      .collect(Collectors.toList())
-                                                      .toArray(new InetSocketAddress[]{}));
-            ClientGlobal.setG_tracker_group(trackerGroup);
-            ClientGlobal.setG_tracker_http_port(fastdfsProperties.getHttpTrackerHttpPort());
-
-            TrackerClient tracker = new TrackerClient();
-            this.trackerServer = tracker.getConnection();
-            this.storageServer = tracker.getStoreStorage(this.trackerServer);
-            this.client = new StorageClient(trackerServer, storageServer);
-        } catch (Throwable e) {
-            throw new FastdfsStoreException("Fail to initialize FastDFS client.", e);
-        }
     }
 
     private void buildStoreFileObject(NameValuePair[] metadata, DefaultStoredFileObject fileObject) {
@@ -271,6 +234,46 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         }
 
         fileObject.setAttributes(attributes);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(this.fastdfsProperties);
+
+        try {
+            ClientGlobal.setG_anti_steal_token(fastdfsProperties.isHttpAntiStealToken());
+            ClientGlobal.setG_charset(fastdfsProperties.getCharset());
+            ClientGlobal.setG_connect_timeout(fastdfsProperties.getConnectTimeoutInseconds());
+            ClientGlobal.setG_network_timeout(fastdfsProperties.getNetworkTimeoutInSeconds());
+            ClientGlobal.setG_secret_key(fastdfsProperties.getHttpSecretKey());
+
+            TrackerGroup trackerGroup =
+                    new TrackerGroup(fastdfsProperties.getTrackerServers()
+                                                      .stream()
+                                                      .map(server -> {
+                                                          try {
+                                                              return InetSocketAddress.createUnresolved(
+                                                                      server.split(":")[0],
+                                                                      Integer.parseInt(server.split(":")[1]));
+                                                          } catch (Throwable e) {
+                                                              logger.error("Unresolvable tracker server" +
+                                                                                   server, e);
+                                                          }
+                                                          return null;
+                                                      })
+                                                      .filter(address -> address != null)
+                                                      .collect(Collectors.toList())
+                                                      .toArray(new InetSocketAddress[]{}));
+            ClientGlobal.setG_tracker_group(trackerGroup);
+            ClientGlobal.setG_tracker_http_port(fastdfsProperties.getHttpTrackerHttpPort());
+
+            TrackerClient tracker = new TrackerClient();
+            this.trackerServer = tracker.getConnection();
+            this.storageServer = tracker.getStoreStorage(this.trackerServer);
+            this.client = new StorageClient(trackerServer, storageServer);
+        } catch (Throwable e) {
+            throw new FastdfsStoreException("Fail to initialize FastDFS client.", e);
+        }
     }
 
     @Override

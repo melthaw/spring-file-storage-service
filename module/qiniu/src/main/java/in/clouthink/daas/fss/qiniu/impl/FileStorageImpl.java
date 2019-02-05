@@ -46,9 +46,18 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     private BucketManager bucketManager;
 
+    public QiniuProperties getQiniuProperties() {
+        return qiniuProperties;
+    }
+
     @Override
     public String getName() {
         return PROVIDER_NAME;
+    }
+
+    @Override
+    public boolean isMetadataSupported() {
+        return true;
     }
 
     @Override
@@ -73,13 +82,10 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
             fileObject.getAttributes().put("qiniu-bucket", qiniuBucket);
             fileObject.getAttributes().put("qiniu-filename", storedFilename);
-
             String uploadedAt = metadata.get("fss-uploadedAt");
             fileObject.setUploadedAt(uploadedAt != null ? new Date(Long.parseLong(uploadedAt)) : null);
-
             fileObject.setStoredFilename(storedFilename);
             fileObject.setProviderName(PROVIDER_NAME);
-
             fileObject.setImplementation(new QiniuFile(this.getFullPath(qiniuKey), auth));
 
             return new DefaultStoreFileResponse(PROVIDER_NAME, fileObject);
@@ -132,6 +138,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
             DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
+            //TODO resolve metadata
             fileObject.getAttributes().put("qiniu-bucket", qiniuBucket);
             fileObject.getAttributes().put("qiniu-key", qiniuKey);
             fileObject.setUploadedAt(new Date(fileInfo.putTime));
@@ -174,7 +181,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
                 return null;
             }
 
+            //TODO resolve metadata
             DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
+
             fileObject.getAttributes().put("qiniu-bucket", qiniuBucket);
             fileObject.getAttributes().put("qiniu-key", qiniuKey);
             fileObject.setUploadedAt(new Date(fileInfo.putTime));

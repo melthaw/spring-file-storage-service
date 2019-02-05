@@ -31,17 +31,22 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     private ZimgClient zimgClient = new ZimgClient();
 
-    public void setZimgProperties(ZimgProperties zimgProperties) {
-        this.zimgProperties = zimgProperties;
+    public ZimgProperties getZimgProperties() {
+        return zimgProperties;
     }
 
-    public void setZimgClient(ZimgClient zimgClient) {
-        this.zimgClient = zimgClient;
+    public ZimgClient getZimgClient() {
+        return zimgClient;
     }
 
     @Override
     public String getName() {
         return PROVIDER_NAME;
+    }
+
+    @Override
+    public boolean isMetadataSupported() {
+        return false;
     }
 
     @Override
@@ -65,9 +70,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         DefaultStoredFileObject fileObject = DefaultStoredFileObject.from(request);
 
         fileObject.getAttributes().put("zimg-md5", zimgResult.getInfo().getMd5());
-
         fileObject.setUploadedAt(new Date());
-
         fileObject.setStoredFilename(zimgResult.getInfo().getMd5());
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(new ZimgFile(zimgResult.getInfo().getMd5(),
@@ -139,9 +142,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
         try {
             zimgClient.delete(filename, zimgProperties.getDownloadEndpoint());
-            logger.info(String.format("The file [%s] is deleted.", filename));
+            logger.info(String.format("The file [%s] is deleted", filename));
         } catch (Throwable e) {
-            logger.error(String.format("Delete the file [%s] failed.", filename), e);
+            logger.error(String.format("Fail to delete the file [%s]", filename), e);
         }
 
         return fileObject;

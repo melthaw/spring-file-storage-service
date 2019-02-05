@@ -41,9 +41,22 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     @Autowired
     private AmazonS3 s3Client;
 
+    public S3Properties getS3Properties() {
+        return s3Properties;
+    }
+
+    public AmazonS3 getS3Client() {
+        return s3Client;
+    }
+
     @Override
     public String getName() {
         return PROVIDER_NAME;
+    }
+
+    @Override
+    public boolean isMetadataSupported() {
+        return true;
     }
 
     @Override
@@ -107,8 +120,8 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         }
 
         DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
-        buildStoreFileObject(s3Object, fileObject);
 
+        buildStoreFileObject(s3Object, fileObject);
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(s3Object);
 
@@ -131,8 +144,8 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         }
 
         DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
-        buildStoreFileObject(s3Object, fileObject);
 
+        buildStoreFileObject(s3Object, fileObject);
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(null);
 

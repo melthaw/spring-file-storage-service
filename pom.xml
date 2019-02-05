@@ -48,7 +48,6 @@
         <module>module/zimg</module>
         <module>module/s3</module>
         <module>module/glusterfs</module>
-        <module>module/tfs</module>
         <module>module/fastdfs</module>
         <module>module/webdav</module>
         <module>module/mongodb</module>

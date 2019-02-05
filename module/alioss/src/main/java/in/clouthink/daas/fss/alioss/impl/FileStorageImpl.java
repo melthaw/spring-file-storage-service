@@ -44,6 +44,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     @Override
+    public boolean isMetadataSupported() {
+        return true;
+    }
+
+    @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String ossBucket = resolveBucket(request);
         String ossKey = MetadataUtils.generateKey(request);

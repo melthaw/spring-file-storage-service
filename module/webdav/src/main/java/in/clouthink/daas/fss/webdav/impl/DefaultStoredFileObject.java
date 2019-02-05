@@ -1,19 +1,20 @@
-package in.clouthink.daas.fss.alioss.impl;
+package in.clouthink.daas.fss.webdav.impl;
 
-import com.aliyun.oss.model.OSSObject;
 import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.core.StoredFileObject;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.support.DefaultFileObject;
-import in.clouthink.daas.fss.util.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * @author dz
+ * @since 3
+ */
 public class DefaultStoredFileObject extends DefaultFileObject implements StoredFileObject {
 
     public static DefaultStoredFileObject from(StoreFileRequest request) {
@@ -34,13 +35,15 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         return result;
     }
 
+    private static final Log logger = LogFactory.getLog(DefaultStoredFileObject.class);
+
     private String providerName;
 
-    private OSSObject ossObject;
+    private WebDavFile webDavFile;
 
     @Override
     public String getProviderName() {
-        return providerName;
+        return this.providerName;
     }
 
     public void setProviderName(String providerName) {
@@ -48,12 +51,12 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     }
 
     @Override
-    public OSSObject getImplementation() {
-        return ossObject;
+    public WebDavFile getImplementation() {
+        return this.webDavFile;
     }
 
-    public void setImplementation(OSSObject ossObject) {
-        this.ossObject = ossObject;
+    public void setImplementation(WebDavFile webDavFile) {
+        this.webDavFile = webDavFile;
     }
 
     @Override
@@ -65,9 +68,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
             bufferSize = 1024 * 4;
         }
 
-        InputStream is = ossObject.getObjectContent();
-        IOUtils.copy(is, outputStream, bufferSize);
-        IOUtils.close(is);
+        webDavFile.writeTo(outputStream, bufferSize);
     }
 
 }

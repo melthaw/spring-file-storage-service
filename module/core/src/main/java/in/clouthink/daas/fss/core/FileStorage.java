@@ -6,7 +6,7 @@ import java.io.InputStream;
 /**
  * The file storage abstraction ( store, search , delete physically )
  *
- * @author dz on 16/3/28.
+ * @author dz
  */
 public interface FileStorage {
 
@@ -14,6 +14,11 @@ public interface FileStorage {
      * @return the name of file storage provider
      */
     String getName();
+
+    /**
+     * @return true if the storage backend is supporting save metadata , otherwise return false.
+     */
+    boolean isMetadataSupported();
 
     /**
      * @param inputStream input stream of the uploaded file
