@@ -1,9 +1,13 @@
 package in.clouthink.daas.fss.util;
 
 import in.clouthink.daas.fss.core.StoreFileRequest;
+import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class MetadataUtils {
 
@@ -22,5 +26,23 @@ public class MetadataUtils {
         }
         return metadata;
     }
+
+    public static String generateKey(StoreFileRequest request) {
+        String originalFilename = request.getOriginalFilename();
+        Date uploadedAt = new Date();
+        StringBuilder sb = new StringBuilder();
+
+        String filename = UUID.randomUUID().toString().replace("-", "");
+        sb.append(new SimpleDateFormat("yyyy/MM/dd/").format(uploadedAt)).append(filename);
+
+        String extName = in.clouthink.daas.fss.repackage.org.apache.commons.io.
+                FilenameUtils.getExtension(originalFilename);
+        if (!StringUtils.isEmpty(extName)) {
+            sb.append(".").append(extName);
+        }
+
+        return sb.toString();
+    }
+
 
 }

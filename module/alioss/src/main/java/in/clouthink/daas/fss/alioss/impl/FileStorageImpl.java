@@ -46,7 +46,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String ossBucket = resolveBucket(request);
-        String ossKey = generateKey(request);
+        String ossKey = MetadataUtils.generateKey(request);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(request.getContentType());
@@ -185,23 +185,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             bucket = ossProperties.getDefaultBucket();
         }
         return bucket;
-    }
-
-    private String generateKey(StoreFileRequest request) {
-        String originalFilename = request.getOriginalFilename();
-        Date uploadedAt = new Date();
-        StringBuilder sb = new StringBuilder();
-
-        String filename = UUID.randomUUID().toString().replace("-", "");
-        sb.append(new SimpleDateFormat("yyyy/MM/dd/").format(uploadedAt)).append(filename);
-
-        String extName = in.clouthink.daas.fss.repackage.org.apache.commons.io.FilenameUtils.getExtension(
-                originalFilename);
-        if (!StringUtils.isEmpty(extName)) {
-            sb.append(".").append(extName);
-        }
-
-        return sb.toString();
     }
 
 

@@ -1,33 +1,33 @@
-package in.clouthink.daas.fss.alioss.support;
+package in.clouthink.daas.fss.qiniu.support;
 
 import java.util.Map;
 
 /**
- * Config for oss client.
+ * Config for qiniu client.
  *
  * @author dz
  */
-public interface OssProperties {
+public interface QiniuProperties {
 
     /**
-     * The oss access key id
+     * The host of qiniu cloud
      */
-    String getKeyId();
+    String getHost();
 
     /**
-     * The oss access secret
+     * The upload endpoint (including protocol host port and url )
      */
-    String getSecret();
+    String getEndpoint();
 
     /**
-     * The oss domain base
+     * The access key
      */
-    String getOssDomain();
+    String getAccessKey();
 
     /**
-     * The img domain base
+     * The secret key
      */
-    String getImgDomain();
+    String getSecretKey();
 
     /**
      * The default bucket to store the file which's bucket is not specified for category.
@@ -39,5 +39,4 @@ public interface OssProperties {
      * if the bucket is not defined for the file's category , the default bucket will be taken place.
      */
     Map<String, String> getBuckets();
-
 }

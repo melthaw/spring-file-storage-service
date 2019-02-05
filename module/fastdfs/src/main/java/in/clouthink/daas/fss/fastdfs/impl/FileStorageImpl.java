@@ -18,11 +18,9 @@ import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -57,17 +55,8 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
     @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String originalFilename = request.getOriginalFilename();
-        Date uploadedAt = new Date();
-        StringBuilder sb = new StringBuilder();
-
-        String filename = UUID.randomUUID().toString().replace("-", "");
-        sb.append(new SimpleDateFormat("yyyy/MM/dd/").format(uploadedAt)).append(filename);
-
         String fileExtName = in.clouthink.daas.fss.repackage.org.apache.commons.io.
                 FilenameUtils.getExtension(originalFilename);
-        if (!StringUtils.isEmpty(fileExtName)) {
-            sb.append(".").append(fileExtName);
-        }
 
         Map<String, String> metadata = MetadataUtils.buildMetadata(request);
 
@@ -244,7 +233,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         }
     }
 
-
     private void buildStoreFileObject(NameValuePair[] metadata, DefaultStoredFileObject fileObject) {
         if (metadata == null || metadata.length == 0) {
             return;
@@ -284,7 +272,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
         fileObject.setAttributes(attributes);
     }
-
 
     @Override
     public void destroy() throws Exception {
