@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * //TODO defaulg
  *
  * @author dz
  */
@@ -62,7 +61,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             StringMap params = new StringMap();
             metadata.entrySet().stream().forEach(entry -> params.put(entry.getKey(), entry.getValue()));
 
-            String upToken = this.getUpToken(qiniuBucket);
+            String upToken = this.auth.uploadToken(qiniuBucket);
 
             Response res = uploadManager.put(inputStream, qiniuKey, upToken, params, request.getContentType());
             String storedFilename = this.processUploadResponse(res);
@@ -83,6 +82,17 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             fileObject.setImplementation(new QiniuFile(this.getFullPath(qiniuKey), auth));
 
             return new DefaultStoreFileResponse(PROVIDER_NAME, fileObject);
+        } catch (QiniuException e) {
+            Response r = e.response;
+
+            String message;
+            try {
+                message = r.bodyString();
+            } catch (Exception ex) {
+                message = ex.toString();
+            }
+
+            throw new QiniuStoreException(message);
         } catch (Throwable e) {
             throw new QiniuStoreException(String.format("Fail to upload file %s", request.getOriginalFilename()), e);
         }
@@ -128,7 +138,17 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             fileObject.setImplementation(new QiniuFile(this.getFullPath(qiniuKey), auth));
 
             return fileObject;
+        } catch (QiniuException e) {
+            Response r = e.response;
 
+            String message;
+            try {
+                message = r.bodyString();
+            } catch (Exception ex) {
+                message = ex.toString();
+            }
+
+            throw new QiniuStoreException(message);
         } catch (Throwable e) {
             logger.error(String.format("Delete the object[bucket=%s,key=%s] failed.", qiniuBucket, qiniuKey), e);
         }
@@ -164,6 +184,17 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             logger.info(String.format("The qiniu file object[bucket=%s,key=%s] is deleted.", qiniuBucket, qiniuKey));
 
             return fileObject;
+        } catch (QiniuException e) {
+            Response r = e.response;
+
+            String message;
+            try {
+                message = r.bodyString();
+            } catch (Exception ex) {
+                message = ex.toString();
+            }
+
+            throw new QiniuStoreException(message);
         } catch (Throwable e) {
             logger.error(String.format("Delete the object[bucket=%s,key=%s] failed.", qiniuBucket, qiniuKey), e);
         }
@@ -171,9 +202,8 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         return null;
     }
 
-
     private String resolveBucket(StoreFileRequest request) {
-        String category = (String) request.getAttributes().get("category");
+        String category = request.getAttributes().get("category");
         String bucket = qiniuProperties.getBuckets().get(category);
         if (StringUtils.isEmpty(bucket)) {
             bucket = qiniuProperties.getDefaultBucket();
@@ -186,14 +216,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
                 this.qiniuProperties.getEndpoint() + file : file;
     }
 
-    public String getDownloadUrl(String fileKey) {
-        String path = this.getFullPath(fileKey);
-        return this.auth.privateDownloadUrl(path, 3600L);
-    }
-
     private String processUploadResponse(Response res) throws QiniuException {
         if (res.isOK()) {
-            UploadResult ret = (UploadResult) res.jsonToObject(UploadResult.class);
+            UploadResult ret = res.jsonToObject(UploadResult.class);
             return this.getFullPath(ret.getKey());
         }
         else {
@@ -201,25 +226,8 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         }
     }
 
-    private void processUploadException(String fileKey, QiniuException e) {
-        Response r = e.response;
-
-        String message;
-        try {
-            message = r.bodyString();
-        } catch (Exception ex) {
-            message = ex.toString();
-        }
-
-        throw new QiniuStoreException(message);
-    }
-
-    private String getUpToken(String bucketName) {
-        return this.auth.uploadToken(bucketName);
-    }
-
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         Assert.notNull(qiniuProperties);
 
         this.auth = Auth.create(qiniuProperties.getAccessKey(), qiniuProperties.getSecretKey());
