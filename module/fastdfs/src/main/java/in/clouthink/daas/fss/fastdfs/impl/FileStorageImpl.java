@@ -58,6 +58,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
     }
 
     @Override
+    public boolean isImageSupported() {
+        return false;
+    }
+
+    @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String originalFilename = request.getOriginalFilename();
         String fileExtName = in.clouthink.daas.fss.repackage.org.apache.commons.io.

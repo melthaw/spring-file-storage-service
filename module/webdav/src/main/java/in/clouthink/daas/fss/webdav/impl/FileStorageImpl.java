@@ -51,6 +51,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     @Override
+    public boolean isImageSupported() {
+        return false;
+    }
+
+    @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String filenameToSave = MetadataUtils.generateKey(request);
 

@@ -50,6 +50,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     @Override
+    public boolean isImageSupported() {
+        return true;
+    }
+
+    @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String contentType = request.getContentType();
         if (contentType.indexOf("/") > 0) {

@@ -4,6 +4,8 @@ import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.core.StoredFileObject;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.support.DefaultFileObject;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
@@ -29,9 +31,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         return result;
     }
 
+    private static final Log logger = LogFactory.getLog(DefaultStoredFileObject.class);
+
     private String providerName;
 
-    private Object glusterFile;
+    private GlusterFile glusterFile;
 
     @Override
     public String getProviderName() {
@@ -43,11 +47,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     }
 
     @Override
-    public Object getImplementation() {
+    public GlusterFile getImplementation() {
         return glusterFile;
     }
 
-    public void setImplementation(Object s3Object) {
+    public void setImplementation(GlusterFile s3Object) {
         this.glusterFile = s3Object;
     }
 
@@ -56,11 +60,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         if (getImplementation() == null) {
             throw new UnsupportedOperationException("The stored file implementation is not supplied.");
         }
-        if (bufferSize <= 0) {
-            bufferSize = 1024 * 4;
-        }
 
-        //TODO
+        logger.warn(String.format("The bufferSize is not supported in current provider, the value[%d] will be ignored.",
+                                  bufferSize));
+
+        glusterFile.writeTo(outputStream);
     }
 
 }

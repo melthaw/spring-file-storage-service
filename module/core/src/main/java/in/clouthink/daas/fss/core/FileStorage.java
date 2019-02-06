@@ -20,6 +20,12 @@ public interface FileStorage {
      */
     boolean isMetadataSupported();
 
+
+    /**
+     * @return true if the storage backend is supporting image , otherwise return false.
+     */
+    boolean isImageSupported();
+
     /**
      * @param inputStream input stream of the uploaded file
      * @param request     the file store request

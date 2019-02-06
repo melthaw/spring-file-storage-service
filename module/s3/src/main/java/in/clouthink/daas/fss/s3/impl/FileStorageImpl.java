@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author LiangBin & dz
+ * @author dz
  */
 public class FileStorageImpl implements FileStorage, InitializingBean {
 
@@ -56,6 +56,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public boolean isMetadataSupported() {
+        return true;
+    }
+
+    @Override
+    public boolean isImageSupported() {
         return true;
     }
 

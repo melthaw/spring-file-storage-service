@@ -7,5 +7,10 @@ package in.clouthink.daas.fss.glusterfs.support;
  */
 public interface GlusterfsProperties {
 
+    String getServer();
+
+    String getVolume();
+
+    int getBufferSize();
 
 }
