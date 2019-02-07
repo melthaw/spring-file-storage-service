@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GlusterfsAutoConfiguration {
 
-    @Bean
+    @Bean(name = "glusterfsStorage")
     public FileStorage fileStorage() {
         return new FileStorageImpl();
     }
