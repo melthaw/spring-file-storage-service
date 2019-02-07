@@ -38,7 +38,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     @Autowired
     private S3Properties s3Properties;
 
-    @Autowired
     private AmazonS3 s3Client;
 
     public S3Properties getS3Properties() {

@@ -19,6 +19,8 @@ public class StorePipe {
 
     private String prettyName;
 
+    private Map<String, String> metadata;
+
     private StoreSuccessHandler successHandler;
 
     private StoreFailureHandler failureHandler;
@@ -53,11 +55,12 @@ public class StorePipe {
         return this;
     }
 
-    public void store() throws IOException {
-        store(null);
+    public StorePipe metadata(Map<String, String> metadata) {
+        this.metadata = metadata;
+        return this;
     }
 
-    public void store(Map<String, String> metadata) throws IOException {
+    public void store() throws IOException {
         StoreFileRequest request = buildFileStorageRequest(multipartFile, metadata);
         try {
             StoreFileResponse response = fileStorage.store(multipartFile.getInputStream(), request);
