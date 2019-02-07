@@ -189,8 +189,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
                 break;
             }
         }
-        throw new GlusterfsStoreException(
-                "Gluster file system is not supported, please make sure the glusterfs is enabled. ");
+
+        if (!glusterSupported) {
+            throw new GlusterfsStoreException(
+                    "Gluster file system is not supported, please make sure the glusterfs is enabled. ");
+        }
     }
 
 }
