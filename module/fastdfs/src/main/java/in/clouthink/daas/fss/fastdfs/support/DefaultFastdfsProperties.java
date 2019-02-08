@@ -8,7 +8,6 @@ import java.util.List;
 
 public class DefaultFastdfsProperties implements FastdfsProperties, InitializingBean {
 
-
     /**
      * fastdfs.connect_timeout_in_seconds
      */

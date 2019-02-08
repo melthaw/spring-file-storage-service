@@ -257,11 +257,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
                                                       .stream()
                                                       .map(server -> {
                                                           try {
-                                                              return InetSocketAddress.createUnresolved(
+                                                              return new InetSocketAddress(
                                                                       server.split(":")[0],
                                                                       Integer.parseInt(server.split(":")[1]));
                                                           } catch (Throwable e) {
-                                                              logger.error("Unresolvable tracker server" +
+                                                              logger.error("Unresolvable tracker server " +
                                                                                    server, e);
                                                           }
                                                           return null;

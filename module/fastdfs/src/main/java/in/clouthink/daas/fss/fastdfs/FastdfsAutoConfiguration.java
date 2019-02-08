@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FastdfsAutoConfiguration {
 
-    @Bean
+    @Bean(name = "fastdfsStorage")
     public FileStorage fileStorage() {
         return new FileStorageImpl();
     }
