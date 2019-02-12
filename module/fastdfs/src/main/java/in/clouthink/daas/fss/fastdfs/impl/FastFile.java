@@ -35,6 +35,7 @@ public class FastFile {
 
     public void writeTo(OutputStream outputStream) throws IOException, MyException {
         byte[] dataInBytes = storageClient.download_file(this.group, this.filename);
+        //TODO optimize with DownloadCallback
         IOUtils.copy(dataInBytes, outputStream);
     }
 

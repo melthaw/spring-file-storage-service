@@ -136,6 +136,10 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             filename = filename.substring(0, filename.indexOf("?"));
         }
 
+        if (filename.indexOf(":") <= 0) {
+            throw new FastdfsStoreException(String.format("Invalid filename %s", filename));
+        }
+
         String group_name = filename.split(":")[0];
         String remote_filename = filename.split(":")[1];
 
