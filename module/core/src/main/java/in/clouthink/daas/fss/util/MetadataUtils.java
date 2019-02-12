@@ -12,16 +12,42 @@ import java.util.UUID;
 public class MetadataUtils {
 
     public static Map<String, String> buildMetadata(StoreFileRequest request) {
+        return buildMetadata(request, false);
+    }
+
+    public static Map<String, String> buildMetadata(StoreFileRequest request, boolean replaceNullWithEmpty) {
         Map<String, String> metadata = new HashMap<>();
+
         metadata.put("fss-contentType", request.getContentType());
+        if (replaceNullWithEmpty && request.getContentType() == null) {
+            metadata.put("fss-contentType", "");
+        }
+
         metadata.put("fss-originalFilename", request.getOriginalFilename());
+        if (replaceNullWithEmpty && request.getOriginalFilename() == null) {
+            metadata.put("fss-originalFilename", "");
+        }
+
         metadata.put("fss-prettyFilename", request.getPrettyFilename());
+        if (replaceNullWithEmpty && request.getPrettyFilename() == null) {
+            metadata.put("fss-prettyFilename", "");
+        }
+
         metadata.put("fss-uploadedBy", request.getUploadedBy());
-        metadata.put("fss-size", request.getSize() > 0 ? Long.toString(request.getSize()) : null);
+        if (replaceNullWithEmpty && request.getUploadedBy() == null) {
+            metadata.put("fss-uploadedBy", "");
+        }
+
+        metadata.put("fss-size",
+                     request.getSize() > 0 ? Long.toString(request.getSize()) : "-1");
+
         metadata.put("fss-uploadedAt", Long.toString(System.currentTimeMillis()));
+
         if (request.getAttributes() != null) {
             request.getAttributes().entrySet().forEach(key -> {
-                metadata.put("fss-attrs-" + key, request.getAttributes().get(key));
+                if (request.getAttributes().get(key) != null) {
+                    metadata.put("fss-attrs-" + key, request.getAttributes().get(key));
+                }
             });
         }
         return metadata;

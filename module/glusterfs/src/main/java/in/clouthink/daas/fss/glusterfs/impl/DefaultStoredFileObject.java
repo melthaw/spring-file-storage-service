@@ -67,4 +67,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         glusterFile.writeTo(outputStream);
     }
 
+    @Override
+    public String toString() {
+        return "DefaultStoredFileObject{" +
+                "providerName='" + providerName + '\'' +
+                ", glusterFile=" + glusterFile +
+                "} " + super.toString();
+    }
 }

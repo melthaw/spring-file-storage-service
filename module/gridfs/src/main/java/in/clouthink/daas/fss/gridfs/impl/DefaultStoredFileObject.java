@@ -66,4 +66,12 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         getImplementation().writeTo(outputStream);
     }
 
+    @Override
+    public String toString() {
+        return "DefaultStoredFileObject{" +
+                "providerName='" + providerName + '\'' +
+                ", gridFSDBFile=" + gridFSDBFile +
+                "} " + super.toString();
+    }
+
 }

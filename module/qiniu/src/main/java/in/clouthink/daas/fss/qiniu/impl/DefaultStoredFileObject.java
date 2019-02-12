@@ -66,4 +66,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         qiniuFile.writeTo(outputStream);
     }
 
+    @Override
+    public String toString() {
+        return "DefaultStoredFileObject{" +
+                "providerName='" + providerName + '\'' +
+                ", qiniuFile=" + qiniuFile +
+                "} " + super.toString();
+    }
 }

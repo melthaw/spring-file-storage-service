@@ -47,7 +47,9 @@ public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject
 
     private String prettyFilename;
 
-    private String url;
+    private String fileUrl;
+
+    private String imageUrl;
 
     private String contentType;
 
@@ -139,12 +141,21 @@ public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject
     }
 
     @Override
-    public String getUrl() {
-        return url;
+    public String getFileUrl() {
+        return fileUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override

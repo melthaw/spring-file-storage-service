@@ -68,4 +68,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         IOUtils.close(is);
     }
 
+    @Override
+    public String toString() {
+        return "DefaultStoredFileObject{" +
+                "providerName='" + providerName + '\'' +
+                ", s3Object=" + s3Object +
+                "} " + super.toString();
+    }
 }

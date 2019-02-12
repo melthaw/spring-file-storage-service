@@ -72,4 +72,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         }
     }
 
+    @Override
+    public String toString() {
+        return "DefaultStoredFileObject{" +
+                "providerName='" + providerName + '\'' +
+                ", fastFile=" + fastFile +
+                "} " + super.toString();
+    }
 }

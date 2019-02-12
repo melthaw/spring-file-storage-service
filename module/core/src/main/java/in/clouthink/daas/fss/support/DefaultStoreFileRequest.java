@@ -77,4 +77,17 @@ public class DefaultStoreFileRequest implements StoreFileRequest {
     public void setAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("DefaultStoreFileRequest{");
+        sb.append("originalFilename='").append(originalFilename).append('\'');
+        sb.append(", prettyFilename='").append(prettyFilename).append('\'');
+        sb.append(", contentType='").append(contentType).append('\'');
+        sb.append(", uploadedBy='").append(uploadedBy).append('\'');
+        sb.append(", size=").append(size);
+        sb.append(", attributes=").append(attributes);
+        sb.append('}');
+        return sb.toString();
+    }
 }

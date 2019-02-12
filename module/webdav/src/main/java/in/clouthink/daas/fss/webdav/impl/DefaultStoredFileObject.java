@@ -71,4 +71,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         webDavFile.writeTo(outputStream, bufferSize);
     }
 
+    @Override
+    public String toString() {
+        return "DefaultStoredFileObject{" +
+                "providerName='" + providerName + '\'' +
+                ", webDavFile=" + webDavFile +
+                "} " + super.toString();
+    }
 }

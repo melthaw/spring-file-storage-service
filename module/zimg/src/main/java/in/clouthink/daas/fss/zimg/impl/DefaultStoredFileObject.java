@@ -71,4 +71,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         zimg.writeTo(outputStream);
     }
 
+    @Override
+    public String toString() {
+        return "DefaultStoredFileObject{" +
+                "providerName='" + providerName + '\'' +
+                ", zimg=" + zimg +
+                "} " + super.toString();
+    }
 }

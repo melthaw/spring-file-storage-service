@@ -17,7 +17,9 @@ public class DefaultFileObject implements FileObject {
 
     private String prettyFilename;
 
-    private String fullFilename;
+    private String fileUrl;
+
+    private String imageUrl;
 
     private String contentType;
 
@@ -57,12 +59,21 @@ public class DefaultFileObject implements FileObject {
     }
 
     @Override
-    public String getUrl() {
-        return fullFilename;
+    public String getFileUrl() {
+        return fileUrl;
     }
 
-    public void setFullFilename(String fullFilename) {
-        this.fullFilename = fullFilename;
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -108,6 +119,23 @@ public class DefaultFileObject implements FileObject {
 
     public void setAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("DefaultFileObject{");
+        sb.append("storedFilename='").append(storedFilename).append('\'');
+        sb.append(", originalFilename='").append(originalFilename).append('\'');
+        sb.append(", prettyFilename='").append(prettyFilename).append('\'');
+        sb.append(", fileUrl='").append(fileUrl).append('\'');
+        sb.append(", imageUrl='").append(imageUrl).append('\'');
+        sb.append(", contentType='").append(contentType).append('\'');
+        sb.append(", size=").append(size);
+        sb.append(", uploadedAt=").append(uploadedAt);
+        sb.append(", uploadedBy='").append(uploadedBy).append('\'');
+        sb.append(", attributes=").append(attributes);
+        sb.append('}');
+        return sb.toString();
     }
 
 }

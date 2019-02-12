@@ -75,6 +75,11 @@ public interface FileObject {
      *
      * @return full file name
      */
-    String getUrl();
+    String getFileUrl();
+
+    /**
+     * @return the image url if the provider support image
+     */
+    String getImageUrl();
 
 }

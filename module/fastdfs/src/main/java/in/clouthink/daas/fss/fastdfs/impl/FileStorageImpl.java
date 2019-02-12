@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * The file storage impl for fastdfs.
+ * The file storage impl for fastdfs ( using fastdfs-client-java 1.27-RELEASE ).
  *
  * @author dz
  */
@@ -37,11 +37,13 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
     @Autowired
     private FastdfsProperties fastdfsProperties;
 
+    private TrackerClient trackerClient;
+
     private TrackerServer trackerServer;
 
     private StorageServer storageServer;
 
-    private StorageClient client;
+    private StorageClient storageClient;
 
     public FastdfsProperties getFastdfsProperties() {
         return fastdfsProperties;
@@ -54,7 +56,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
     @Override
     public boolean isMetadataSupported() {
-        return true;
+        return false;
     }
 
     @Override
@@ -64,26 +66,26 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
     @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
+
         String originalFilename = request.getOriginalFilename();
         String fileExtName = in.clouthink.daas.fss.repackage.org.apache.commons.io.
                 FilenameUtils.getExtension(originalFilename);
 
-        Map<String, String> metadata = MetadataUtils.buildMetadata(request);
+        // Metadata is supported by fastdfs, but something wrong with the fastdfs java client.
+//        Map<String, String> metadata = MetadataUtils.buildMetadata(request,true);
+//
+//        NameValuePair[] metadataOfNameValuePair =  metadata.entrySet()
+//                .stream()
+//                .map(entry -> new NameValuePair(entry.getKey(),entry.getValue()))
+//                .collect(Collectors.toList())
+//                .toArray(new NameValuePair[]{});
 
         // 上传文件
         try {
-            String[] result = client.upload_file(IOUtils.copyToByteArray(inputStream),
-                                                 fileExtName,
-                                                 metadata.entrySet()
-                                                         .stream()
-                                                         .map(entry -> {
-                                                             NameValuePair pair = new NameValuePair();
-                                                             pair.setName(entry.getKey());
-                                                             pair.setValue(entry.getValue());
-                                                             return pair;
-                                                         })
-                                                         .collect(Collectors.toList())
-                                                         .toArray(new NameValuePair[]{}));
+            String[] result = storageClient.upload_file(IOUtils.copyToByteArray(inputStream),
+                                                        fileExtName,
+                                                        null);
+//                                                        metadataOfNameValuePair);
 
             String group_name = result[0];
             String remote_filename = result[1];
@@ -94,14 +96,14 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
                                        remote_filename));
 
             DefaultStoredFileObject fileObject = DefaultStoredFileObject.from(request);
-            fileObject.getAttributes().put("fastdfs-group", group_name);
 
+            fileObject.setStoredFilename(group_name + ":" + remote_filename);
+            fileObject.setFileUrl(remote_filename);
             fileObject.setUploadedAt(new Date());
-            fileObject.setStoredFilename(remote_filename);
             fileObject.setProviderName(PROVIDER_NAME);
             fileObject.setImplementation(new FastFile(group_name,
                                                       remote_filename,
-                                                      client));
+                                                      storageClient));
 
             return new DefaultStoreFileResponse(PROVIDER_NAME, fileObject);
         } catch (Throwable e) {
@@ -135,11 +137,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         }
 
         String group_name = filename.split(":")[0];
-        String remote_filename = filename.split(":")[0];
+        String remote_filename = filename.split(":")[1];
 
         try {
-            FileInfo fileInfo = client.get_file_info(group_name, remote_filename);
-            NameValuePair[] metadata = client.get_metadata(group_name, remote_filename);
+            FileInfo fileInfo = storageClient.get_file_info(group_name, remote_filename);
+//            NameValuePair[] metadata = storageClient.get_metadata(group_name, remote_filename);
 
             if (fileInfo == null) {
                 return null;
@@ -148,13 +150,14 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
             DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
-            buildStoreFileObject(metadata, fileObject);
-            fileObject.getAttributes().put("fastdfs-group", group_name);
+//            buildStoreFileObject(metadata, fileObject);
+
             fileObject.setStoredFilename(filename);
+            fileObject.setFileUrl(remote_filename);
             fileObject.setProviderName(PROVIDER_NAME);
             fileObject.setImplementation(new FastFile(group_name,
                                                       remote_filename,
-                                                      client));
+                                                      storageClient));
 
             return fileObject;
         } catch (Throwable e) {
@@ -174,10 +177,10 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         }
 
         String group_name = filename.split(":")[0];
-        String remote_filename = filename.split(":")[0];
+        String remote_filename = filename.split(":")[1];
         try {
-            FileInfo fileInfo = client.get_file_info(group_name, remote_filename);
-            NameValuePair[] metadata = client.get_metadata(group_name, remote_filename);
+            FileInfo fileInfo = storageClient.get_file_info(group_name, remote_filename);
+//            NameValuePair[] metadata = storageClient.get_metadata(group_name, remote_filename);
 
             if (fileInfo == null) {
                 return null;
@@ -185,13 +188,13 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
             DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
-            buildStoreFileObject(metadata, fileObject);
-            fileObject.getAttributes().put("fastdfs-group", group_name);
+//            buildStoreFileObject(metadata, fileObject);
             fileObject.setStoredFilename(filename);
+            fileObject.setFileUrl(remote_filename);
             fileObject.setProviderName(PROVIDER_NAME);
             fileObject.setImplementation(null);
 
-            client.delete_file(group_name, remote_filename);
+            storageClient.delete_file(group_name, remote_filename);
             logger.info(String.format("The file [%s] is deleted.", filename));
 
             return fileObject;
@@ -201,6 +204,12 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         return null;
     }
 
+    /**
+     * There are some issues to upload metadata with fastdfs java client,  so we can't convert it back to file object.
+     *
+     * @param metadata
+     * @param fileObject
+     */
     private void buildStoreFileObject(NameValuePair[] metadata, DefaultStoredFileObject fileObject) {
         if (metadata == null || metadata.length == 0) {
             return;
@@ -272,18 +281,26 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             ClientGlobal.setG_tracker_group(trackerGroup);
             ClientGlobal.setG_tracker_http_port(fastdfsProperties.getHttpTrackerHttpPort());
 
-            TrackerClient tracker = new TrackerClient();
-            this.trackerServer = tracker.getConnection();
-            this.storageServer = tracker.getStoreStorage(this.trackerServer);
-            this.client = new StorageClient(trackerServer, storageServer);
+            this.trackerClient = new TrackerClient();
+            this.trackerServer = trackerClient.getConnection();
+            Assert.notNull(this.trackerServer);
+            this.storageServer = trackerClient.getStoreStorage(this.trackerServer);
+            Assert.notNull(this.storageServer);
+            this.storageClient = new StorageClient(trackerServer, storageServer);
         } catch (Throwable e) {
             throw new FastdfsStoreException("Fail to initialize FastDFS client.", e);
         }
     }
 
     @Override
-    public void destroy() throws Exception {
-        this.trackerServer.close();
-        this.storageServer.close();
+    public void destroy() {
+        try {
+            this.trackerServer.close();
+        } catch (Throwable e) {
+        }
+        try {
+            this.storageServer.close();
+        } catch (Throwable e) {
+        }
     }
 }
