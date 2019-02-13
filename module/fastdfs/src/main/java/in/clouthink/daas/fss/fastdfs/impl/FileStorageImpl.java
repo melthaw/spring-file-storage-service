@@ -80,7 +80,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
                                                           .toArray(new NameValuePair[]{});
         // 上传文件
         try {
-            StorageClient1 storageClient = new StorageClient1(trackerServer, storageServer);
+            StorageClient storageClient = new StorageClient(trackerServer, storageServer);
             String[] result = storageClient.uploadFile(IOUtils.copyToByteArray(inputStream),
                                                        fileExtName,
                                                        metadataOfNameValuePair);
