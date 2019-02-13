@@ -84,7 +84,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             String[] result = storageClient.uploadFile(IOUtils.copyToByteArray(inputStream),
                                                        fileExtName,
                                                        metadataOfNameValuePair);
-            //null);
 
             if (result == null || result.length != 2) {
                 throw new FastdfsStoreException(String.format("Fail to upload file %s , unknown reason.",
