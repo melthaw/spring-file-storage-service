@@ -11,12 +11,12 @@ public class DefaultFastdfsProperties implements FastdfsProperties, Initializing
     /**
      * fastdfs.connect_timeout_in_seconds
      */
-    int connectTimeoutInseconds = 5;
+    int connectTimeoutInseconds = 30;
 
     /**
      * fastdfs.network_timeout_in_seconds
      */
-    int networkTimeoutInSeconds = 5;
+    int networkTimeoutInSeconds = 60;
 
     /**
      * fastdfs.charset
