@@ -25,9 +25,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.csource</groupId>
+            <groupId>in.clouthink.repack</groupId>
             <artifactId>fastdfs-client-java</artifactId>
-            <version>1.27-RELEASE</version>
+            <version>1.29.0</version>
         </dependency>
 
         <dependency>

@@ -43,8 +43,7 @@ public class DefaultFastdfsProperties implements FastdfsProperties, Initializing
      */
     List<String> trackerServers = new ArrayList<>();
 
-    @Override
-    public int getConnectTimeoutInseconds() {
+    @Override public int getConnectTimeoutInseconds() {
         return connectTimeoutInseconds;
     }
 
@@ -52,8 +51,7 @@ public class DefaultFastdfsProperties implements FastdfsProperties, Initializing
         this.connectTimeoutInseconds = connectTimeoutInseconds;
     }
 
-    @Override
-    public int getNetworkTimeoutInSeconds() {
+    @Override public int getNetworkTimeoutInSeconds() {
         return networkTimeoutInSeconds;
     }
 
@@ -61,8 +59,7 @@ public class DefaultFastdfsProperties implements FastdfsProperties, Initializing
         this.networkTimeoutInSeconds = networkTimeoutInSeconds;
     }
 
-    @Override
-    public String getCharset() {
+    @Override public String getCharset() {
         return charset;
     }
 
@@ -70,8 +67,7 @@ public class DefaultFastdfsProperties implements FastdfsProperties, Initializing
         this.charset = charset;
     }
 
-    @Override
-    public boolean isHttpAntiStealToken() {
+    @Override public boolean isHttpAntiStealToken() {
         return httpAntiStealToken;
     }
 
@@ -79,8 +75,7 @@ public class DefaultFastdfsProperties implements FastdfsProperties, Initializing
         this.httpAntiStealToken = httpAntiStealToken;
     }
 
-    @Override
-    public String getHttpSecretKey() {
+    @Override public String getHttpSecretKey() {
         return httpSecretKey;
     }
 
@@ -88,8 +83,7 @@ public class DefaultFastdfsProperties implements FastdfsProperties, Initializing
         this.httpSecretKey = httpSecretKey;
     }
 
-    @Override
-    public int getHttpTrackerHttpPort() {
+    @Override public int getHttpTrackerHttpPort() {
         return httpTrackerHttpPort;
     }
 
@@ -97,8 +91,7 @@ public class DefaultFastdfsProperties implements FastdfsProperties, Initializing
         this.httpTrackerHttpPort = httpTrackerHttpPort;
     }
 
-    @Override
-    public List<String> getTrackerServers() {
+    @Override public List<String> getTrackerServers() {
         return trackerServers;
     }
 
@@ -106,8 +99,7 @@ public class DefaultFastdfsProperties implements FastdfsProperties, Initializing
         this.trackerServers = trackerServers;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    @Override public void afterPropertiesSet() throws Exception {
         Assert.notNull(trackerServers);
         Assert.notEmpty(trackerServers);
     }

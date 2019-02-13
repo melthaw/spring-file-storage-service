@@ -3,11 +3,9 @@ package in.clouthink.daas.fss.fastdfs.impl;
 import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.core.StoredFileObject;
 import in.clouthink.daas.fss.domain.model.FileObject;
-import in.clouthink.daas.fss.fastdfs.exception.FastdfsStoreException;
 import in.clouthink.daas.fss.support.DefaultFileObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.csource.common.MyException;
 import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
@@ -39,8 +37,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
 
     private FastFile fastFile;
 
-    @Override
-    public String getProviderName() {
+    @Override public String getProviderName() {
         return providerName;
     }
 
@@ -48,8 +45,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         this.providerName = providerName;
     }
 
-    @Override
-    public FastFile getImplementation() {
+    @Override public FastFile getImplementation() {
         return fastFile;
     }
 
@@ -57,26 +53,18 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         this.fastFile = ossObject;
     }
 
-    @Override
-    public void writeTo(OutputStream outputStream, int bufferSize) throws IOException {
+    @Override public void writeTo(OutputStream outputStream, int bufferSize) throws IOException {
         if (getImplementation() == null) {
             throw new UnsupportedOperationException("The stored file implementation is not supplied.");
         }
         if (bufferSize <= 0) {
             bufferSize = 1024 * 4;
         }
-        try {
-            fastFile.writeTo(outputStream);
-        } catch (MyException e) {
-            throw new FastdfsStoreException("Fail to write to output stream", e);
-        }
+        fastFile.writeTo(outputStream);
     }
 
-    @Override
-    public String toString() {
-        return "DefaultStoredFileObject{" +
-                "providerName='" + providerName + '\'' +
-                ", fastFile=" + fastFile +
-                "} " + super.toString();
+    @Override public String toString() {
+        return "DefaultStoredFileObject{" + "providerName='" + providerName + '\'' + ", fastFile=" + fastFile + "} " +
+                super.toString();
     }
 }

@@ -1,7 +1,8 @@
 package in.clouthink.daas.fss.fastdfs.impl;
 
+import in.clouthink.daas.fss.fastdfs.exception.FastdfsDownloadException;
 import in.clouthink.daas.fss.util.IOUtils;
-import org.csource.common.MyException;
+import org.csource.common.FastdfsException;
 import org.csource.fastdfs.StorageClient;
 
 import java.io.IOException;
@@ -33,10 +34,14 @@ public class FastFile {
         return storageClient;
     }
 
-    public void writeTo(OutputStream outputStream) throws IOException, MyException {
-        byte[] dataInBytes = storageClient.download_file(this.group, this.filename);
-        //TODO optimize with DownloadCallback
-        IOUtils.copy(dataInBytes, outputStream);
+    public void writeTo(OutputStream outputStream) throws IOException {
+        try {
+            byte[] dataInBytes = storageClient.downloadFile(this.group, this.filename);
+            //TODO optimize with DownloadCallback
+            IOUtils.copy(dataInBytes, outputStream);
+        } catch (FastdfsException e) {
+            throw new FastdfsDownloadException("Fail to write to output stream", e);
+        }
     }
 
 }
