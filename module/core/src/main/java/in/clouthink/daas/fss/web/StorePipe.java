@@ -1,6 +1,9 @@
 package in.clouthink.daas.fss.web;
 
-import in.clouthink.daas.fss.core.*;
+import in.clouthink.daas.fss.core.FileStorage;
+import in.clouthink.daas.fss.core.StoreFileException;
+import in.clouthink.daas.fss.core.StoreFileRequest;
+import in.clouthink.daas.fss.core.StoreFileResponse;
 import in.clouthink.daas.fss.repackage.org.apache.commons.io.FilenameUtils;
 import in.clouthink.daas.fss.support.DefaultStoreFileRequest;
 import org.springframework.util.StringUtils;
@@ -9,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Map;
 
-public class StorePipe {
+public class StorePipe<T> {
 
     private MultipartFile multipartFile;
 
@@ -21,60 +24,66 @@ public class StorePipe {
 
     private Map<String, String> metadata;
 
-    private StoreSuccessHandler successHandler;
+    private StoreSuccessHandler<T> successHandler;
 
     private StoreFailureHandler failureHandler;
 
-    public StorePipe source(MultipartFile multipartFile) {
+    public StorePipe<T> source(MultipartFile multipartFile) {
         this.multipartFile = multipartFile;
         return this;
     }
 
-    public StorePipe target(FileStorage fileStorage) {
+    public StorePipe<T> target(FileStorage fileStorage) {
         this.fileStorage = fileStorage;
         return this;
     }
 
-    public StorePipe success(StoreSuccessHandler handler) {
+    public StorePipe<T> success(StoreSuccessHandler<T> handler) {
         this.successHandler = handler;
         return this;
     }
 
-    public StorePipe failed(StoreFailureHandler handler) {
+    public StorePipe<T> failed(StoreFailureHandler handler) {
         this.failureHandler = handler;
         return this;
     }
 
-    public StorePipe requestBy(String requestBy) {
+    public StorePipe<T> requestBy(String requestBy) {
         this.requestBy = requestBy;
         return this;
     }
 
-    public StorePipe prettyName(String prettyName) {
+    public StorePipe<T> prettyName(String prettyName) {
         this.prettyName = prettyName;
         return this;
     }
 
-    public StorePipe metadata(Map<String, String> metadata) {
+    public StorePipe<T> metadata(Map<String, String> metadata) {
         this.metadata = metadata;
         return this;
     }
 
-    public void store() throws IOException {
+    public T store() throws StoreFileException {
         StoreFileRequest request = buildFileStorageRequest(multipartFile, metadata);
         try {
             StoreFileResponse response = fileStorage.store(multipartFile.getInputStream(), request);
             if (this.successHandler != null) {
-                this.successHandler.onStoreSuccess(request, response);
+                return this.successHandler.onStoreSuccess(request, response);
             }
+        } catch (IOException exception) {
+            StoreFileException storeFileException = new StoreFileException("Fail to get the input stream from upload.",
+                                                                           exception);
+            if (this.failureHandler != null) {
+                this.failureHandler.onStoreFailure(request, storeFileException);
+            }
+            throw storeFileException;
         } catch (StoreFileException exception) {
             if (this.failureHandler != null) {
                 this.failureHandler.onStoreFailure(request, exception);
             }
-            else {
-                throw exception;
-            }
+            throw exception;
         }
+        return null;
     }
 
     private StoreFileRequest buildFileStorageRequest(MultipartFile multipartFile,
@@ -91,8 +100,7 @@ public class StorePipe {
 
         String originalSuffix = FilenameUtils.getExtension(originalFileName);
 
-        if (!StringUtils.isEmpty(this.prettyName) &&
-                !StringUtils.isEmpty(originalSuffix) &&
+        if (!StringUtils.isEmpty(this.prettyName) && !StringUtils.isEmpty(originalSuffix) &&
                 !this.prettyName.endsWith("." + originalSuffix)) {
             prettyFilename = FilenameUtils.getPrefix(this.prettyName) + "." + originalSuffix;
         }

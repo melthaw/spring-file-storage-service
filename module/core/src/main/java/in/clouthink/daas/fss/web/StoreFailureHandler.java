@@ -5,6 +5,6 @@ import in.clouthink.daas.fss.core.StoreFileRequest;
 
 public interface StoreFailureHandler {
 
-    void onStoreFailure(StoreFileRequest request, StoreFileException exception) ;
+    void onStoreFailure(StoreFileRequest request, StoreFileException exception);
 
 }

@@ -64,7 +64,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
     @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
-
         String originalFilename = request.getOriginalFilename();
         String fileExtName = in.clouthink.daas.fss.repackage.org.apache.commons.io.
                 FilenameUtils.getExtension(originalFilename);
@@ -102,6 +101,13 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
             fileObject.setStoredFilename(group_name + ":" + remote_filename);
             fileObject.setFileUrl(remote_filename);
+            try {
+                FileInfo fileInfo = storageClient.getFileInfo(group_name, remote_filename);
+                long fileSize = fileInfo.getFileSize();
+                fileObject.setSize(fileSize);
+            } catch (Throwable e) {
+                //try to fill the size from stored file , ignore if get to failure.
+            }
             fileObject.setUploadedAt(new Date());
             fileObject.setProviderName(PROVIDER_NAME);
             fileObject.setImplementation(new FastFile(group_name, remote_filename, storageClient));

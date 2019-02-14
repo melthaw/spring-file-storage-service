@@ -3,8 +3,8 @@ package in.clouthink.daas.fss.web;
 import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.core.StoreFileResponse;
 
-public interface StoreSuccessHandler {
+public interface StoreSuccessHandler<T> {
 
-    void onStoreSuccess(StoreFileRequest request, StoreFileResponse response);
+    T onStoreSuccess(StoreFileRequest request, StoreFileResponse response);
 
 }
