@@ -53,11 +53,11 @@ public class MetadataUtils {
         return metadata;
     }
 
-    public static String generateKey(StoreFileRequest request) {
-        return generateKey(request, false);
+    public static String generateFilename(StoreFileRequest request) {
+        return generateFilename(request, false);
     }
 
-    public static String generateKey(StoreFileRequest request, boolean generatePath) {
+    public static String generateFilename(StoreFileRequest request, boolean generatePath) {
         String originalFilename = request.getOriginalFilename();
         Date uploadedAt = new Date();
         StringBuilder sb = new StringBuilder();

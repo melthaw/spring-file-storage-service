@@ -17,11 +17,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author dz
@@ -56,7 +54,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String ossBucket = resolveBucket(request);
-        String ossKey = MetadataUtils.generateKey(request);
+        String ossKey = MetadataUtils.generateFilename(request);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(request.getContentType());

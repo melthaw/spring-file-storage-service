@@ -57,7 +57,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
-        String filenameToSave = MetadataUtils.generateKey(request);
+        String filenameToSave = MetadataUtils.generateFilename(request);
 
         String uploadEndpoint = webDavProperties.getEndpoint();
         if (!uploadEndpoint.endsWith("/")) {

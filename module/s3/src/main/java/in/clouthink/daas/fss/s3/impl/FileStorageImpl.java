@@ -66,7 +66,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String ossBucket = resolveBucket(request);
-        String ossKey = MetadataUtils.generateKey(request);
+        String ossKey = MetadataUtils.generateFilename(request);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(request.getContentType());

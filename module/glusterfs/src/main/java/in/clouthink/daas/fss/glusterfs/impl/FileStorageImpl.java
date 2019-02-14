@@ -64,7 +64,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         FileAttribute<Set<PosixFilePermission>> posixFileAttrs = PosixFilePermissions.asFileAttribute(
                 posixFilePermissions);
 
-        String fileToSave = MetadataUtils.generateKey(request);
+        String fileToSave = MetadataUtils.generateFilename(request);
         String saveUri = "gluster://" +
                 glusterfsProperties.getServer() + ":" +
                 glusterfsProperties.getVolume() + "/" +
