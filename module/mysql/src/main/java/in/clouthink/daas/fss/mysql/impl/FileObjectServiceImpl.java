@@ -1,6 +1,5 @@
 package in.clouthink.daas.fss.mysql.impl;
 
-import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.domain.model.FileObjectHistory;
 import in.clouthink.daas.fss.domain.request.FileObjectSaveRequest;
