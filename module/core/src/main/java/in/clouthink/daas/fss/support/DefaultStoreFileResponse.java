@@ -23,4 +23,5 @@ public class DefaultStoreFileResponse implements StoreFileResponse {
     public StoredFileObject getStoredFileObject() {
         return fileObject;
     }
+
 }

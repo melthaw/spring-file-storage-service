@@ -19,8 +19,8 @@ public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject
     public static FileObject from(StoreFileRequest request) {
         FileObject result = new FileObject();
         BeanUtils.copyProperties(request, result);
-        if (result.getAttributes() == null) {
-            result.setAttributes(new HashMap<String, String>());
+        if (request.getAttributes() != null) {
+            result.setAttributes(request.getAttributes());
         }
         return result;
     }

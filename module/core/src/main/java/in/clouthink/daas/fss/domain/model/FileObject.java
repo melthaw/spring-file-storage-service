@@ -25,11 +25,15 @@ public interface FileObject {
     String getPrettyFilename();
 
     /**
-     * The final stored physical file name in backend (the final file name must be unique)
+     * The final stored physical file name in backend (the stored file name must be unique)
      * <p>
-     * for example : /2019/01/01/32179432792779432.jpg
+     * example 1: /2019/01/01/32179432792779432.jpg
+     * <p>
+     * example 2: bucket1:/2019/01/01/32179432792779432.jpg
+     * <p>
+     * example 3: group1:/2019/01/01/32179432792779432.jpg
      *
-     * @return final file name
+     * @return stored file name
      */
     String getStoredFilename();
 
@@ -73,12 +77,12 @@ public interface FileObject {
      * <p>
      * for example : http://oss.aliyun.com/fss/2019/01/01/32179432792779432.jpg
      *
-     * @return full file name
+     * @return full file name if supported
      */
     String getFileUrl();
 
     /**
-     * @return the image url if the provider support image
+     * @return the image url if image can be downloaded
      */
     String getImageUrl();
 

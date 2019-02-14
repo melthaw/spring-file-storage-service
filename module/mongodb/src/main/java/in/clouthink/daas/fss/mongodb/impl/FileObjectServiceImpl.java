@@ -3,10 +3,12 @@ package in.clouthink.daas.fss.mongodb.impl;
 import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.domain.model.FileObjectHistory;
+import in.clouthink.daas.fss.domain.request.FileObjectSaveRequest;
 import in.clouthink.daas.fss.domain.request.FileObjectSearchRequest;
 import in.clouthink.daas.fss.domain.service.FileObjectService;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectHistoryRepository;
 import in.clouthink.daas.fss.mongodb.repository.FileObjectRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 public class FileObjectServiceImpl implements FileObjectService {
 
     @Autowired
@@ -38,30 +39,22 @@ public class FileObjectServiceImpl implements FileObjectService {
         return fileObjectHistoryRepository.findByFileObjectId(id)
                                           .stream()
                                           .map(item -> (FileObjectHistory) item)
-                                          .collect(Collectors
-                                                           .toList());
+                                          .collect(Collectors.toList());
     }
 
     @Override
-    public FileObject merge(StoreFileRequest request, FileObject fileObject) {
-        return null;
-    }
-
-    @Override
-    public FileObject save(StoreFileRequest storeFileRequest) {
-        in.clouthink.daas.fss.mongodb.model.FileObject fileObject =
-                in.clouthink.daas.fss.mongodb.model.FileObject.from(storeFileRequest);
-
+    public FileObject save(FileObjectSaveRequest storeFileRequest) {
+        in.clouthink.daas.fss.mongodb.model.FileObject fileObject = new in.clouthink.daas.fss.mongodb.model.FileObject();
+        BeanUtils.copyProperties(storeFileRequest, fileObject, "id");
         return fileObjectRepository.save(fileObject);
     }
 
     @Override
     public FileObjectHistory saveAsHistory(FileObject fileObject) {
-        in.clouthink.daas.fss.mongodb.model.FileObject mongdbFileObject =
-                (in.clouthink.daas.fss.mongodb.model.FileObject) fileObject;
+        in.clouthink.daas.fss.mongodb.model.FileObject mongodbFileObject = (in.clouthink.daas.fss.mongodb.model.FileObject) fileObject;
 
-        in.clouthink.daas.fss.mongodb.model.FileObjectHistory result =
-                in.clouthink.daas.fss.mongodb.model.FileObjectHistory.from(mongdbFileObject);
+        in.clouthink.daas.fss.mongodb.model.FileObjectHistory result = in.clouthink.daas.fss.mongodb.model.FileObjectHistory
+                .from(mongodbFileObject);
 
         return fileObjectHistoryRepository.save(result);
     }

@@ -1,8 +1,8 @@
 package in.clouthink.daas.fss.domain.service;
 
-import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.domain.model.FileObjectHistory;
+import in.clouthink.daas.fss.domain.request.FileObjectSaveRequest;
 import in.clouthink.daas.fss.domain.request.FileObjectSearchRequest;
 import org.springframework.data.domain.Page;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * we need the file object service which save the file object attributes on the local database.
  * <p>
  *
- * @author dz on 16/3/28.
+ * @author dz
  */
 public interface FileObjectService {
 
@@ -25,7 +25,7 @@ public interface FileObjectService {
     FileObject findById(String id);
 
     /**
-     * @param storedFileName full stored file name, partial is not supported
+     * @param storedFileName the stored file name which returned by underlying store service
      * @return FileObject
      */
     FileObject findByStoredFilename(String storedFileName);
@@ -37,17 +37,10 @@ public interface FileObjectService {
     List<FileObjectHistory> findHistoryByFileObjectId(String id);
 
     /**
-     * @param storeFileRequest the request to store file
+     * @param saveRequest the request to store file
      * @return FileObject
      */
-    FileObject save(StoreFileRequest storeFileRequest);
-
-    /**
-     * @param request
-     * @param fileObject
-     * @return
-     */
-    FileObject merge(StoreFileRequest request, FileObject fileObject);
+    FileObject save(FileObjectSaveRequest saveRequest);
 
     /**
      * @param fileObject
