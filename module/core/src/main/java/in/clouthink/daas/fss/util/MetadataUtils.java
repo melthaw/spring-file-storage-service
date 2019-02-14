@@ -1,6 +1,7 @@
 package in.clouthink.daas.fss.util;
 
 import in.clouthink.daas.fss.core.StoreFileRequest;
+import in.clouthink.daas.fss.repackage.org.apache.commons.io.FilenameUtils;
 import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -38,8 +39,7 @@ public class MetadataUtils {
             metadata.put("fss-uploadedBy", "");
         }
 
-        metadata.put("fss-size",
-                     request.getSize() > 0 ? Long.toString(request.getSize()) : "-1");
+        metadata.put("fss-size", request.getSize() > 0 ? Long.toString(request.getSize()) : "-1");
 
         metadata.put("fss-uploadedAt", Long.toString(System.currentTimeMillis()));
 
@@ -54,15 +54,21 @@ public class MetadataUtils {
     }
 
     public static String generateKey(StoreFileRequest request) {
+        return generateKey(request, false);
+    }
+
+    public static String generateKey(StoreFileRequest request, boolean generatePath) {
         String originalFilename = request.getOriginalFilename();
         Date uploadedAt = new Date();
         StringBuilder sb = new StringBuilder();
 
-        String filename = UUID.randomUUID().toString().replace("-", "");
-        sb.append(new SimpleDateFormat("yyyy/MM/dd/").format(uploadedAt)).append(filename);
+        String filenameWithoutSuffix = UUID.randomUUID().toString().replace("-", "");
+        if (generatePath) {
+            sb.append(new SimpleDateFormat("yyyy/MM/dd/").format(uploadedAt));
+        }
+        sb.append(filenameWithoutSuffix);
 
-        String extName = in.clouthink.daas.fss.repackage.org.apache.commons.io.
-                FilenameUtils.getExtension(originalFilename);
+        String extName = FilenameUtils.getExtension(originalFilename);
         if (!StringUtils.isEmpty(extName)) {
             sb.append(".").append(extName);
         }

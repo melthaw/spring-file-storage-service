@@ -6,6 +6,7 @@ import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.core.StoreFileResponse;
 import in.clouthink.daas.fss.repackage.org.apache.commons.io.FilenameUtils;
 import in.clouthink.daas.fss.support.DefaultStoreFileRequest;
+import in.clouthink.daas.fss.util.IEUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -108,15 +109,9 @@ public class StorePipe<T> {
         result.setPrettyFilename(prettyFilename);
 
         String contentType = multipartFile.getContentType();
-        if (StringUtils.isEmpty(contentType)) {
+        if (!StringUtils.isEmpty(contentType)) {
             // Fixed ContentType from IE
-            contentType = multipartFile.getContentType();
-            if ("image/pjpeg".equals(contentType) || "image/jpg".equals(contentType)) {
-                contentType = "image/jpeg";
-            }
-            else if ("image/x-png".equals(contentType)) {
-                contentType = "image/png";
-            }
+            contentType = IEUtils.toStandardContentType(contentType);
         }
         result.setContentType(contentType);
 
