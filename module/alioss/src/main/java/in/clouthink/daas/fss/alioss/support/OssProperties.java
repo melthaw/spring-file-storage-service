@@ -17,17 +17,12 @@ public interface OssProperties {
     /**
      * The oss access secret
      */
-    String getSecret();
+    String getKeySecret();
 
     /**
      * The oss domain base
      */
-    String getOssDomain();
-
-    /**
-     * The img domain base
-     */
-    String getImgDomain();
+    String getEndpoint();
 
     /**
      * The default bucket to store the file which's bucket is not specified for category.

@@ -13,11 +13,9 @@ public class DefaultOssProperties implements OssProperties, InitializingBean {
 
 	private String keyId;
 
-	private String secret;
+	private String keySecret;
 
-	private String ossDomain;
-
-	private String imgDomain;
+	private String endpoint;
 
 	private String defaultBucket;
 
@@ -33,30 +31,21 @@ public class DefaultOssProperties implements OssProperties, InitializingBean {
 	}
 
 	@Override
-	public String getSecret() {
-		return secret;
+	public String getKeySecret() {
+		return keySecret;
 	}
 
-	public void setSecret(String secret) {
-		this.secret = secret;
-	}
-
-	@Override
-	public String getOssDomain() {
-		return ossDomain;
-	}
-
-	public void setOssDomain(String ossDomain) {
-		this.ossDomain = ossDomain;
+	public void setKeySecret(String keySecret) {
+		this.keySecret = keySecret;
 	}
 
 	@Override
-	public String getImgDomain() {
-		return imgDomain;
+	public String getEndpoint() {
+		return endpoint;
 	}
 
-	public void setImgDomain(String imgDomain) {
-		this.imgDomain = imgDomain;
+	public void setEndpoint(String endpoint) {
+		this.endpoint = endpoint;
 	}
 
 	@Override
@@ -80,9 +69,8 @@ public class DefaultOssProperties implements OssProperties, InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(keyId);
-		Assert.notNull(secret);
-		Assert.notNull(ossDomain);
-		Assert.notNull(imgDomain);
+		Assert.notNull(keySecret);
+		Assert.notNull(endpoint);
 		Assert.notNull(defaultBucket);
 	}
 

@@ -101,6 +101,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
             fileObject.setStoredFilename(group_name + ":" + remote_filename);
             fileObject.setFileUrl(remote_filename);
+            fileObject.setUploadedAt(new Date());
+            fileObject.setProviderName(PROVIDER_NAME);
+
             try {
                 FileInfo fileInfo = storageClient.getFileInfo(group_name, remote_filename);
                 long fileSize = fileInfo.getFileSize();
@@ -108,8 +111,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             } catch (Throwable e) {
                 //try to fill the size from stored file , ignore if get to failure.
             }
-            fileObject.setUploadedAt(new Date());
-            fileObject.setProviderName(PROVIDER_NAME);
             fileObject.setImplementation(new FastFile(group_name, remote_filename, storageClient));
 
             return new DefaultStoreFileResponse(PROVIDER_NAME, fileObject);
@@ -145,7 +146,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         }
 
         if (filename.indexOf(":") <= 0) {
-            throw new FastdfsStoreException(String.format("Invalid filename %s", filename));
+            throw new FastdfsStoreException(String.format(
+                    "Invalid filename %s , the format should be group_name:file_path",
+                    filename));
         }
 
         String group_name = filename.split(":")[0];
@@ -171,7 +174,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
             return fileObject;
         } catch (Throwable e) {
-            logger.error(String.format("Fail to getG the file [%s]", filename), e);
+            logger.error(String.format("Fail to get the file [%s]", filename), e);
         }
         return null;
     }
@@ -186,8 +189,15 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             filename = filename.substring(0, filename.indexOf("?"));
         }
 
+        if (filename.indexOf(":") <= 0) {
+            throw new FastdfsStoreException(String.format(
+                    "Invalid filename %s , the format should be group_name:file_path",
+                    filename));
+        }
+
         String group_name = filename.split(":")[0];
         String remote_filename = filename.split(":")[1];
+
         try {
             StorageClient storageClient = new StorageClient(trackerServer, storageServer);
             FileInfo fileInfo = storageClient.getFileInfo(group_name, remote_filename);

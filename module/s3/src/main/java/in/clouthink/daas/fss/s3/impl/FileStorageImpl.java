@@ -4,8 +4,10 @@ import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.profile.internal.ProfileStaticCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
@@ -72,8 +74,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         objectMetadata.setContentType(request.getContentType());
         objectMetadata.setUserMetadata(MetadataUtils.buildMetadata(request));
 
-        PutObjectResult putObjectResult = s3Client
-                .putObject(ossBucket, ossKey, inputStream, objectMetadata);
+        PutObjectResult putObjectResult = s3Client.putObject(ossBucket, ossKey, inputStream, objectMetadata);
 
         logger.debug(String.format("%s is stored", ossKey));
 
@@ -211,13 +212,16 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     public void afterPropertiesSet() throws Exception {
         Assert.notNull(s3Properties);
 
-        AWSCredentials credentials = new BasicAWSCredentials(s3Properties.getAccessKey(),
-                                                             s3Properties.getSecretKey());
+        AWSCredentials credentials = new BasicAWSCredentials(s3Properties.getAccessKey(), s3Properties.getSecretKey());
 
         ClientConfiguration clientConfig = new ClientConfiguration();
         clientConfig.setProtocol(Protocol.valueOf(s3Properties.getProtocol()));
 
-        s3Client = new AmazonS3Client(credentials, clientConfig);
+//        s3Client = AmazonS3ClientBuilder.standard()
+        //                                        .withClientConfiguration(clientConfig)
+        //                                        .withCredentials(credentials)
+        //                                        .build();
+        s3Client =  new AmazonS3Client(credentials, clientConfig);
         s3Client.setEndpoint(s3Properties.getEndpoint());
     }
 

@@ -36,7 +36,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
 
     private String providerName;
 
-    private OSSObject ossObject;
+    private OssObjectProxy ossObject;
 
     @Override
     public String getProviderName() {
@@ -48,11 +48,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     }
 
     @Override
-    public OSSObject getImplementation() {
+    public OssObjectProxy getImplementation() {
         return ossObject;
     }
 
-    public void setImplementation(OSSObject ossObject) {
+    public void setImplementation(OssObjectProxy ossObject) {
         this.ossObject = ossObject;
     }
 
@@ -65,16 +65,12 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
             bufferSize = 1024 * 4;
         }
 
-        InputStream is = ossObject.getObjectContent();
-        IOUtils.copy(is, outputStream, bufferSize);
-        IOUtils.close(is);
+        ossObject.writeTo(outputStream, bufferSize);
     }
 
     @Override
     public String toString() {
-        return "DefaultStoredFileObject{" +
-                "providerName='" + providerName + '\'' +
-                ", ossObject=" + ossObject +
-                "} " + super.toString();
+        return "DefaultStoredFileObject{" + "providerName='" + providerName + '\'' + ", ossObject=" + ossObject + "} " +
+                super.toString();
     }
 }
