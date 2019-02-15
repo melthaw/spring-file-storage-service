@@ -82,7 +82,10 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             }
         }
 
-        logger.debug(String.format("%s is stored", ossObjectName));
+        logger.debug(String.format("The uploading %s stored as oss-object[bucket=%s,object=%s]",
+                                   request.getOriginalFilename(),
+                                   ossBucket,
+                                   ossObjectName));
 
         DefaultStoredFileObject fileObject = DefaultStoredFileObject.from(request);
 
@@ -140,6 +143,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
         buildStoreFileObject(ossObject, fileObject);
+        fileObject.setFileUrl(buildDownloadUrl(ossObject.getBucketName(), ossObject.getKey()));
+        fileObject.setImageUrl(buildImageUrl(ossObject.getBucketName(), ossObject.getKey()));
+        fileObject.setStoredFilename(filename);
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(new OssObjectProxy(ossObject));
 
@@ -173,12 +179,13 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
         buildStoreFileObject(ossObject, fileObject);
+        fileObject.setStoredFilename(filename);
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(null);
 
         try {
             ossClient.deleteObject(ossBucket, ossObjectKey);
-            logger.info(String.format("The oss-object[bucket=%s,object=%s] is deleted.", ossBucket, ossObjectKey));
+            logger.debug(String.format("The oss-object[bucket=%s,object=%s] is deleted.", ossBucket, ossObjectKey));
         } catch (Throwable e) {
             logger.error(String.format("Fail to delete the oss-object[bucket=%s,object=%s]", ossBucket, ossObjectKey),
                          e);
@@ -195,7 +202,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         }
 
         try {
-            fileObject.setStoredFilename(ossObject.getKey());
             fileObject.setOriginalFilename(userMetadata.get("fss-originalFilename"));
             fileObject.setPrettyFilename(userMetadata.get("fss-prettyFilename"));
             fileObject.setContentType(userMetadata.get("fss-contentType"));
@@ -206,9 +212,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
             String size = userMetadata.get("fss-size");
             fileObject.setSize(size != null ? Long.parseLong(size) : -1);
-
-            fileObject.setFileUrl(buildDownloadUrl(ossObject.getBucketName(), ossObject.getKey()));
-            fileObject.setImageUrl(buildImageUrl(ossObject.getBucketName(), ossObject.getKey()));
         } catch (Throwable e) {
             logger.error(e, e);
         }

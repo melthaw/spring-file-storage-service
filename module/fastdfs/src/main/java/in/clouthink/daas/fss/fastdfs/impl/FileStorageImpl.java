@@ -92,7 +92,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             String group_name = result[0];
             String remote_filename = result[1];
 
-            logger.debug(String.format("%s is stored to group %s with name %s",
+            logger.debug(String.format("The uploading %s is stored to [group=%s , filename=%s]",
                                        originalFilename,
                                        group_name,
                                        remote_filename));
@@ -204,7 +204,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             NameValuePair[] metadata = storageClient.getMetadata(group_name, remote_filename);
 
             if (fileInfo == null) {
-                logger.warn(String.format("File [%s] not found.", filename));
+                logger.warn(String.format("File %s not found.", filename));
                 return null;
             }
 
@@ -217,11 +217,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             fileObject.setImplementation(null);
 
             storageClient.deleteFile(group_name, remote_filename);
-            logger.info(String.format("The file [%s] is deleted.", filename));
+            logger.info(String.format("The file[group=%s , filename=%s] is deleted.", group_name, remote_filename));
 
             return fileObject;
         } catch (Throwable e) {
-            logger.error(String.format("Fail to delete the file [%s]", filename), e);
+            logger.error(String.format("Fail to delete the file %s", filename), e);
         }
         return null;
     }
