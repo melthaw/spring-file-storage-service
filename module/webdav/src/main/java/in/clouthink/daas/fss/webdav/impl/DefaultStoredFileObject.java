@@ -35,8 +35,6 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         return result;
     }
 
-    private static final Log logger = LogFactory.getLog(DefaultStoredFileObject.class);
-
     private String providerName;
 
     private WebDavFile webDavFile;
@@ -73,9 +71,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
 
     @Override
     public String toString() {
-        return "DefaultStoredFileObject{" +
-                "providerName='" + providerName + '\'' +
-                ", webDavFile=" + webDavFile +
+        return "DefaultStoredFileObject{" + "providerName='" + providerName + '\'' + ", webDavFile=" + webDavFile +
                 "} " + super.toString();
     }
 }

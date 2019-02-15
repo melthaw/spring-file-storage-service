@@ -7,6 +7,8 @@ package in.clouthink.daas.fss.webdav.support;
  */
 public interface WebDavProperties {
 
+	boolean isSslEnabled();
+
 	String getUsername();
 
 	String getPassword();

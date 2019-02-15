@@ -4,6 +4,7 @@ import com.github.sardine.Sardine;
 import in.clouthink.daas.fss.util.IOUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public class WebDavFile {
@@ -26,7 +27,12 @@ public class WebDavFile {
     }
 
     public void writeTo(OutputStream outputStream, int bufferSize) throws IOException {
-        IOUtils.copy(sardine.get(remoteFilename), outputStream, bufferSize);
+        InputStream inputStream = sardine.get(remoteFilename);
+        try {
+            IOUtils.copy(inputStream, outputStream, bufferSize);
+        } finally {
+            IOUtils.close(inputStream);
+        }
     }
 
 }

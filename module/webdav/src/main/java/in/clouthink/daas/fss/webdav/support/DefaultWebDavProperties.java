@@ -8,11 +8,22 @@ import org.springframework.util.Assert;
  */
 public class DefaultWebDavProperties implements WebDavProperties, InitializingBean {
 
+    private boolean sslEnabled = false;
+
     private String username;
 
     private String password;
 
     private String endpoint;
+
+    @Override
+    public boolean isSslEnabled() {
+        return sslEnabled;
+    }
+
+    public void setSslEnabled(boolean sslEnabled) {
+        this.sslEnabled = sslEnabled;
+    }
 
     @Override
     public String getUsername() {

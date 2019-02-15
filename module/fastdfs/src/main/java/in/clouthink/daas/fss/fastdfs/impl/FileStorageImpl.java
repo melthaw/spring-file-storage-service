@@ -204,7 +204,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             NameValuePair[] metadata = storageClient.getMetadata(group_name, remote_filename);
 
             if (fileInfo == null) {
-                logger.warn(String.format("File %s not found.", filename));
+                logger.warn(String.format("File [%s] not found.", filename));
                 return null;
             }
 
@@ -221,7 +221,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
             return fileObject;
         } catch (Throwable e) {
-            logger.error(String.format("Fail to delete the file %s", filename), e);
+            logger.error(String.format("Fail to delete the file [%s]", filename), e);
         }
         return null;
     }

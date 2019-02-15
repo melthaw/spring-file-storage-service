@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebDavAutoConfiguration {
 
-    @Bean
+    @Bean(name = "webdavStorage")
     public FileStorage fileStorage() {
         return new FileStorageImpl();
     }
