@@ -11,6 +11,10 @@ import org.springframework.beans.BeanUtils;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * @author dz
+ * @since 3
+ */
 public class DefaultStoredFileObject extends DefaultFileObject implements StoredFileObject {
 
     public static DefaultStoredFileObject from(StoreFileRequest request) {
@@ -34,7 +38,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     private static final Log logger = LogFactory.getLog(DefaultStoredFileObject.class);
 
     private String providerName;
-    
+
     private QiniuFile qiniuFile;
 
     @Override
@@ -63,14 +67,12 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
         if (bufferSize <= 0) {
             bufferSize = 1024 * 4;
         }
-        qiniuFile.writeTo(outputStream);
+        qiniuFile.writeTo(outputStream, bufferSize);
     }
 
     @Override
     public String toString() {
-        return "DefaultStoredFileObject{" +
-                "providerName='" + providerName + '\'' +
-                ", qiniuFile=" + qiniuFile +
-                "} " + super.toString();
+        return "DefaultStoredFileObject{" + "providerName='" + providerName + '\'' + ", qiniuFile=" + qiniuFile + "} " +
+                super.toString();
     }
 }

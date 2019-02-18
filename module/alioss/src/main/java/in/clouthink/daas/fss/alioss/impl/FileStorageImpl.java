@@ -89,12 +89,21 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
         DefaultStoredFileObject fileObject = DefaultStoredFileObject.from(request);
 
+        String url = new StringBuilder("https://").append(ossBucket)
+                                                  .append(".")
+                                                  .append(this.ossProperties.getEndpoint())
+                                                  .append("/")
+                                                  .append(ossObjectName)
+                                                  .toString();
+
         fileObject.getAttributes().put("oss-bucket", ossBucket);
         fileObject.getAttributes().put("oss-object", ossObjectName);
+        fileObject.getAttributes().put("oss-url", url);
 
         String uploadedAt = objectMetadata.getUserMetadata().get("fss-uploadedAt");
         fileObject.setUploadedAt(uploadedAt != null ? new Date(Long.parseLong(uploadedAt)) : null);
 
+        fileObject.setFileUrl(url);
         fileObject.setStoredFilename(ossBucket + ":" + ossObjectName);
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(new OssObjectProxy(ossClient, ossBucket, ossObjectName));
@@ -143,8 +152,10 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
         buildStoreFileObject(ossObject, fileObject);
-        fileObject.setFileUrl(buildDownloadUrl(ossObject.getBucketName(), ossObject.getKey()));
-        fileObject.setImageUrl(buildImageUrl(ossObject.getBucketName(), ossObject.getKey()));
+
+        String fileUrl = ossObject.getObjectMetadata().getUserMetadata().get("oss-url");
+
+        fileObject.setFileUrl(fileUrl);
         fileObject.setStoredFilename(filename);
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(new OssObjectProxy(ossObject));
@@ -235,24 +246,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             bucket = ossProperties.getDefaultBucket();
         }
         return bucket;
-    }
-
-    private String buildDownloadUrl(String ossBucket, String ossObjectName) {
-        return new StringBuilder("https://").append(ossBucket)
-                                            .append(".")
-                                            .append(this.ossProperties.getEndpoint())
-                                            .append("/")
-                                            .append(ossObjectName)
-                                            .toString();
-    }
-
-    private String buildImageUrl(String ossBucket, String ossObjectName) {
-        return new StringBuilder("https://").append(ossBucket)
-                                            .append(".")
-                                            .append(this.ossProperties.getEndpoint())
-                                            .append("/")
-                                            .append(ossObjectName)
-                                            .toString();
     }
 
     @Override

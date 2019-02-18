@@ -6,11 +6,13 @@ import org.springframework.util.Assert;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author dz
+ * @since 3
+ */
 public class DefaultQiniuProperties implements QiniuProperties, InitializingBean {
 
     private String host;
-
-    private String endpoint;
 
     private String accessKey;
 
@@ -18,7 +20,7 @@ public class DefaultQiniuProperties implements QiniuProperties, InitializingBean
 
     private String defaultBucket;
 
-    private Map<String,String> buckets = new HashMap<String,String>();
+    private Map<String, String> buckets = new HashMap<String, String>();
 
     @Override
     public String getHost() {
@@ -27,18 +29,6 @@ public class DefaultQiniuProperties implements QiniuProperties, InitializingBean
 
     public void setHost(String host) {
         this.host = host;
-    }
-
-    @Override
-    public String getEndpoint() {
-        if (this.endpoint == null) {
-            return null;
-        }
-        return this.endpoint.endsWith("/") ? this.endpoint : this.endpoint + "/";
-    }
-
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
     }
 
     @Override
@@ -69,18 +59,17 @@ public class DefaultQiniuProperties implements QiniuProperties, InitializingBean
     }
 
     @Override
-    public Map<String,String> getBuckets() {
+    public Map<String, String> getBuckets() {
         return buckets;
     }
 
-    public void setBuckets(Map<String,String> buckets) {
+    public void setBuckets(Map<String, String> buckets) {
         this.buckets = buckets;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         Assert.notNull(host);
-        Assert.notNull(endpoint);
         Assert.notNull(accessKey);
         Assert.notNull(secretKey);
         Assert.notNull(defaultBucket);

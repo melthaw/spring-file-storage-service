@@ -6,6 +6,7 @@ import java.util.Map;
  * Config for qiniu client.
  *
  * @author dz
+ * @since 3
  */
 public interface QiniuProperties {
 
@@ -13,11 +14,6 @@ public interface QiniuProperties {
      * The host of qiniu cloud
      */
     String getHost();
-
-    /**
-     * The upload endpoint (including protocol host port and url )
-     */
-    String getEndpoint();
 
     /**
      * The access key

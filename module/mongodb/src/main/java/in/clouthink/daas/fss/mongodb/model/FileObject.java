@@ -210,4 +210,28 @@ public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject
     public void setAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("FileObject{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", category='").append(category).append('\'');
+        sb.append(", code='").append(code).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", bizId='").append(bizId).append('\'');
+        sb.append(", storedFilename='").append(storedFilename).append('\'');
+        sb.append(", originalFilename='").append(originalFilename).append('\'');
+        sb.append(", prettyFilename='").append(prettyFilename).append('\'');
+        sb.append(", fileUrl='").append(fileUrl).append('\'');
+        sb.append(", imageUrl='").append(imageUrl).append('\'');
+        sb.append(", contentType='").append(contentType).append('\'');
+        sb.append(", uploadedBy='").append(uploadedBy).append('\'');
+        sb.append(", uploadedAt=").append(uploadedAt);
+        sb.append(", size=").append(size);
+        sb.append(", version=").append(version);
+        sb.append(", attributes=").append(attributes);
+        sb.append('}');
+        return sb.toString();
+    }
 }

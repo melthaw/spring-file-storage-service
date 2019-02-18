@@ -1,11 +1,13 @@
 package in.clouthink.daas.fss.qiniu.impl;
 
+import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
@@ -24,12 +26,10 @@ import org.springframework.util.StringUtils;
 import java.io.*;
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 
 /**
- * TODO: metadata
- *
  * @author dz
+ * @see <a href="https://developer.qiniu.com/kodo/sdk/1239/java">offical sdk</a>
  */
 public class FileStorageImpl implements FileStorage, InitializingBean {
 
@@ -57,7 +57,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public boolean isMetadataSupported() {
-        return true;
+        return false;
     }
 
     @Override
@@ -67,33 +67,45 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
+        String qiniuKey = MetadataUtils.generateFilename(request);
+        String qiniuBucket = this.resolveBucket(request);
+
         try {
-            String qiniuBucket = this.resolveBucket(request);
-            String qiniuKey = UUID.randomUUID().toString().replace("-", "");
-
-            Map<String, String> metadata = MetadataUtils.buildMetadata(request);
-
-            StringMap params = new StringMap();
-            metadata.entrySet().stream().forEach(entry -> params.put(entry.getKey(), entry.getValue()));
-
+            //get up token
             String upToken = this.auth.uploadToken(qiniuBucket);
 
-            Response res = uploadManager.put(inputStream, qiniuKey, upToken, params, request.getContentType());
-            String storedFilename = this.processUploadResponse(res);
+            Response res = uploadManager.put(inputStream, qiniuKey, upToken, null, request.getContentType());
 
-            logger.debug(String.format("%s is stored", storedFilename));
+            if (!res.isOK()) {
+                throw new QiniuStoreException(res.toString());
+            }
+
+            DefaultPutRet uploadResult = new Gson().fromJson(res.bodyString(), DefaultPutRet.class);
+
+            logger.debug(String.format("%s is uploaded and stored as %s",
+                                       request.getOriginalFilename(),
+                                       uploadResult.key));
 
             DefaultStoredFileObject fileObject = DefaultStoredFileObject.from(request);
 
+            String url = new StringBuilder("https://").append(this.qiniuProperties.getHost())
+                                                      .append("/")
+                                                      .append(uploadResult.key)
+                                                      .toString();
+
             fileObject.getAttributes().put("qiniu-bucket", qiniuBucket);
-            fileObject.getAttributes().put("qiniu-filename", storedFilename);
-            String uploadedAt = metadata.get("fss-uploadedAt");
-            fileObject.setUploadedAt(uploadedAt != null ? new Date(Long.parseLong(uploadedAt)) : null);
-            fileObject.setStoredFilename(storedFilename);
+            fileObject.getAttributes().put("qiniu-key", uploadResult.key);
+            fileObject.getAttributes().put("qiniu-url", url);
+
+            fileObject.setUploadedAt(new Date());
+            fileObject.setFileUrl(url);
+            fileObject.setStoredFilename(qiniuBucket + ":" + uploadResult.key);
             fileObject.setProviderName(PROVIDER_NAME);
-            fileObject.setImplementation(new QiniuFile(this.getFullPath(qiniuKey), auth));
+            fileObject.setImplementation(new QiniuFile(url, auth));
 
             return new DefaultStoreFileResponse(PROVIDER_NAME, fileObject);
+        } catch (QiniuStoreException e) {
+            throw e;
         } catch (QiniuException e) {
             Response r = e.response;
 
@@ -126,16 +138,23 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoredFileObject findByStoredFilename(String filename) {
-        String qiniuBucket = qiniuProperties.getDefaultBucket();
-        String qiniuKey = filename;
-        int posOfSplitter = filename.indexOf(":");
-        if (posOfSplitter > 1) {
-            qiniuBucket = filename.substring(0, posOfSplitter);
-            qiniuKey = filename.substring(posOfSplitter);
+        if (StringUtils.isEmpty(filename)) {
+            return null;
         }
 
-        try {
+        if (filename.indexOf("?") > 0) {
+            filename = filename.substring(0, filename.indexOf("?"));
+        }
 
+        if (filename.indexOf(":") <= 0) {
+            throw new QiniuStoreException(String.format("Invalid filename %s , the format should be bucket:key",
+                                                        filename));
+        }
+
+        String qiniuBucket = filename.split(":")[0];
+        String qiniuKey = filename.split(":")[1];
+
+        try {
             FileInfo fileInfo = bucketManager.stat(qiniuBucket, qiniuKey);
             if (fileInfo == null) {
                 return null;
@@ -143,12 +162,17 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
             DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
-            //TODO resolve metadata
-            fileObject.getAttributes().put("qiniu-bucket", qiniuBucket);
-            fileObject.getAttributes().put("qiniu-key", qiniuKey);
+            String url = new StringBuilder("http://").append(this.qiniuProperties.getHost())
+                                                      .append("/")
+                                                      .append(qiniuKey)
+                                                      .toString();
+            fileObject.setFileUrl(url);
+
+            fileObject.setSize(fileInfo.fsize);
+            fileObject.setContentType(fileInfo.mimeType);
             fileObject.setUploadedAt(new Date(fileInfo.putTime));
             fileObject.setProviderName(PROVIDER_NAME);
-            fileObject.setImplementation(new QiniuFile(this.getFullPath(qiniuKey), auth));
+            fileObject.setImplementation(new QiniuFile(url, auth));
 
             return fileObject;
         } catch (QiniuException e) {
@@ -163,7 +187,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
             throw new QiniuStoreException(message);
         } catch (Throwable e) {
-            logger.error(String.format("Delete the object[bucket=%s,key=%s] failed.", qiniuBucket, qiniuKey), e);
+            logger.error(String.format("Fail to get the file[bucket=%s,key=%s]", qiniuBucket, qiniuKey), e);
         }
 
         return null;
@@ -171,32 +195,41 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoredFileObject delete(String filename) {
-        String qiniuBucket = qiniuProperties.getDefaultBucket();
-        String qiniuKey = filename;
-        int posOfSplitter = filename.indexOf(":");
-        if (posOfSplitter > 1) {
-            qiniuBucket = filename.substring(0, posOfSplitter);
-            qiniuKey = filename.substring(posOfSplitter);
+        if (StringUtils.isEmpty(filename)) {
+            return null;
         }
 
-        try {
+        if (filename.indexOf("?") > 0) {
+            filename = filename.substring(0, filename.indexOf("?"));
+        }
 
+        if (filename.indexOf(":") <= 0) {
+            throw new QiniuStoreException(String.format("Invalid filename %s , the format should be bucket:key",
+                                                        filename));
+        }
+
+        String qiniuBucket = filename.split(":")[0];
+        String qiniuKey = filename.split(":")[1];
+
+        try {
             FileInfo fileInfo = bucketManager.stat(qiniuBucket, qiniuKey);
             if (fileInfo == null) {
                 return null;
             }
 
-            //TODO resolve metadata
             DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
             fileObject.getAttributes().put("qiniu-bucket", qiniuBucket);
             fileObject.getAttributes().put("qiniu-key", qiniuKey);
+
+            fileObject.setSize(fileInfo.fsize);
+            fileObject.setContentType(fileInfo.mimeType);
             fileObject.setUploadedAt(new Date(fileInfo.putTime));
             fileObject.setProviderName(PROVIDER_NAME);
             fileObject.setImplementation(null);
 
             bucketManager.delete(qiniuBucket, qiniuKey);
-            logger.info(String.format("The qiniu file object[bucket=%s,key=%s] is deleted.", qiniuBucket, qiniuKey));
+            logger.info(String.format("The qiniu file[bucket=%s,key=%s] is deleted.", qiniuBucket, qiniuKey));
 
             return fileObject;
         } catch (QiniuException e) {
@@ -211,7 +244,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
             throw new QiniuStoreException(message);
         } catch (Throwable e) {
-            logger.error(String.format("Delete the object[bucket=%s,key=%s] failed.", qiniuBucket, qiniuKey), e);
+            logger.error(String.format("Fail to delete the file[bucket=%s,key=%s]", qiniuBucket, qiniuKey), e);
         }
 
         return null;
@@ -224,21 +257,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             bucket = qiniuProperties.getDefaultBucket();
         }
         return bucket;
-    }
-
-    protected String getFullPath(String file) {
-        return !file.startsWith("http://") && !file.startsWith("https://") ?
-                this.qiniuProperties.getEndpoint() + file : file;
-    }
-
-    private String processUploadResponse(Response res) throws QiniuException {
-        if (res.isOK()) {
-            UploadResult ret = res.jsonToObject(UploadResult.class);
-            return this.getFullPath(ret.getKey());
-        }
-        else {
-            throw new QiniuStoreException(res.toString());
-        }
     }
 
     @Override
