@@ -118,11 +118,15 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         fileObject.setStoredFilename(filename);
         fileObject.setProviderName(PROVIDER_NAME);
 
-        fileObject.setImplementation(new ZimgFile(filename,
-                                                  zimgProperties.getDownloadEndpoint(),
-                                                  zimgClient));
+        fileObject.setImplementation(new ZimgFile(filename, zimgProperties.getDownloadEndpoint(), zimgClient));
 
         return fileObject;
+    }
+
+    @Override
+    public StoredFileObject findByStoredFilename(String filename, String downloadUrl) {
+        logger.warn(String.format("Caution: The download url[%s] will be skipped", downloadUrl));
+        return findByStoredFilename(filename);
     }
 
     @Override

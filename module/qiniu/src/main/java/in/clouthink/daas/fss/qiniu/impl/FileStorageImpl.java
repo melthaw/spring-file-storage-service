@@ -150,6 +150,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoredFileObject findByStoredFilename(String filename) {
+        return findByStoredFilename(filename, null);
+    }
+
+    @Override
+    public StoredFileObject findByStoredFilename(String filename, String downloadUrl) {
         if (StringUtils.isEmpty(filename)) {
             return null;
         }
@@ -174,10 +179,13 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
             DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
-            String url = new StringBuilder("http://").append(this.qiniuProperties.getHost())
-                                                     .append("/")
-                                                     .append(qiniuKey)
-                                                     .toString();
+            String url = downloadUrl;
+            if (StringUtils.isEmpty(url)) {
+                url = new StringBuilder("http://").append(this.qiniuProperties.getHost())
+                                                  .append("/")
+                                                  .append(qiniuKey)
+                                                  .toString();
+            }
             fileObject.setFileUrl(url);
 
             fileObject.setSize(fileInfo.fsize);
@@ -203,6 +211,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         }
 
         return null;
+
     }
 
     @Override

@@ -57,6 +57,15 @@ public interface FileStorage {
     StoredFileObject findByStoredFilename(String filename);
 
     /**
+     * Caution: if the metadata is not supported by provider , the download url might be not resolvable , so we have to pass it from outside.
+     *
+     * @param filename    the final stored filename of the file object
+     * @param downloadUrl the download url
+     * @return StoredFileObject
+     */
+    StoredFileObject findByStoredFilename(String filename, String downloadUrl);
+
+    /**
      * Delete the stored file object physically.
      *
      * @param filename the final stored filename of the file to delete

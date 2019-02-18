@@ -133,6 +133,12 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     @Override
+    public StoredFileObject findByStoredFilename(String filename, String downloadUrl) {
+        logger.warn(String.format("Caution: The download url[%s] will be skipped", downloadUrl));
+        return findByStoredFilename(filename);
+    }
+
+    @Override
     public StoredFileObject delete(String filename) {
         GridFSDBFile gridFSDBFile = this.gridFS.findOne(filename);
 

@@ -134,6 +134,12 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     @Override
+    public StoredFileObject findByStoredFilename(String filename, String downloadUrl) {
+        logger.warn(String.format("Caution: The download url[%s] will be skipped", downloadUrl));
+        return findByStoredFilename(filename);
+    }
+
+    @Override
     public StoredFileObject delete(String filename) {
         String ossBucket = s3Properties.getDefaultBucket();
         String ossKey = filename;
@@ -217,11 +223,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         ClientConfiguration clientConfig = new ClientConfiguration();
         clientConfig.setProtocol(Protocol.valueOf(s3Properties.getProtocol()));
 
-//        s3Client = AmazonS3ClientBuilder.standard()
+        //        s3Client = AmazonS3ClientBuilder.standard()
         //                                        .withClientConfiguration(clientConfig)
         //                                        .withCredentials(credentials)
         //                                        .build();
-        s3Client =  new AmazonS3Client(credentials, clientConfig);
+        s3Client = new AmazonS3Client(credentials, clientConfig);
         s3Client.setEndpoint(s3Properties.getEndpoint());
     }
 
