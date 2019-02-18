@@ -223,8 +223,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         ClientConfiguration clientConfig = new ClientConfiguration();
         clientConfig.setProtocol(Protocol.valueOf(s3Properties.getProtocol()));
 
+        //FIXME
         //        s3Client = AmazonS3ClientBuilder.standard()
-        //                                        .withClientConfiguration(clientConfig)
+        //                                        .withC
         //                                        .withCredentials(credentials)
         //                                        .build();
         s3Client = new AmazonS3Client(credentials, clientConfig);
