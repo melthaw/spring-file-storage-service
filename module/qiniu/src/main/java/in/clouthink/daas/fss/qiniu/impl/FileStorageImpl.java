@@ -86,6 +86,17 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
                                        request.getOriginalFilename(),
                                        uploadResult.key));
 
+            long size = request.getSize();
+            if (request.getSize() <= 0) {
+                try {
+                    FileInfo fileInfo = bucketManager.stat(qiniuBucket, qiniuKey);
+                    if (fileInfo != null) {
+                        size = fileInfo.fsize;
+                    }
+                } catch (Throwable e) {
+                }
+            }
+
             DefaultStoredFileObject fileObject = DefaultStoredFileObject.from(request);
 
             String url = new StringBuilder("https://").append(this.qiniuProperties.getHost())
@@ -97,6 +108,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             fileObject.getAttributes().put("qiniu-key", uploadResult.key);
             fileObject.getAttributes().put("qiniu-url", url);
 
+            fileObject.setSize(size);
             fileObject.setUploadedAt(new Date());
             fileObject.setFileUrl(url);
             fileObject.setStoredFilename(qiniuBucket + ":" + uploadResult.key);
@@ -163,9 +175,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
             String url = new StringBuilder("http://").append(this.qiniuProperties.getHost())
-                                                      .append("/")
-                                                      .append(qiniuKey)
-                                                      .toString();
+                                                     .append("/")
+                                                     .append(qiniuKey)
+                                                     .toString();
             fileObject.setFileUrl(url);
 
             fileObject.setSize(fileInfo.fsize);
