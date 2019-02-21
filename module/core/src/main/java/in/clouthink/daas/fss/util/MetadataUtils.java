@@ -53,10 +53,21 @@ public class MetadataUtils {
         return metadata;
     }
 
+    /**
+     *
+     * @param request
+     * @return filename without '/' prefix
+     */
     public static String generateFilename(StoreFileRequest request) {
         return generateFilename(request, false);
     }
 
+    /**
+     *
+     * @param request
+     * @param generatePath
+     * @return filename without '/' prefix
+     */
     public static String generateFilename(StoreFileRequest request, boolean generatePath) {
         String originalFilename = request.getOriginalFilename();
         Date uploadedAt = new Date();

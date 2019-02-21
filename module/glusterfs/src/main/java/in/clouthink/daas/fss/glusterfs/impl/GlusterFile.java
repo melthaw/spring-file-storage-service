@@ -20,4 +20,5 @@ public class GlusterFile {
     public void writeTo(OutputStream outputStream) throws IOException {
         Files.copy(filePath, outputStream);
     }
+
 }

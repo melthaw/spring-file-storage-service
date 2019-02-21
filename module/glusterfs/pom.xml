@@ -31,6 +31,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.peircean.libgfapi-jni</groupId>
+            <artifactId>libgfapi-all</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
         </dependency>

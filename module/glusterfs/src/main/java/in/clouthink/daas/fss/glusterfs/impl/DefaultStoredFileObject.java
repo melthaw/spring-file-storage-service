@@ -69,9 +69,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
 
     @Override
     public String toString() {
-        return "DefaultStoredFileObject{" +
-                "providerName='" + providerName + '\'' +
-                ", glusterFile=" + glusterFile +
+        return "DefaultStoredFileObject{" + "providerName='" + providerName + '\'' + ", glusterFile=" + glusterFile +
                 "} " + super.toString();
     }
 }
