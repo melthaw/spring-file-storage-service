@@ -144,7 +144,8 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             return null;
         }
 
-        if (Files.exists(filePath)) {
+        if (!Files.exists(filePath)) {
+            logger.warn(String.format("%s not existed", filename));
             return null;
         }
 
@@ -192,7 +193,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
             return null;
         }
 
-        if (Files.exists(filePath)) {
+        if (!Files.exists(filePath)) {
             return null;
         }
 
