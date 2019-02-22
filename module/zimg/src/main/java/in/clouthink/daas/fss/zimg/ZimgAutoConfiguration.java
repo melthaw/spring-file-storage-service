@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ZimgAutoConfiguration {
 
-    @Bean
+    @Bean(name = "zimgStorage")
     public FileStorage fileStorage() {
         return new FileStorageImpl();
     }

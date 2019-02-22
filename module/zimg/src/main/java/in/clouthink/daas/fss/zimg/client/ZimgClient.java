@@ -3,7 +3,6 @@ package in.clouthink.daas.fss.zimg.client;
 import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.ArrayMap;
 import in.clouthink.daas.fss.zimg.exception.*;
-import in.clouthink.daas.fss.zimg.impl.HttpClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -31,6 +30,7 @@ public class ZimgClient {
 
     public ZimgResult upload(InputStream inputStream, String contentType, long size, String uploadEndpoint) {
         checkContentType(contentType);
+        checkSize(size);
         try {
             GenericJson genericJson = httpClient.upload(uploadEndpoint, contentType, size, inputStream);
 
@@ -116,6 +116,12 @@ public class ZimgClient {
             }
         }
         throw new UnsupportedContentTypeException(contentType);
+    }
+
+    private void checkSize(long size) {
+        if (size <=0) {
+            throw new ZimgStoreException("The upload file size is not specified.");
+        }
     }
 
 }

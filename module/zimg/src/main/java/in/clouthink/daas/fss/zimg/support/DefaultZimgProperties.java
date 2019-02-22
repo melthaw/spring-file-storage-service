@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * default impl for properties
  * @author dz
+ * @since 3
  */
 public class DefaultZimgProperties implements ZimgProperties, InitializingBean {
 

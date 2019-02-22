@@ -1,4 +1,4 @@
-package in.clouthink.daas.fss.zimg.impl;
+package in.clouthink.daas.fss.zimg.client;
 
 import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -17,28 +17,27 @@ import java.io.OutputStream;
 import java.nio.charset.MalformedInputException;
 
 /**
+ * The rest api client
+ *
  * @author dz
  * @since 3
  */
 public class HttpClient {
 
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+    private static final JsonFactory   JSON_FACTORY   = new JacksonFactory();
 
-    public GenericJson upload(String uploadEndpoint,
-                              String contentType,
-                              long size,
-                              InputStream inputStream) throws IOException {
+    public GenericJson upload(String uploadEndpoint, String contentType, long size, InputStream inputStream)
+            throws IOException {
         try {
             final JsonObjectParser jsonObjectParser = new JsonObjectParser(JSON_FACTORY);
-            HttpRequestFactory requestFactory =
-                    HTTP_TRANSPORT.createRequestFactory(request -> request.setParser(jsonObjectParser));
+            HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(request -> request.setParser(
+                    jsonObjectParser));
 
             InputStreamContent inputStreamContent = new InputStreamContent(contentType, inputStream);
             inputStreamContent.setLength(size);
 
-            HttpRequest request = requestFactory.buildPostRequest(new GenericUrl(uploadEndpoint),
-                                                                  inputStreamContent);
+            HttpRequest request = requestFactory.buildPostRequest(new GenericUrl(uploadEndpoint), inputStreamContent);
 
             HttpHeaders headers = request.getHeaders();
             headers.setContentType(contentType);
@@ -57,8 +56,8 @@ public class HttpClient {
 
     public GenericJson info(String url) throws IOException {
         final JsonObjectParser jsonObjectParser = new JsonObjectParser(JSON_FACTORY);
-        HttpRequestFactory requestFactory =
-                HTTP_TRANSPORT.createRequestFactory(request -> request.setParser(jsonObjectParser));
+        HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(request -> request.setParser(
+                jsonObjectParser));
         return requestFactory.buildGetRequest(new GenericUrl(url)).execute().parseAs(GenericJson.class);
     }
 

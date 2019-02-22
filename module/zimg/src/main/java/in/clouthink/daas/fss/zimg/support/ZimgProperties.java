@@ -4,6 +4,7 @@ package in.clouthink.daas.fss.zimg.support;
  * Config for zimg client.
  *
  * @author dz
+ * @since 3
  */
 public interface ZimgProperties {
 

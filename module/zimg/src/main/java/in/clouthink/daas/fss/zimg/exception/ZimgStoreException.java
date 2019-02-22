@@ -6,7 +6,6 @@ import in.clouthink.daas.fss.core.StoreFileException;
  * @author dz
  * @since 3
  */
-
 public class ZimgStoreException extends StoreFileException {
 
 	public ZimgStoreException() {
