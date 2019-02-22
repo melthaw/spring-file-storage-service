@@ -1,6 +1,8 @@
 package in.clouthink.daas.fss.s3.support;
 
+import com.amazonaws.ClientConfiguration;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
@@ -11,89 +13,100 @@ import java.util.Map;
  */
 public class DefaultS3Properties implements S3Properties, InitializingBean {
 
-	private String accessKey;
+    private String accessKey;
 
-	private String secretKey;
+    private String secretKey;
 
-	private String endpoint;
+    private String endpoint;
 
-	private String region;
+    private String region;
 
-	private String bucketStyle = "host";
+    private String bucketStyle = "host";
 
-	private String defaultBucket;
+    private String defaultBucket;
 
-	private Map<String,String> buckets = new HashMap<String,String>();
+    private Map<String, String> buckets = new HashMap<String, String>();
 
-	@Override
-	public String getAccessKey() {
-		return accessKey;
-	}
+    private ClientConfiguration clientConfiguration;
 
-	public void setAccessKey(String accessKey) {
-		this.accessKey = accessKey;
-	}
+    @Override
+    public String getAccessKey() {
+        return accessKey;
+    }
 
-	@Override
-	public String getSecretKey() {
-		return secretKey;
-	}
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
 
-	public void setSecretKey(String secretKey) {
-		this.secretKey = secretKey;
-	}
+    @Override
+    public String getSecretKey() {
+        return secretKey;
+    }
 
-	@Override
-	public String getEndpoint() {
-		return endpoint;
-	}
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
 
-	public void setEndpoint(String endpoint) {
-		this.endpoint = endpoint;
-	}
+    @Override
+    public String getEndpoint() {
+        return endpoint;
+    }
 
-	@Override
-	public String getRegion() {
-		return region;
-	}
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
 
-	public void setRegion(String region) {
-		this.region = region;
-	}
+    @Override
+    public String getRegion() {
+        return region;
+    }
 
-	@Override
-	public String getBucketStyle() {
-		return bucketStyle;
-	}
+    public void setRegion(String region) {
+        this.region = region;
+    }
 
-	public void setBucketStyle(String bucketStyle) {
-		this.bucketStyle = bucketStyle;
-	}
+    @Override
+    public String getBucketStyle() {
+        return bucketStyle;
+    }
 
-	@Override
-	public String getDefaultBucket() {
-		return defaultBucket;
-	}
+    public void setBucketStyle(String bucketStyle) {
+        this.bucketStyle = bucketStyle;
+    }
 
-	public void setDefaultBucket(String defaultBucket) {
-		this.defaultBucket = defaultBucket;
-	}
+    @Override
+    public String getDefaultBucket() {
+        return defaultBucket;
+    }
 
-	@Override
-	public Map<String,String> getBuckets() {
-		return buckets;
-	}
+    public void setDefaultBucket(String defaultBucket) {
+        this.defaultBucket = defaultBucket;
+    }
 
-	public void setBuckets(Map<String,String> buckets) {
-		this.buckets = buckets;
-	}
+    @Override
+    public Map<String, String> getBuckets() {
+        return buckets;
+    }
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		Assert.notNull(this.accessKey);
-		Assert.notNull(this.secretKey);
-		Assert.notNull(this.endpoint);
-		Assert.notNull(this.defaultBucket);
-	}
+    public void setBuckets(Map<String, String> buckets) {
+        this.buckets = buckets;
+    }
+
+    @Override
+    public ClientConfiguration getClientConfiguration() {
+        return clientConfiguration;
+    }
+
+    public void setClientConfiguration(ClientConfiguration clientConfiguration) {
+        this.clientConfiguration = clientConfiguration;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(this.accessKey);
+        Assert.notNull(this.secretKey);
+        Assert.notNull(this.endpoint);
+        Assert.notNull(this.defaultBucket);
+    }
 
 }

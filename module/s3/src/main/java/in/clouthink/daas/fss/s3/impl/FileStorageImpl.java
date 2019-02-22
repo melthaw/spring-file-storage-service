@@ -246,19 +246,14 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
                                                              this.s3Properties.getSecretKey());
         AmazonS3ClientBuilder builder = AmazonS3Client.builder()
                                                       .withCredentials((new AWSStaticCredentialsProvider(credentials)))
-//                                                      .withClientConfiguration(new ClientConfiguration().withValidateAfterInactivityMillis(
-//                                                              100)
-//                                                                                                        .withRequestTimeout(
-//                                                                                                                5000)
-//                                                                                                        .withConnectionTimeout(
-//                                                                                                                5000)
-//                                                                                                        .withTcpKeepAlive(
-//                                                                                                                true))
                                                       .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(
                                                               this.s3Properties.getEndpoint(),
                                                               this.s3Properties.getRegion()));
         if ("path".equalsIgnoreCase(this.s3Properties.getBucketStyle())) {
             builder.withPathStyleAccessEnabled(true);
+        }
+        if (this.s3Properties.getClientConfiguration() != null) {
+            builder.withClientConfiguration(this.s3Properties.getClientConfiguration());
         }
         s3Client = builder.build();
     }

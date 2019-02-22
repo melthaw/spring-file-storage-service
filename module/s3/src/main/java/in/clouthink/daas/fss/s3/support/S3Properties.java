@@ -1,5 +1,7 @@
 package in.clouthink.daas.fss.s3.support;
 
+import com.amazonaws.ClientConfiguration;
+
 import java.util.Map;
 
 /**
@@ -49,4 +51,8 @@ public interface S3Properties {
      */
     Map<String, String> getBuckets();
 
+    /**
+     * Client configuration options such as proxy settings, user agent string, max retry attempts, etc.
+     */
+    ClientConfiguration getClientConfiguration();
 }
