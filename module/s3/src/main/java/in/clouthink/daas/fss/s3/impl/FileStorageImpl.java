@@ -3,17 +3,18 @@ package in.clouthink.daas.fss.s3.impl;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.profile.internal.ProfileStaticCredentialsProvider;
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
+import in.clouthink.daas.fss.core.*;
 import in.clouthink.daas.fss.s3.exception.S3StoreException;
 import in.clouthink.daas.fss.s3.support.S3Properties;
-import in.clouthink.daas.fss.core.*;
 import in.clouthink.daas.fss.support.DefaultStoreFileResponse;
 import in.clouthink.daas.fss.util.MetadataUtils;
 import org.apache.commons.logging.Log;
@@ -67,30 +68,32 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
-        String ossBucket = resolveBucket(request);
-        String ossKey = MetadataUtils.generateFilename(request);
+        String s3Bucket = resolveBucket(request);
+        String s3ObjectKey = MetadataUtils.generateFilename(request);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(request.getContentType());
         objectMetadata.setUserMetadata(MetadataUtils.buildMetadata(request));
 
-        PutObjectResult putObjectResult = s3Client.putObject(ossBucket, ossKey, inputStream, objectMetadata);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(s3Bucket, s3ObjectKey, inputStream, objectMetadata);
+        putObjectRequest.getRequestClientOptions().setReadLimit(50000000);
+        PutObjectResult putObjectResult = s3Client.putObject(putObjectRequest);
 
-        logger.debug(String.format("%s is stored", ossKey));
+        logger.debug(String.format("%s is stored", s3ObjectKey));
 
-        S3Object s3Object = s3Client.getObject(ossBucket, ossKey);
+        S3Object s3Object = s3Client.getObject(s3Bucket, s3ObjectKey);
 
         DefaultStoredFileObject fileObject = DefaultStoredFileObject.from(request);
 
-        fileObject.getAttributes().put("s3-bucket", ossBucket);
-        fileObject.getAttributes().put("s3-key", ossKey);
+        fileObject.getAttributes().put("s3-bucket", s3Bucket);
+        fileObject.getAttributes().put("s3-key", s3ObjectKey);
 
         String uploadedAt = objectMetadata.getUserMetadata().get("fss-uploadedAt");
         fileObject.setUploadedAt(uploadedAt != null ? new Date(Long.parseLong(uploadedAt)) : null);
 
-        fileObject.setStoredFilename(ossKey);
+        fileObject.setStoredFilename(s3Bucket + ":" + s3ObjectKey);
         fileObject.setProviderName(PROVIDER_NAME);
-        fileObject.setImplementation(s3Object);
+        fileObject.setImplementation(new S3ObjectProxy(s3Object));
 
         return new DefaultStoreFileResponse(PROVIDER_NAME, fileObject);
     }
@@ -111,15 +114,23 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoredFileObject findByStoredFilename(String filename) {
-        String ossBucket = s3Properties.getDefaultBucket();
-        String ossKey = filename;
-        int posOfSplitter = filename.indexOf(":");
-        if (posOfSplitter > 1) {
-            ossBucket = filename.substring(0, posOfSplitter);
-            ossKey = filename.substring(posOfSplitter);
+        if (StringUtils.isEmpty(filename)) {
+            return null;
         }
 
-        S3Object s3Object = s3Client.getObject(ossBucket, ossKey);
+        if (filename.indexOf("?") > 0) {
+            filename = filename.substring(0, filename.indexOf("?"));
+        }
+
+        if (filename.indexOf(":") <= 0) {
+            throw new S3StoreException(String.format("Invalid filename %s , the format should be bucket_name:object_key",
+                                                     filename));
+        }
+
+        String s3Bucket = filename.split(":")[0];
+        String s3ObjectKey = filename.split(":")[1];
+
+        S3Object s3Object = s3Client.getObject(s3Bucket, s3ObjectKey);
         if (s3Object == null) {
             return null;
         }
@@ -128,7 +139,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
         buildStoreFileObject(s3Object, fileObject);
         fileObject.setProviderName(PROVIDER_NAME);
-        fileObject.setImplementation(s3Object);
+        fileObject.setImplementation(new S3ObjectProxy(s3Object));
 
         return fileObject;
     }
@@ -141,15 +152,23 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public StoredFileObject delete(String filename) {
-        String ossBucket = s3Properties.getDefaultBucket();
-        String ossKey = filename;
-        int posOfSplitter = filename.indexOf(":");
-        if (posOfSplitter > 1) {
-            ossBucket = filename.substring(0, posOfSplitter);
-            ossKey = filename.substring(posOfSplitter);
+        if (StringUtils.isEmpty(filename)) {
+            return null;
         }
 
-        S3Object s3Object = s3Client.getObject(ossBucket, ossKey);
+        if (filename.indexOf("?") > 0) {
+            filename = filename.substring(0, filename.indexOf("?"));
+        }
+
+        if (filename.indexOf(":") <= 0) {
+            throw new S3StoreException(String.format("Invalid filename %s , the format should be bucket_name:object_key",
+                                                     filename));
+        }
+
+        String s3Bucket = filename.split(":")[0];
+        String s3ObjectKey = filename.split(":")[1];
+
+        S3Object s3Object = s3Client.getObject(s3Bucket, s3ObjectKey);
         if (s3Object == null) {
             return null;
         }
@@ -161,10 +180,10 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         fileObject.setImplementation(null);
 
         try {
-            s3Client.deleteObject(ossBucket, ossKey);
-            logger.info(String.format("The oss file object[bucket=%s,key=%s] is deleted.", ossBucket, ossKey));
+            s3Client.deleteObject(s3Bucket, s3ObjectKey);
+            logger.info(String.format("The oss file object[bucket=%s,key=%s] is deleted.", s3Bucket, s3ObjectKey));
         } catch (Throwable e) {
-            logger.error(String.format("Delete the object[bucket=%s,key=%s] failed.", ossBucket, ossKey), e);
+            logger.error(String.format("Delete the object[bucket=%s,key=%s] failed.", s3Bucket, s3ObjectKey), e);
         }
 
         return fileObject;
@@ -206,7 +225,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     private String resolveBucket(StoreFileRequest request) {
-        String category = (String) request.getAttributes().get("category");
+        String category = request.getAttributes().get("category");
         String bucket = s3Properties.getBuckets().get(category);
         if (StringUtils.isEmpty(bucket)) {
             bucket = s3Properties.getDefaultBucket();
@@ -219,17 +238,13 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         Assert.notNull(s3Properties);
 
         AWSCredentials credentials = new BasicAWSCredentials(s3Properties.getAccessKey(), s3Properties.getSecretKey());
-
-        ClientConfiguration clientConfig = new ClientConfiguration();
-        clientConfig.setProtocol(Protocol.valueOf(s3Properties.getProtocol()));
-
-        //FIXME
-        //        s3Client = AmazonS3ClientBuilder.standard()
-        //                                        .withC
-        //                                        .withCredentials(credentials)
-        //                                        .build();
-        s3Client = new AmazonS3Client(credentials, clientConfig);
-        s3Client.setEndpoint(s3Properties.getEndpoint());
+        s3Client = AmazonS3Client.builder()
+                                 .withCredentials((new AWSStaticCredentialsProvider(credentials)))
+                                 .withClientConfiguration(new ClientConfiguration().withRequestTimeout(5000))
+                                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(s3Properties.getEndpoint(),
+                                                                                                       null))
+                                 .withPathStyleAccessEnabled(true)
+                                 .build();
     }
 
 }

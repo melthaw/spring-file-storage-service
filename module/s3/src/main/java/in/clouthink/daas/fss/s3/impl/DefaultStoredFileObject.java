@@ -1,15 +1,12 @@
 package in.clouthink.daas.fss.s3.impl;
 
-import com.amazonaws.services.s3.model.S3Object;
 import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.core.StoredFileObject;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.support.DefaultFileObject;
-import in.clouthink.daas.fss.util.IOUtils;
 import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DefaultStoredFileObject extends DefaultFileObject implements StoredFileObject {
@@ -34,7 +31,7 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
 
     private String providerName;
 
-    private S3Object s3Object;
+    private S3ObjectProxy s3Object;
 
     @Override
     public String getProviderName() {
@@ -46,11 +43,11 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
     }
 
     @Override
-    public S3Object getImplementation() {
+    public S3ObjectProxy getImplementation() {
         return s3Object;
     }
 
-    public void setImplementation(S3Object s3Object) {
+    public void setImplementation(S3ObjectProxy s3Object) {
         this.s3Object = s3Object;
     }
 
@@ -63,16 +60,12 @@ public class DefaultStoredFileObject extends DefaultFileObject implements Stored
             bufferSize = 1024 * 4;
         }
 
-        InputStream is = s3Object.getObjectContent();
-        IOUtils.copy(is, outputStream, bufferSize);
-        IOUtils.close(is);
+        s3Object.writeTo(outputStream, bufferSize);
     }
 
     @Override
     public String toString() {
-        return "DefaultStoredFileObject{" +
-                "providerName='" + providerName + '\'' +
-                ", s3Object=" + s3Object +
-                "} " + super.toString();
+        return "DefaultStoredFileObject{" + "providerName='" + providerName + '\'' + ", s3Object=" + s3Object + "} " +
+                super.toString();
     }
 }

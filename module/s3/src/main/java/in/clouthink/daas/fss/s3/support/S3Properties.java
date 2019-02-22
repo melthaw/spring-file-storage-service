@@ -10,24 +10,24 @@ import java.util.Map;
 public interface S3Properties {
 
     /**
-     * The ceph access key
+     * The s3 access key
      */
     String getAccessKey();
 
     /**
-     * The ceph access secret
+     * The s3 access secret
      */
     String getSecretKey();
 
     /**
-     * The ceph endpoint
+     * The s3 endpoint
      */
     String getEndpoint();
 
-    /**
-     * The access protocol
-     */
-    String getProtocol();
+//    /**
+//     * The access protocol
+//     */
+//    String getProtocol();
 
     /**
      * The default bucket to store the file which's bucket is not specified for category.

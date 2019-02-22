@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class S3AutoConfiguration {
 
-    @Bean
+    @Bean(name = "s3Storage")
     public FileStorage fileStorage() {
         return new FileStorageImpl();
     }

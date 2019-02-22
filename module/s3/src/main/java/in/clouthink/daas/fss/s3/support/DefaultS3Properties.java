@@ -17,8 +17,6 @@ public class DefaultS3Properties implements S3Properties, InitializingBean {
 
 	private String endpoint;
 
-	private String protocol;
-
 	private String defaultBucket;
 
 	private Map<String,String> buckets = new HashMap<String,String>();
@@ -51,15 +49,6 @@ public class DefaultS3Properties implements S3Properties, InitializingBean {
 	}
 
 	@Override
-	public String getProtocol() {
-		return protocol;
-	}
-
-	public void setProtocol(String protocol) {
-		this.protocol = protocol;
-	}
-
-	@Override
 	public String getDefaultBucket() {
 		return defaultBucket;
 	}
@@ -82,7 +71,6 @@ public class DefaultS3Properties implements S3Properties, InitializingBean {
 		Assert.notNull(accessKey);
 		Assert.notNull(secretKey);
 		Assert.notNull(endpoint);
-		Assert.notNull(protocol);
 		Assert.notNull(defaultBucket);
 	}
 
