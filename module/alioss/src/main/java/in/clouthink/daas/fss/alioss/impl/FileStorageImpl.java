@@ -12,6 +12,7 @@ import in.clouthink.daas.fss.util.IOUtils;
 import in.clouthink.daas.fss.util.MetadataUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -260,6 +261,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         this.ossClient = new OSSClient("http://" + this.ossProperties.getEndpoint(),
                                        this.ossProperties.getKeyId(),
                                        this.ossProperties.getKeySecret());
+
+        if (this.ossProperties.getClientConfiguration() != null) {
+            BeanUtils.copyProperties(this.ossProperties.getClientConfiguration(),
+                                     this.ossClient.getClientConfiguration());
+        }
     }
 
     @Override

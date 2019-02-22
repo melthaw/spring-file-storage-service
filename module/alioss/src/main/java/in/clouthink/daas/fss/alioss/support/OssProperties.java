@@ -1,5 +1,7 @@
 package in.clouthink.daas.fss.alioss.support;
 
+import com.aliyun.oss.ClientConfiguration;
+
 import java.util.Map;
 
 /**
@@ -34,5 +36,11 @@ public interface OssProperties {
      * if the bucket is not defined for the file's category , the default bucket will be taken place.
      */
     Map<String, String> getBuckets();
+
+    /**
+     *
+     * @return
+     */
+    ClientConfiguration getClientConfiguration();
 
 }
