@@ -17,6 +17,10 @@ public class DefaultS3Properties implements S3Properties, InitializingBean {
 
 	private String endpoint;
 
+	private String region;
+
+	private String bucketStyle = "host";
+
 	private String defaultBucket;
 
 	private Map<String,String> buckets = new HashMap<String,String>();
@@ -49,6 +53,24 @@ public class DefaultS3Properties implements S3Properties, InitializingBean {
 	}
 
 	@Override
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	@Override
+	public String getBucketStyle() {
+		return bucketStyle;
+	}
+
+	public void setBucketStyle(String bucketStyle) {
+		this.bucketStyle = bucketStyle;
+	}
+
+	@Override
 	public String getDefaultBucket() {
 		return defaultBucket;
 	}
@@ -68,10 +90,10 @@ public class DefaultS3Properties implements S3Properties, InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		Assert.notNull(accessKey);
-		Assert.notNull(secretKey);
-		Assert.notNull(endpoint);
-		Assert.notNull(defaultBucket);
+		Assert.notNull(this.accessKey);
+		Assert.notNull(this.secretKey);
+		Assert.notNull(this.endpoint);
+		Assert.notNull(this.defaultBucket);
 	}
 
 }

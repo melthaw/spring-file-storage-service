@@ -20,14 +20,23 @@ public interface S3Properties {
     String getSecretKey();
 
     /**
-     * The s3 endpoint
+     * The service endpoint either with or without the protocol (e.g. https://sns.us-west-1.amazonaws.com or sns.us-west-1.amazonaws.com)
      */
     String getEndpoint();
 
-//    /**
-//     * The access protocol
-//     */
-//    String getProtocol();
+    /**
+     * The region to use for SigV4 signing of requests (e.g. us-west-1)
+     */
+    String getRegion();
+
+    /**
+     * The bucket style
+     * <p>
+     * host for virtual-host as default
+     * <p>
+     * path for sub path
+     */
+    String getBucketStyle();
 
     /**
      * The default bucket to store the file which's bucket is not specified for category.

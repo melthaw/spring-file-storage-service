@@ -1,13 +1,12 @@
 package in.clouthink.daas.fss.s3.impl;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
@@ -138,6 +137,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
         buildStoreFileObject(s3Object, fileObject);
+
+        String fileUrl = s3Object.getObjectMetadata().getUserMetadata().get("s3-url");
+
+        fileObject.setFileUrl(fileUrl);
+        fileObject.setStoredFilename(filename);
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(new S3ObjectProxy(s3Object));
 
@@ -176,14 +180,15 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
         buildStoreFileObject(s3Object, fileObject);
+        fileObject.setStoredFilename(filename);
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(null);
 
         try {
             s3Client.deleteObject(s3Bucket, s3ObjectKey);
-            logger.info(String.format("The oss file object[bucket=%s,key=%s] is deleted.", s3Bucket, s3ObjectKey));
+            logger.info(String.format("The s3-object[bucket=%s,key=%s] is deleted.", s3Bucket, s3ObjectKey));
         } catch (Throwable e) {
-            logger.error(String.format("Delete the object[bucket=%s,key=%s] failed.", s3Bucket, s3ObjectKey), e);
+            logger.error(String.format("Delete the s3-object[bucket=%s,key=%s] failed.", s3Bucket, s3ObjectKey), e);
         }
 
         return fileObject;
@@ -235,16 +240,27 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(s3Properties);
+        Assert.notNull(this.s3Properties);
 
-        AWSCredentials credentials = new BasicAWSCredentials(s3Properties.getAccessKey(), s3Properties.getSecretKey());
-        s3Client = AmazonS3Client.builder()
-                                 .withCredentials((new AWSStaticCredentialsProvider(credentials)))
-                                 .withClientConfiguration(new ClientConfiguration().withRequestTimeout(5000))
-                                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(s3Properties.getEndpoint(),
-                                                                                                       null))
-                                 .withPathStyleAccessEnabled(true)
-                                 .build();
+        AWSCredentials credentials = new BasicAWSCredentials(this.s3Properties.getAccessKey(),
+                                                             this.s3Properties.getSecretKey());
+        AmazonS3ClientBuilder builder = AmazonS3Client.builder()
+                                                      .withCredentials((new AWSStaticCredentialsProvider(credentials)))
+//                                                      .withClientConfiguration(new ClientConfiguration().withValidateAfterInactivityMillis(
+//                                                              100)
+//                                                                                                        .withRequestTimeout(
+//                                                                                                                5000)
+//                                                                                                        .withConnectionTimeout(
+//                                                                                                                5000)
+//                                                                                                        .withTcpKeepAlive(
+//                                                                                                                true))
+                                                      .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(
+                                                              this.s3Properties.getEndpoint(),
+                                                              this.s3Properties.getRegion()));
+        if ("path".equalsIgnoreCase(this.s3Properties.getBucketStyle())) {
+            builder.withPathStyleAccessEnabled(true);
+        }
+        s3Client = builder.build();
     }
 
 }
