@@ -97,11 +97,11 @@ Application
 ```java
 @SpringBootApplication
 @Import({WebDavAutoConfiguration.class})
-@EnableConfigurationProperties(WebDavApplication.TestOssProperties.class)
+@EnableConfigurationProperties(WebDavApplication.TestWebdavProperties.class)
 public class WebDavApplication {
 
     @ConfigurationProperties(prefix = "fss.webdav")
-    public static class TestOssProperties extends DefaultWebDavProperties {
+    public static class TestWebdavProperties extends DefaultWebDavProperties {
 
     }
 
@@ -171,6 +171,200 @@ public class WebDavTest {
 }
 ```
 
+# Configuration Reference
+
+Default implementation is build inside , here is the sample to quick enable it in Spring. 
+
+```java
+@EnableConfigurationProperties(WebDavApplication.TestOssProperties.class)
+public class WebDavApplication {
+
+    @ConfigurationProperties(prefix = "fss.alioss")
+    public static class TestOssProperties extends DefaultOssProperties {
+
+    }
+    
+    ...
+}
+
+```
+
+
+## Alioss
+
+Definition
+
+> `in.clouthink.daas.fss.alioss.support.OssProperties`
+
+Implementation 
+
+> `in.clouthink.daas.fss.alioss.support.DefaultOssProperties`
+
+Sample
+
+```yml
+fss:
+  alioss:
+    keyId: <your alioss key id>
+    keySecret: <your alioss key secret>
+    endpoint: oss-cn-shenzhen.aliyuncs.com
+    defaultBucket: testfss
+    clientConfiguration:
+      socketTimeout: 5000
+      connectionTimeout: 5000
+```
+
+## FastDfs
+
+
+Definition
+
+> `in.clouthink.daas.fss.fastdfs.support.FastdfsProperties`
+
+Implementation 
+
+> `in.clouthink.daas.fss.fastdfs.support.DefaultFastdfsProperties`
+
+Sample
+
+```yml
+fss:
+  fastdfs:
+    connectTimeoutInseconds: 30
+    networkTimeoutInSeconds: 60
+    charset: UTF-8
+    httpAntiStealToken: false
+    httpSecretKey:
+    httpTrackerHttpPort: 8080
+    trackerServers:
+      - tracker:22122
+```
+
+
+
+## Glusterfs
+
+Definition
+
+> `in.clouthink.daas.fss.glusterfs.support.GlusterfsProperties`
+
+Implementation 
+
+> `in.clouthink.daas.fss.glusterfs.support.DefaultGlusterfsProperties`
+
+Sample
+
+```yml
+fss:
+  glusterfs:
+    server: glusterfs1
+    volume: test-volume
+```
+
+
+## Gridfs
+
+> Share the Spring Mongodb Data configuration and no more special.
+
+```yml
+spring:
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_HOST:localhost}:${MONGODB_PORT:27017}/${MONGODB_DB:daas-fss}
+```
+
+## Qiniu Cloud
+
+
+Definition
+
+> `in.clouthink.daas.fss.qiniu.support.QiniuProperties`
+
+Implementation 
+
+> `in.clouthink.daas.fss.qiniu.support.DefaultQiniuProperties`
+
+Sample
+
+```yml
+fss:
+  qiniu:
+    accessKey: <your qiniu access key>
+    secretKey: <your qiniu secret ky>
+    host: <your qiniu subdomain>.bkt.clouddn.com
+    defaultBucket: testfss
+```
+
+
+## Amazon S3 Protocol 
+
+
+Definition
+
+> `in.clouthink.daas.fss.s3.support.S3Properties`
+
+Implementation 
+
+> `in.clouthink.daas.fss.s3.support.DefaultS3Properties`
+
+Sample
+
+```yml
+fss:
+  s3:
+    accessKey: <your s3 access key>
+    secretKey: <your s3 secret key>
+    endpoint: <your s3 endpoint>
+    region: us-west-2
+    bucketStyle: path
+    defaultBucket: test
+    clientConfiguration:
+      connectionTimeout: 5000
+```
+
+
+## Webdav Protocol
+
+
+Definition
+
+> `in.clouthink.daas.fss.webdav.support.WebdavProperties`
+
+Implementation 
+
+> `in.clouthink.daas.fss.webdav.support.DefaultWebdavProperties`
+
+Sample
+
+```yml
+fss:
+  webdav:
+    username: alice
+    password: secret1234
+    endpoint: http://127.0.0.1
+```
+
+## Zimg
+
+Definition
+
+> `in.clouthink.daas.fss.zimg.support.ZimgProperties`
+
+Implementation 
+
+> `in.clouthink.daas.fss.zimg.support.DefaultZimgProperties`
+
+Sample
+
+```yml
+fss:
+  zimg:
+    uploadEndpoint: http://127.0.0.1:4869/upload
+    downloadEndpoint: http://127.0.0.1:4869
+    adminEndpoint: http://127.0.0.1:4869/admin
+    infoEndpoint: http://127.0.0.1:4869/info
+
+```
 
 
 
