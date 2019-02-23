@@ -11,42 +11,85 @@ So far the following version is available
 
 module name | latest version
 ------|------
-daas-fss-core | 2.0.0
-daas-fss-mongodb| 2.0.0
-daas-fss-alioss| 2.0.0
+daas-fss-core | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-core/3.0.0)
+daas-fss-zimg | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-zimg/3.0.0)
+daas-fss-gridfs | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-gridfs/3.0.0)
+daas-fss-alioss | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.0)
+daas-fss-data-mysql | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-data-mysql/3.0.0)
+daas-fss-data-mongodb | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-data-mongodb/3.0.0)
 
-## Maven
+> Now 2.0.0 is deprecated.  
 
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-fss-core</artifactId>
-        <version>${daas.fss.core.version}</version>
-    </dependency>
+# Usage 
 
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-fss-mongodb</artifactId>
-        <version>${daas.fss.mongodb.version}</version>
-    </dependency>
-    
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-fss-alioss</artifactId>
-        <version>${daas.fss.alioss.version}</version>
-    </dependency>
-    
-    <dependency>
-        <groupId>in.clouthink.daas</groupId>
-        <artifactId>daas-edm</artifactId>
-        <version>1.0.1</version>
-    </dependency>
+## Spring Mvc
 
-## Gradle
+```java
 
-    compile "in.clouthink.daas:daas-fss-core:${daas_fss_core_version}"
-    compile "in.clouthink.daas:daas-fss-mongodb:${daas_fss_mongodb_version}"
-    compile "in.clouthink.daas:daas-fss-alioss:${daas_fss_alioss_version}"
-    compile "in.clouthink.daas:daas-edm:1.0.1"
+```
+
+
+## Zimg
+
+
+### Quick Start
+
+Here is the sample code using in your application most frequently. 
+
+```java
+
+
+```
+
+Now let's make an explain how to make it running.
+
+### Prepare zimg server
+
+Let's quick start it by docker-compose 
+
+```yml
+
+
+
+```
+
+```bash
+
+```
+
+### Spring boot it
+
+Add new Java class named FssConfiguration annotated with `@Configuration` and create the `@Bean` 
+
+* FilePipe
+* FileStoreService
+* FileStoreRepository
+* ZimgClient
+
+Here is the sample:
+
+```java
+
+```
+
+### Zimg client Properties Configuration
+
+
+application.yml
+
+```yml
+
+```
+
+application.properties
+
+```properties
+
+```
+
+
+
+
 
 # Alioss configuration for example
 
@@ -99,10 +142,54 @@ Please populate the property value from the alioss you configured
     
     }
 
-# Gridfs configuration for example
+# Mongodb GridFS configuration for example
 
 `TODO`
 
-# Appendix - SPI
+# Appendix - Build the source
 
-`TODO`
+Install all (skip test)
+
+```shell
+mvn clean install -Dmaven.test.skip=true
+```
+
+Build all
+
+```shell
+mvn clean package
+```
+
+Build single project
+
+* core
+
+```shell
+mvn -pl module/core clean package
+# or
+mvn --projects module/core clean package
+```
+
+* zimg
+
+```shell
+mvn -pl module/zimg lean package -am
+# or
+mvn --projects module/zimg clean package --also-make
+```
+
+* alioss
+
+```shell
+mvn -pl module/alioss clean package -am
+# or
+mvn --projects module/alioss clean package --also-make
+```
+
+* mongodb
+
+```shell
+mvn -pl module/mongodb clean package -am
+# or
+mvn --projects module/mongodb clean package --also-make
+```

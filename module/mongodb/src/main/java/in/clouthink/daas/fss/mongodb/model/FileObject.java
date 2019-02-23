@@ -1,7 +1,6 @@
 package in.clouthink.daas.fss.mongodb.model;
 
-import in.clouthink.daas.fss.core.FileStorageRequest;
-import in.clouthink.daas.fss.core.MutableFileObject;
+import in.clouthink.daas.fss.core.StoreFileRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -14,195 +13,225 @@ import java.util.Map;
 /**
  * @author dz
  */
-@Document(collection = "FileObjects")
-public class FileObject implements MutableFileObject {
+@Document(collection = "FssFileObjects")
+public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject {
 
-	public static FileObject from(in.clouthink.daas.fss.core.FileObject fromObject) {
-		FileObject result = new FileObject();
-		BeanUtils.copyProperties(fromObject, result);
-		if (result.getAttributes() == null) {
-			result.setAttributes(new HashMap<String,String>());
-		}
-		return result;
-	}
+    public static FileObject from(StoreFileRequest request) {
+        FileObject result = new FileObject();
+        BeanUtils.copyProperties(request, result);
+        if (request.getAttributes() != null) {
+            result.setAttributes(request.getAttributes());
+        }
+        return result;
+    }
 
-	public static FileObject from(FileStorageRequest request) {
-		FileObject result = new FileObject();
-		BeanUtils.copyProperties(request, result);
-		if (result.getAttributes() == null) {
-			result.setAttributes(new HashMap<String,String>());
-		}
-		return result;
-	}
+    @Id
+    private String id;
 
-	@Id
-	private String id;
+    private String category;
 
-	private String category;
+    private String code;
 
-	private String code;
+    @Indexed
+    private String name;
 
-	@Indexed
-	private String name;
+    private String description;
 
-	private String description;
+    @Indexed
+    private String bizId;
 
-	@Indexed
-	private String bizId;
+    @Indexed
+    private String storedFilename;
 
-	@Indexed
-	private String finalFilename;
+    private String originalFilename;
 
-	private String originalFilename;
+    private String prettyFilename;
 
-	private String prettyFilename;
+    private String fileUrl;
 
-	private String contentType;
+    private String imageUrl;
 
-	@Indexed
-	private String uploadedBy;
+    private String contentType;
 
-	@Indexed
-	private Date uploadedAt;
+    @Indexed
+    private String uploadedBy;
 
-	private long size;
+    @Indexed
+    private Date uploadedAt;
 
-	private int version;
+    private long size;
 
-	private Map<String,String> attributes = new HashMap<String,String>();
+    private int version;
 
-	@Override
-	public String getId() {
-		return id;
-	}
+    private Map<String, String> attributes = new HashMap<String, String>();
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	@Override
-	public String getCategory() {
-		return category;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    public String getCategory() {
+        return category;
+    }
 
-	@Override
-	public String getCode() {
-		return code;
-	}
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String getDescription() {
-		return description;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	@Override
-	public String getBizId() {
-		return bizId;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setBizId(String bizId) {
-		this.bizId = bizId;
-	}
+    public String getBizId() {
+        return bizId;
+    }
 
-	@Override
-	public String getFinalFilename() {
-		return finalFilename;
-	}
+    public void setBizId(String bizId) {
+        this.bizId = bizId;
+    }
 
-	public void setFinalFilename(String finalFilename) {
-		this.finalFilename = finalFilename;
-	}
+    @Override
+    public String getStoredFilename() {
+        return storedFilename;
+    }
 
-	@Override
-	public String getOriginalFilename() {
-		return originalFilename;
-	}
+    public void setStoredFilename(String storedFilename) {
+        this.storedFilename = storedFilename;
+    }
 
-	public void setOriginalFilename(String originalFilename) {
-		this.originalFilename = originalFilename;
-	}
+    @Override
+    public String getOriginalFilename() {
+        return originalFilename;
+    }
 
-	@Override
-	public String getPrettyFilename() {
-		return prettyFilename;
-	}
+    public void setOriginalFilename(String originalFilename) {
+        this.originalFilename = originalFilename;
+    }
 
-	public void setPrettyFilename(String prettyFilename) {
-		this.prettyFilename = prettyFilename;
-	}
+    @Override
+    public String getPrettyFilename() {
+        return prettyFilename;
+    }
 
-	@Override
-	public String getContentType() {
-		return contentType;
-	}
+    public void setPrettyFilename(String prettyFilename) {
+        this.prettyFilename = prettyFilename;
+    }
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
+    @Override
+    public String getFileUrl() {
+        return fileUrl;
+    }
 
-	@Override
-	public String getUploadedBy() {
-		return uploadedBy;
-	}
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
 
-	public void setUploadedBy(String uploadedBy) {
-		this.uploadedBy = uploadedBy;
-	}
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-	@Override
-	public Date getUploadedAt() {
-		return uploadedAt;
-	}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-	public void setUploadedAt(Date uploadedAt) {
-		this.uploadedAt = uploadedAt;
-	}
+    @Override
+    public String getContentType() {
+        return contentType;
+    }
 
-	@Override
-	public long getSize() {
-		return size;
-	}
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 
-	public void setSize(long size) {
-		this.size = size;
-	}
+    @Override
+    public String getUploadedBy() {
+        return uploadedBy;
+    }
 
-	@Override
-	public int getVersion() {
-		return version;
-	}
+    public void setUploadedBy(String uploadedBy) {
+        this.uploadedBy = uploadedBy;
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+    @Override
+    public Date getUploadedAt() {
+        return uploadedAt;
+    }
 
-	@Override
-	public Map<String,String> getAttributes() {
-		return attributes;
-	}
+    public void setUploadedAt(Date uploadedAt) {
+        this.uploadedAt = uploadedAt;
+    }
 
-	public void setAttributes(Map<String,String> attributes) {
-		this.attributes = attributes;
-	}
+    @Override
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    @Override
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("FileObject{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", category='").append(category).append('\'');
+        sb.append(", code='").append(code).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", bizId='").append(bizId).append('\'');
+        sb.append(", storedFilename='").append(storedFilename).append('\'');
+        sb.append(", originalFilename='").append(originalFilename).append('\'');
+        sb.append(", prettyFilename='").append(prettyFilename).append('\'');
+        sb.append(", fileUrl='").append(fileUrl).append('\'');
+        sb.append(", imageUrl='").append(imageUrl).append('\'');
+        sb.append(", contentType='").append(contentType).append('\'');
+        sb.append(", uploadedBy='").append(uploadedBy).append('\'');
+        sb.append(", uploadedAt=").append(uploadedAt);
+        sb.append(", size=").append(size);
+        sb.append(", version=").append(version);
+        sb.append(", attributes=").append(attributes);
+        sb.append('}');
+        return sb.toString();
+    }
 }

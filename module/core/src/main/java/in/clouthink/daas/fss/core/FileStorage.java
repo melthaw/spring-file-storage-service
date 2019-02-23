@@ -1,30 +1,76 @@
 package in.clouthink.daas.fss.core;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.File;
+import java.io.InputStream;
 
 /**
- * The underlying file storage , which wrapped the uploaded file object with implementation
+ * The file storage abstraction ( store, search , delete physically )
  *
-* @author dz on 16/3/28.
+ * @author dz
  */
 public interface FileStorage {
 
-	/**
-	 * @return the general file object which contains the information of stored file object.
-	 */
-	FileObject getFileObject();
+    /**
+     * @return the name of file storage provider
+     */
+    String getName();
 
-	/**
-	 * @return the underlying implementation object (based on the provider)
-	 */
-	Object getImplementation();
+    /**
+     * @return true if the storage backend is supporting save metadata , otherwise return false.
+     */
+    boolean isMetadataSupported();
 
-	/**
-	 * @param outputStream
-	 * @param bufferSize   default 4 * 1024b, if equal or less than 0, the default value is choosed
-	 * @throws IOException
-	 */
-	void writeTo(OutputStream outputStream, long bufferSize) throws IOException;
+
+    /**
+     * @return true if the storage backend is supporting image , otherwise return false.
+     */
+    boolean isImageSupported();
+
+    /**
+     * @param inputStream input stream of the uploaded file
+     * @param request     the file store request
+     * @return StoreFileResponse
+     * @throws StoreFileException
+     */
+    StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException;
+
+    /**
+     * @param file    the uploaded file
+     * @param request the file store request
+     * @return StoreFileResponse
+     * @throws StoreFileException
+     */
+    StoreFileResponse store(File file, StoreFileRequest request) throws StoreFileException;
+
+    /**
+     * @param bytes   the uploaded file in bytes
+     * @param request the file store request
+     * @return StoreFileResponse
+     * @throws StoreFileException
+     */
+    StoreFileResponse store(byte[] bytes, StoreFileRequest request) throws StoreFileException;
+
+    /**
+     * @param filename the final stored filename of the file object
+     * @return StoredFileObject
+     */
+    StoredFileObject findByStoredFilename(String filename);
+
+    /**
+     * Caution: if the metadata is not supported by provider , the download url might be not resolvable , so we have to pass it from outside.
+     *
+     * @param filename    the final stored filename of the file object
+     * @param downloadUrl the download url
+     * @return StoredFileObject
+     */
+    StoredFileObject findByStoredFilename(String filename, String downloadUrl);
+
+    /**
+     * Delete the stored file object physically.
+     *
+     * @param filename the final stored filename of the file to delete
+     * @return StoredFileObject ( the writeTo method is not supported since the file is deleted )
+     */
+    StoredFileObject delete(String filename);
 
 }

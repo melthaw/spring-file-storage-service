@@ -1,53 +1,46 @@
 package in.clouthink.daas.fss.alioss.support;
 
+import com.aliyun.oss.ClientConfiguration;
+
 import java.util.Map;
 
 /**
  * Config for oss client.
  *
- * @author LiangBin & dz
+ * @author dz
  */
 public interface OssProperties {
 
-	/**
-	 * The oss access key id
-	 */
-	String getKeyId();
+    /**
+     * The oss access key id
+     */
+    String getKeyId();
 
-	/**
-	 * The oss access secret
-	 *
-	 * @return
-	 */
-	String getSecret();
+    /**
+     * The oss access secret
+     */
+    String getKeySecret();
 
-	/**
-	 * The oss domain base
-	 *
-	 * @return
-	 */
-	String getOssDomain();
+    /**
+     * The oss domain base
+     */
+    String getEndpoint();
 
-	/**
-	 * The img domain base
-	 *
-	 * @return
-	 */
-	String getImgDomain();
+    /**
+     * The default bucket to store the file which's bucket is not specified for category.
+     */
+    String getDefaultBucket();
 
-	/**
-	 * The default bucket to store the file which's bucket is not specified for category.
-	 *
-	 * @return
-	 */
-	String getDefaultBucket();
+    /**
+     * The file's category and bucket mapping, the file will be stored in corresponding bucket for different category,
+     * if the bucket is not defined for the file's category , the default bucket will be taken place.
+     */
+    Map<String, String> getBuckets();
 
-	/**
-	 * The file's category and bucket mapping, the file will be stored in corresponding bucket for different category,
-	 * if the bucket is not defined for the file's category , the default bucket will be taken place.
-	 *
-	 * @return
-	 */
-	Map<String,String> getBuckets();
+    /**
+     *
+     * @return
+     */
+    ClientConfiguration getClientConfiguration();
 
 }
