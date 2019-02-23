@@ -7,14 +7,14 @@
     <parent>
         <groupId>in.clouthink.daas</groupId>
         <artifactId>daas-fss</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>daas-fss-qiniu</artifactId>
     <packaging>jar</packaging>
     <name>daas-fss-qiniu</name>
-    <version>3.0.1</version>
+    <version>3.0.2-SNAPSHOT</version>
 
     <dependencies>
 
