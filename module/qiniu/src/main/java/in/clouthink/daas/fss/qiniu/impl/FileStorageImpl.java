@@ -61,11 +61,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     @Override
-    public boolean isImageSupported() {
-        return true;
-    }
-
-    @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String qiniuKey = MetadataUtils.generateFilename(request);
         String qiniuBucket = this.resolveBucket(request);

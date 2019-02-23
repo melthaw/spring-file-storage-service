@@ -49,11 +49,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
     }
 
     @Override
-    public boolean isImageSupported() {
-        return true;
-    }
-
-    @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String ossBucket = resolveBucket(request);
         String ossObjectName = MetadataUtils.generateFilename(request, true);

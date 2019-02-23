@@ -62,11 +62,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     @Override
-    public boolean isImageSupported() {
-        return false;
-    }
-
-    @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String filenameToSave = MetadataUtils.generateFilename(request);
 
@@ -317,7 +312,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         if (this.webDavProperties.isSslEnabled()) {
             //FIXME
             final SSLSocketFactory socketFactory = new SSLSocketFactory(new TrustSelfSignedStrategy());
-            this.sardine = new SardineImpl() {
+            this.sardine =  new SardineImpl() {
                 @Override
                 protected SSLSocketFactory createDefaultSecureSocketFactory() {
                     return socketFactory;

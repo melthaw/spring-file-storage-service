@@ -61,11 +61,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     @Override
-    public boolean isImageSupported() {
-        return true;
-    }
-
-    @Override
     public StoreFileResponse store(InputStream inputStream, StoreFileRequest request) throws StoreFileException {
         String s3Bucket = resolveBucket(request);
         String s3ObjectKey = MetadataUtils.generateFilename(request);
@@ -239,7 +234,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         Assert.notNull(this.s3Properties);
 
         AWSCredentials credentials = new BasicAWSCredentials(this.s3Properties.getAccessKey(),

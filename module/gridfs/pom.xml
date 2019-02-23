@@ -7,14 +7,14 @@
     <parent>
         <groupId>in.clouthink.daas</groupId>
         <artifactId>daas-fss</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>daas-fss-gridfs</artifactId>
     <packaging>jar</packaging>
     <name>daas-fss-gridfs</name>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0</version>
 
     <licenses>
         <license>
@@ -38,16 +38,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>in.clouthink.daas</groupId>
-            <artifactId>daas-edm</artifactId>
-            <version>1.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>daas-fss-core</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
