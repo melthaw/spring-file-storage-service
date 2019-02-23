@@ -26,15 +26,15 @@ So far the following version is available
 
 # Get Started 
 
-We will take fastdfs for example. 
+We will take [WebDAV](http://www.webdav.org/) for example. 
 
-* Start file server support webdav protocol
+* Start a file server supporting WebDAV protocol
 * Gradle as build tool
 * Show the API usage in Spring Application 
 
 ## Start fastdfs server
 
-We will quick start a webdav file server by docker-compose , please make sure docker & docker-compose are prepare on your local machine.
+We will quick start a WebDAV file server by docker-compose , please make sure docker & docker-compose are prepare on your local machine.
 
 Here is the `docker-compose.yml`
 
@@ -323,8 +323,7 @@ fss:
 ```
 
 
-## Webdav Protocol
-
+## WebDAV 
 
 Definition
 
