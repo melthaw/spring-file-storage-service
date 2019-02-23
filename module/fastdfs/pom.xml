@@ -7,14 +7,14 @@
     <parent>
         <groupId>in.clouthink.daas</groupId>
         <artifactId>daas-fss</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.1</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>daas-fss-fastdfs</artifactId>
     <packaging>jar</packaging>
     <name>daas-fss-fastdfs</name>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 
     <dependencies>
 
