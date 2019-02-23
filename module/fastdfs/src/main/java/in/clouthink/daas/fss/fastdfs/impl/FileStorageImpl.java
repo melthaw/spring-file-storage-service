@@ -54,7 +54,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
     @Override
     public boolean isMetadataSupported() {
-        return false;
+        return true;
     }
 
     @Override
