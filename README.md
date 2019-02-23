@@ -9,14 +9,18 @@ the user can supply the provider impl to match the customize requirement if the 
 
 So far the following version is available 
 
-module name | latest version
-------|------
-daas-fss-core | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-core/3.0.0)
-daas-fss-zimg | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-zimg/3.0.0)
-daas-fss-gridfs | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-gridfs/3.0.0)
-daas-fss-alioss | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.0)
-daas-fss-data-mysql | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-data-mysql/3.0.0)
-daas-fss-data-mongodb | [3.0.0](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-data-mongodb/3.0.0)
+|category  |module name | latest version |
+|---|---|---|
+| core | daas-fss-core | [3.0.1](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-core/3.0.1)
+| physical file | daas-fss-zimg | [3.0.1](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-zimg/3.0.1)
+| | daas-fss-gridfs | [3.0.1](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-gridfs/3.0.1)
+| | daas-fss-alioss | [3.0.1](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.1)
+| | daas-fss-s3 | [3.0.1](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.1)
+| | daas-fss-webdev | [3.0.1](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-webdav/3.0.1)
+| | daas-fss-glusterfs | [3.0.1](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-glusterfs/3.0.1)
+| | daas-fss-qiniu | [3.0.1](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-qiniu/3.0.1)
+| database | daas-fss-mysql | [3.0.1](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-mysql/3.0.1)
+| |daas-fss-mongodb | [3.0.1](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-mongodb/3.0.1)
 
 > Now 2.0.0 is deprecated.  
 
