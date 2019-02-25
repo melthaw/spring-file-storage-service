@@ -82,8 +82,9 @@ public interface FileObject {
     String getFileUrl();
 
     /**
-     * @return the image url if image can be downloaded
+     *
+     * @return the id of business which the file is attached to
      */
-    String getImageUrl();
+    String getAttachedId();
 
 }

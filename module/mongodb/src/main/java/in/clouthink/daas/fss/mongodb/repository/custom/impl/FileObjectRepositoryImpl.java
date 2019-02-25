@@ -35,15 +35,15 @@ public class FileObjectRepositoryImpl implements FileObjectRepositoryCustom {
     private Query buildQuery(FileObjectSearchRequest searchRequest) {
         Query query = new Query();
 
-        String bizId = searchRequest.getBizId();
+        String attachedId = searchRequest.getAttachedId();
         String code = searchRequest.getCode();
         String category = searchRequest.getCategory();
         String uploadedBy = searchRequest.getUploadedBy();
         Date uploadedAtFrom = searchRequest.getUploadedAtFrom();
         Date uploadedAtTo = searchRequest.getUploadedAtTo();
 
-        if (!StringUtils.isEmpty(bizId)) {
-            query.addCriteria(Criteria.where("bizId").regex(bizId));
+        if (!StringUtils.isEmpty(attachedId)) {
+            query.addCriteria(Criteria.where("attachedId").regex(attachedId));
         }
 
         if (!StringUtils.isEmpty(code)) {

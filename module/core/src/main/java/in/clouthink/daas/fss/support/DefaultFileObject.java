@@ -19,8 +19,6 @@ public class DefaultFileObject implements FileObject {
 
     private String fileUrl;
 
-    private String imageUrl;
-
     private String contentType;
 
     private long size;
@@ -28,6 +26,8 @@ public class DefaultFileObject implements FileObject {
     private Date uploadedAt;
 
     private String uploadedBy;
+
+    private String attachedId;
 
     private Map<String, String> attributes = new HashMap<String, String>();
 
@@ -68,15 +68,6 @@ public class DefaultFileObject implements FileObject {
     }
 
     @Override
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    @Override
     public String getContentType() {
         return contentType;
     }
@@ -113,6 +104,15 @@ public class DefaultFileObject implements FileObject {
     }
 
     @Override
+    public String getAttachedId() {
+        return attachedId;
+    }
+
+    public void setAttachedId(String attachedId) {
+        this.attachedId = attachedId;
+    }
+
+    @Override
     public Map<String, String> getAttributes() {
         return attributes;
     }
@@ -128,14 +128,13 @@ public class DefaultFileObject implements FileObject {
         sb.append(", originalFilename='").append(originalFilename).append('\'');
         sb.append(", prettyFilename='").append(prettyFilename).append('\'');
         sb.append(", fileUrl='").append(fileUrl).append('\'');
-        sb.append(", imageUrl='").append(imageUrl).append('\'');
         sb.append(", contentType='").append(contentType).append('\'');
         sb.append(", size=").append(size);
         sb.append(", uploadedAt=").append(uploadedAt);
         sb.append(", uploadedBy='").append(uploadedBy).append('\'');
+        sb.append(", attachedId='").append(attachedId).append('\'');
         sb.append(", attributes=").append(attributes);
         sb.append('}');
         return sb.toString();
     }
-
 }

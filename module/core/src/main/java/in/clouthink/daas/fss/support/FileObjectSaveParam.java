@@ -19,8 +19,6 @@ public class FileObjectSaveParam implements FileObjectSaveRequest {
 
     private String fileUrl;
 
-    private String imageUrl;
-
     private String contentType;
 
     private long size;
@@ -28,6 +26,8 @@ public class FileObjectSaveParam implements FileObjectSaveRequest {
     private Date uploadedAt;
 
     private String uploadedBy;
+
+    private String attachedId;
 
     private Map<String, String> attributes = new HashMap<String, String>();
 
@@ -68,15 +68,6 @@ public class FileObjectSaveParam implements FileObjectSaveRequest {
     }
 
     @Override
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    @Override
     public String getContentType() {
         return contentType;
     }
@@ -110,6 +101,15 @@ public class FileObjectSaveParam implements FileObjectSaveRequest {
 
     public void setUploadedBy(String uploadedBy) {
         this.uploadedBy = uploadedBy;
+    }
+
+    @Override
+    public String getAttachedId() {
+        return attachedId;
+    }
+
+    public void setAttachedId(String attachedId) {
+        this.attachedId = attachedId;
     }
 
     @Override

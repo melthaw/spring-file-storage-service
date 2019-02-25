@@ -50,7 +50,9 @@ public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject
 
     private String description;
 
-    private String bizId;
+    private String attachedId;
+
+    private String provider;
 
     private String storedFilename;
 
@@ -59,8 +61,6 @@ public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject
     private String prettyFilename;
 
     private String fileUrl;
-
-    private String imageUrl;
 
     private String contentType;
 
@@ -114,12 +114,21 @@ public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject
         this.description = description;
     }
 
-    public String getBizId() {
-        return bizId;
+    public String getProvider() {
+        return provider;
     }
 
-    public void setBizId(String bizId) {
-        this.bizId = bizId;
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    @Override
+    public String getAttachedId() {
+        return attachedId;
+    }
+
+    public void setAttachedId(String attachedId) {
+        this.attachedId = attachedId;
     }
 
     @Override
@@ -156,15 +165,6 @@ public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject
 
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
-    }
-
-    @Override
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     @Override

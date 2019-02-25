@@ -20,6 +20,6 @@ public interface FileObjectRepository extends AbstractRepository<FileObject>, Fi
 
     Page<FileObject> findByUploadedAtBetween(Date start, Date end, Pageable pageable);
 
-    Page<FileObject> findByBizId(String bizId, Pageable pageable);
+    Page<FileObject> findByAttachedId(String attachedId, Pageable pageable);
 
 }

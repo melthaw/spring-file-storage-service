@@ -91,7 +91,9 @@ public class StorePipe<T> {
                                                      Map<String, String> uploadFileRequest) {
         DefaultStoreFileRequest result = new DefaultStoreFileRequest();
         result.setSize(multipartFile.getSize());
-        result.setUploadedBy(this.requestBy);
+        if (!StringUtils.isEmpty(this.requestBy)) {
+            result.setUploadedBy(this.requestBy);
+        }
         result.setAttributes(uploadFileRequest);
 
         String originalFileName = multipartFile.getOriginalFilename();
