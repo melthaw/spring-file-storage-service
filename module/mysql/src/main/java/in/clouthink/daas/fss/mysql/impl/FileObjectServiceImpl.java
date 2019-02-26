@@ -5,6 +5,7 @@ import in.clouthink.daas.fss.domain.model.FileObjectHistory;
 import in.clouthink.daas.fss.domain.request.FileObjectSaveRequest;
 import in.clouthink.daas.fss.domain.request.FileObjectSearchRequest;
 import in.clouthink.daas.fss.domain.service.FileObjectService;
+import in.clouthink.daas.fss.mysql.model.FileObjectAttribute;
 import in.clouthink.daas.fss.mysql.repository.FileObjectAttributeRepository;
 import in.clouthink.daas.fss.mysql.repository.FileObjectHistoryRepository;
 import in.clouthink.daas.fss.mysql.repository.FileObjectRepository;
@@ -14,7 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -32,7 +35,18 @@ public class FileObjectServiceImpl implements FileObjectService {
 
     @Override
     public FileObject findById(String id) {
-        return fileObjectRepository.findById(id);
+        in.clouthink.daas.fss.mysql.model.FileObject result = fileObjectRepository.findById(id);
+        if (result == null) {
+            return null;
+        }
+
+        List<FileObjectAttribute> fileObjectAttributes = fileObjectAttributeRepository.findListByFileObject(result);
+
+        Map<String, String> attributes = new HashMap<>();
+        fileObjectAttributes.forEach(item -> attributes.put(item.getKey(), item.getValue()));
+        result.setAttributes(attributes);
+
+        return result;
     }
 
     @Override
@@ -50,9 +64,25 @@ public class FileObjectServiceImpl implements FileObjectService {
 
     @Override
     public FileObject save(FileObjectSaveRequest storeFileRequest) {
+        if (storeFileRequest.getAttributes() != null && storeFileRequest.getAttributes().size() > 25) {
+            throw new IllegalArgumentException("The count of customized attributes can't be exceed 25.");
+        }
+
         in.clouthink.daas.fss.mysql.model.FileObject fileObject = new in.clouthink.daas.fss.mysql.model.FileObject();
         BeanUtils.copyProperties(storeFileRequest, fileObject, "id");
-        return fileObjectRepository.save(fileObject);
+        FileObject result = fileObjectRepository.save(fileObject);
+
+        storeFileRequest.getAttributes().forEach((key, value) -> {
+            FileObjectAttribute attribute = new FileObjectAttribute();
+
+            attribute.setKey(key);
+            attribute.setValue(value);
+            attribute.setFileObject(fileObject);
+
+            fileObjectAttributeRepository.save(attribute);
+        });
+
+        return result;
     }
 
     @Override

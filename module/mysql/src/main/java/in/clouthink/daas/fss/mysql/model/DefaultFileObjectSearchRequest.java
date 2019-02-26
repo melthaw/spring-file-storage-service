@@ -11,7 +11,7 @@ public class DefaultFileObjectSearchRequest extends FileObjectSearchParam implem
     private String code;
 
     @Override
-    public String getBizId() {
+    public String getAttachedId() {
         return bizId;
     }
 
