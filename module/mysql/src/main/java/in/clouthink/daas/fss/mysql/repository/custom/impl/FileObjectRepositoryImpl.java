@@ -1,7 +1,7 @@
 package in.clouthink.daas.fss.mysql.repository.custom.impl;
 
+import in.clouthink.daas.fss.domain.request.FileObjectSearchRequest;
 import in.clouthink.daas.fss.mysql.model.FileObject;
-import in.clouthink.daas.fss.mysql.model.FileObjectSearchRequest;
 import in.clouthink.daas.fss.mysql.repository.custom.FileObjectRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,15 +42,21 @@ public class FileObjectRepositoryImpl implements FileObjectRepositoryCustom {
         JHqlBuilder jhqlBuilder = new JHqlBuilder("select count(p.id) from FileObject p ",
                                                   "select p from FileObject p ");
 
-        if (!StringUtils.isEmpty(searchRequest.getAttachedId())) {
-            jhqlBuilder.andEquals("p.attachedId", "pAttachedId", searchRequest.getAttachedId());
+        if (searchRequest instanceof in.clouthink.daas.fss.mysql.model.FileObjectSearchRequest) {
+            in.clouthink.daas.fss.mysql.model.FileObjectSearchRequest mysqlSearchRequest = (in.clouthink.daas.fss.mysql.model.FileObjectSearchRequest) searchRequest;
+            if (!StringUtils.isEmpty(mysqlSearchRequest.getAttachedId())) {
+                jhqlBuilder.andEquals("p.attachedId", "pAttachedId", mysqlSearchRequest.getAttachedId());
+            }
+            if (!StringUtils.isEmpty(mysqlSearchRequest.getCategory())) {
+                jhqlBuilder.andLike(new String[]{"p.category"},
+                                    "nameLike",
+                                    "%" + mysqlSearchRequest.getCategory() + "%");
+            }
+            if (!StringUtils.isEmpty(mysqlSearchRequest.getCode())) {
+                jhqlBuilder.andLike(new String[]{"p.code"}, "codeLike", "%" + mysqlSearchRequest.getCode() + "%");
+            }
         }
-        if (!StringUtils.isEmpty(searchRequest.getCategory())) {
-            jhqlBuilder.andLike(new String[]{"p.category"}, "nameLike", "%" + searchRequest.getCategory() + "%");
-        }
-        if (!StringUtils.isEmpty(searchRequest.getCode())) {
-            jhqlBuilder.andLike(new String[]{"p.code"}, "codeLike", "%" + searchRequest.getCode() + "%");
-        }
+
         if (!StringUtils.isEmpty(searchRequest.getStoredFilename())) {
             jhqlBuilder.andLike(new String[]{"p.storedFilename"},
                                 "pStoredFilename",

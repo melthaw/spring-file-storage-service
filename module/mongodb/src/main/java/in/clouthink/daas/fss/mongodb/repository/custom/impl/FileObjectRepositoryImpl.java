@@ -1,7 +1,7 @@
 package in.clouthink.daas.fss.mongodb.repository.custom.impl;
 
+import in.clouthink.daas.fss.domain.request.FileObjectSearchRequest;
 import in.clouthink.daas.fss.mongodb.model.FileObject;
-import in.clouthink.daas.fss.mongodb.model.FileObjectSearchRequest;
 import in.clouthink.daas.fss.mongodb.repository.custom.FileObjectRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -35,23 +35,27 @@ public class FileObjectRepositoryImpl implements FileObjectRepositoryCustom {
     private Query buildQuery(FileObjectSearchRequest searchRequest) {
         Query query = new Query();
 
-        String attachedId = searchRequest.getAttachedId();
-        String code = searchRequest.getCode();
-        String category = searchRequest.getCategory();
+        if (searchRequest instanceof in.clouthink.daas.fss.mongodb.model.FileObjectSearchRequest) {
+            String attachedId = ((in.clouthink.daas.fss.mongodb.model.FileObjectSearchRequest) searchRequest).getAttachedId();
+            String code = ((in.clouthink.daas.fss.mongodb.model.FileObjectSearchRequest) searchRequest).getCode();
+            String category = ((in.clouthink.daas.fss.mongodb.model.FileObjectSearchRequest) searchRequest).getCategory();
+
+            if (!StringUtils.isEmpty(attachedId)) {
+                query.addCriteria(Criteria.where("attachedId").regex(attachedId));
+            }
+
+            if (!StringUtils.isEmpty(code)) {
+                query.addCriteria(Criteria.where("code").regex(code));
+            }
+            if (!StringUtils.isEmpty(category)) {
+                query.addCriteria(Criteria.where("category").regex(category));
+            }
+        }
+
         String uploadedBy = searchRequest.getUploadedBy();
         Date uploadedAtFrom = searchRequest.getUploadedAtFrom();
         Date uploadedAtTo = searchRequest.getUploadedAtTo();
 
-        if (!StringUtils.isEmpty(attachedId)) {
-            query.addCriteria(Criteria.where("attachedId").regex(attachedId));
-        }
-
-        if (!StringUtils.isEmpty(code)) {
-            query.addCriteria(Criteria.where("code").regex(code));
-        }
-        if (!StringUtils.isEmpty(category)) {
-            query.addCriteria(Criteria.where("category").regex(category));
-        }
         if (!StringUtils.isEmpty(uploadedBy)) {
             query.addCriteria(Criteria.where("uploadedBy").regex(uploadedBy));
         }

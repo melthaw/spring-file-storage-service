@@ -125,8 +125,8 @@ public class FileObjectServiceImpl implements FileObjectService {
 
     @Override
     public Page<FileObject> search(FileObjectSearchRequest searchRequest) {
-        return fileObjectRepository.findPage((in.clouthink.daas.fss.mysql.model.FileObjectSearchRequest) searchRequest)
-                                   .map(item -> item);
+        return fileObjectRepository.findPage(searchRequest)
+                                   .map(item -> (FileObject) item);
     }
 
 }

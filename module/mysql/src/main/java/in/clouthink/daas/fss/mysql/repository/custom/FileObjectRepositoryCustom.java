@@ -1,7 +1,7 @@
 package in.clouthink.daas.fss.mysql.repository.custom;
 
+import in.clouthink.daas.fss.domain.request.FileObjectSearchRequest;
 import in.clouthink.daas.fss.mysql.model.FileObject;
-import in.clouthink.daas.fss.mysql.model.FileObjectSearchRequest;
 import org.springframework.data.domain.Page;
 
 /**
@@ -9,6 +9,6 @@ import org.springframework.data.domain.Page;
  */
 public interface FileObjectRepositoryCustom {
 
-	Page<FileObject> findPage(FileObjectSearchRequest searchRequest);
+    Page<FileObject> findPage(FileObjectSearchRequest searchRequest);
 
 }

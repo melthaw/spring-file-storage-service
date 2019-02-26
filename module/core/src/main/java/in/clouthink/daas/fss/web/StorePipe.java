@@ -111,6 +111,9 @@ public class StorePipe<T> {
         result.setPrettyFilename(prettyFilename);
 
         String contentType = multipartFile.getContentType();
+        if (StringUtils.isEmpty(contentType)) {
+            throw new IllegalArgumentException("Please specify the Content-Type");
+        }
         if (!StringUtils.isEmpty(contentType)) {
             // Fixed ContentType from IE
             contentType = IEUtils.toStandardContentType(contentType);

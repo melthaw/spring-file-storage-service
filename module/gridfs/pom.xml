@@ -7,14 +7,14 @@
     <parent>
         <groupId>in.clouthink.daas</groupId>
         <artifactId>daas-fss</artifactId>
-        <version>3.0.3</version>
+        <version>3.0.4</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>daas-fss-gridfs</artifactId>
     <packaging>jar</packaging>
     <name>daas-fss-gridfs</name>
-    <version>3.0.3</version>
+    <version>3.0.4</version>
 
     <licenses>
         <license>

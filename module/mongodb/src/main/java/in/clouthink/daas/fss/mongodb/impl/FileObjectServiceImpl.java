@@ -1,6 +1,5 @@
 package in.clouthink.daas.fss.mongodb.impl;
 
-import in.clouthink.daas.fss.core.StoreFileRequest;
 import in.clouthink.daas.fss.domain.model.FileObject;
 import in.clouthink.daas.fss.domain.model.FileObjectHistory;
 import in.clouthink.daas.fss.domain.request.FileObjectSaveRequest;
@@ -11,7 +10,6 @@ import in.clouthink.daas.fss.mongodb.repository.FileObjectRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -87,7 +85,7 @@ public class FileObjectServiceImpl implements FileObjectService {
 
     @Override
     public Page<FileObject> search(FileObjectSearchRequest searchRequest) {
-        return fileObjectRepository.findPage((in.clouthink.daas.fss.mongodb.model.FileObjectSearchRequest) searchRequest)
+        return fileObjectRepository.findPage( searchRequest)
                                    .map(item -> (FileObject) item);
     }
 }
