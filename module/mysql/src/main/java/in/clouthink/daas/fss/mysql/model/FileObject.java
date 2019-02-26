@@ -3,7 +3,6 @@ package in.clouthink.daas.fss.mysql.model;
 import in.clouthink.daas.fss.core.StoreFileRequest;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,7 +13,7 @@ import java.util.Map;
  * @author dz
  */
 @Entity
-@Table(name = "FSS_FILE_OBJECT")
+@Table(name = "fss_file_object")
 public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject {
 
     public static FileObject from(in.clouthink.daas.fss.domain.model.FileObject fromObject) {
@@ -42,34 +41,49 @@ public class FileObject implements in.clouthink.daas.fss.domain.model.FileObject
     @Column(name = "ID")
     private String id;
 
+    @Basic
     private String category;
 
+    @Basic
     private String code;
 
+    @Basic
     private String name;
 
+    @Basic
     private String description;
 
+    @Basic
     private String attachedId;
 
+    @Basic
     private String provider;
 
+    @Basic
     private String storedFilename;
 
+    @Basic
     private String originalFilename;
 
+    @Basic
     private String prettyFilename;
 
+    @Basic
     private String fileUrl;
 
+    @Basic
     private String contentType;
 
+    @Basic
     private String uploadedBy;
 
+    @Basic
     private Date uploadedAt;
 
+    @Basic
     private long size;
 
+    @Basic
     private int version;
 
     private transient Map<String, String> attributes = new HashMap<String, String>();

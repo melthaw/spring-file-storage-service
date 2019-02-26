@@ -70,6 +70,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         DefaultStoredFileObject fileObject = DefaultStoredFileObject.from(request);
 
         fileObject.getAttributes().put("zimg-md5", zimgResult.getInfo().getMd5());
+        fileObject.setFileUrl(buildFileUrl(zimgResult.getInfo().getMd5()));
         fileObject.setUploadedAt(new Date());
         fileObject.setStoredFilename(zimgResult.getInfo().getMd5());
         fileObject.setProviderName(PROVIDER_NAME);
@@ -94,6 +95,16 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
         return store(new ByteArrayInputStream(bytes), request);
     }
 
+    public String buildFileUrl(String filename) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.zimgProperties.getDownloadEndpoint());
+        if (!this.zimgProperties.getDownloadEndpoint().endsWith("/")) {
+            sb.append("/");
+        }
+        sb.append(filename);
+        return sb.toString();
+    }
+
     @Override
     public StoredFileObject findByStoredFilename(String filename) {
         if (StringUtils.isEmpty(filename)) {
@@ -110,9 +121,9 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
         DefaultStoredFileObject fileObject = new DefaultStoredFileObject();
 
+        fileObject.setFileUrl(buildFileUrl(filename));
         fileObject.setStoredFilename(filename);
         fileObject.setProviderName(PROVIDER_NAME);
-
         fileObject.setImplementation(new ZimgFile(filename, zimgProperties.getDownloadEndpoint(), zimgClient));
 
         return fileObject;
@@ -153,7 +164,6 @@ public class FileStorageImpl implements FileStorage, InitializingBean {
 
         return fileObject;
     }
-
 
     @Override
     public void afterPropertiesSet() throws Exception {

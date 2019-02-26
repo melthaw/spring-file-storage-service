@@ -1,6 +1,7 @@
 package in.clouthink.daas.fss.mysql.model;
 
-import org.springframework.data.annotation.Id;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Map;
  * @author dz
  */
 @Entity
-@Table(name = "FSS_FILE_OBJECT_HISTORY")
+@Table(name = "fss_file_object_history")
 public class FileObjectHistory implements in.clouthink.daas.fss.domain.model.FileObjectHistory {
 
     public static FileObjectHistory from(in.clouthink.daas.fss.mysql.model.FileObject fileObjectImpl) {
@@ -31,6 +32,10 @@ public class FileObjectHistory implements in.clouthink.daas.fss.domain.model.Fil
     }
 
     @Id
+    @Access(AccessType.PROPERTY)
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(name = "ID")
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -53,7 +58,7 @@ public class FileObjectHistory implements in.clouthink.daas.fss.domain.model.Fil
 
     private int version;
 
-    private Map<String, String> attributes = new HashMap<String, String>();
+    private transient Map<String, String> attributes = new HashMap<String, String>();
 
     public String getId() {
         return id;

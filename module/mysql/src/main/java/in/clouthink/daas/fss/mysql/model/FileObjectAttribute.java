@@ -1,7 +1,6 @@
 package in.clouthink.daas.fss.mysql.model;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 
@@ -9,7 +8,7 @@ import javax.persistence.*;
  * @author dz
  */
 @Entity
-@Table(name = "FSS_FILE_OBJECT_ATTR")
+@Table(name = "fss_file_object_attr")
 public class FileObjectAttribute {
 
     @Id
@@ -19,8 +18,12 @@ public class FileObjectAttribute {
     @Column(name = "ID")
     private String id;
 
+    @Basic
+    @Column(name = "attr_key")
     private String key;
 
+    @Basic
+    @Column(name = "attr_value")
     private String value;
 
     @ManyToOne(fetch = FetchType.LAZY)

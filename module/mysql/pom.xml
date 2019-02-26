@@ -7,14 +7,14 @@
     <parent>
         <groupId>in.clouthink.daas</groupId>
         <artifactId>daas-fss</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.3</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>daas-fss-mysql</artifactId>
     <packaging>jar</packaging>
     <name>daas-fss-mysql</name>
-    <version>3.0.2</version>
+    <version>3.0.3</version>
 
     <licenses>
         <license>
