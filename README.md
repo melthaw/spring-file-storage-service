@@ -43,9 +43,11 @@ We will take [WebDAV](http://www.webdav.org/) for example.
 * Gradle as build tool
 * Show the API usage in Spring Application 
 
-## Start fastdfs server
+## Start WebDav server
 
-We will quick start a WebDAV file server by docker-compose , please make sure docker & docker-compose are prepare on your local machine.
+> please make sure docker & docker-compose are ready on your local machine.
+
+We will quick start a WebDAV file server by docker-compose.
 
 Here is the `docker-compose.yml`
 
@@ -81,7 +83,6 @@ Gradle build.gradle
     compile("in.clouthink.daas:daas-fss-webdav:3.0.4")
 ```
 
-
 Maven pom.xml 
 
 ```xml
@@ -100,7 +101,6 @@ Maven pom.xml
 
 ```
 
-
 ## Spring 
 
 Application
@@ -108,11 +108,11 @@ Application
 ```java
 @SpringBootApplication
 @Import({WebDavAutoConfiguration.class})
-@EnableConfigurationProperties(WebDavApplication.TestWebdavProperties.class)
+@EnableConfigurationProperties(WebDavApplication.TestWebDavProperties.class)
 public class WebDavApplication {
 
     @ConfigurationProperties(prefix = "fss.webdav")
-    public static class TestWebdavProperties extends DefaultWebDavProperties {
+    public static class TestWebDavProperties extends DefaultWebDavProperties {
 
     }
 
