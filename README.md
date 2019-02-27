@@ -3,6 +3,17 @@
 The fss(for file storage service) apis make storing the blob file easy and simple , 
 the user can supply the provider impl to match the customize requirement if the default build-in impl is not enough.
 
+Here is the support list:
+
+* Alioss
+* Qiniu
+* Amazon S3 Protocol
+* WebDav Protocol
+* Glusterfs
+* Gridfs
+* Zimg
+
+
 # Dependencies
 
 # Latest Release
