@@ -402,14 +402,6 @@ mvn -pl module/core clean package
 mvn --projects module/core clean package
 ```
 
-* zimg
-
-```shell
-mvn -pl module/zimg lean package -am
-# or
-mvn --projects module/zimg clean package --also-make
-```
-
 * alioss
 
 ```shell
@@ -418,10 +410,74 @@ mvn -pl module/alioss clean package -am
 mvn --projects module/alioss clean package --also-make
 ```
 
+* fastdfs
+
+```shell
+mvn -pl module/fastdfs lean package -am
+# or
+mvn --projects module/fastdfs clean package --also-make
+```
+
+* glusterfs
+
+```shell
+mvn -pl module/glusterfs lean package -am
+# or
+mvn --projects module/glusterfs clean package --also-make
+```
+
+* gridfs
+
+```shell
+mvn -pl module/gridfs lean package -am
+# or
+mvn --projects module/gridfs clean package --also-make
+```
+
+* qiniu
+
+```shell
+mvn -pl module/qiniu lean package -am
+# or
+mvn --projects module/qiniu clean package --also-make
+```
+
+* s3
+
+```shell
+mvn -pl module/s3 lean package -am
+# or
+mvn --projects module/s3 clean package --also-make
+```
+
+* webdav
+
+```shell
+mvn -pl module/webdav lean package -am
+# or
+mvn --projects module/webdav clean package --also-make
+```
+
+* zimg
+
+```shell
+mvn -pl module/zimg lean package -am
+# or
+mvn --projects module/zimg clean package --also-make
+```
+
 * mongodb
 
 ```shell
 mvn -pl module/mongodb clean package -am
 # or
 mvn --projects module/mongodb clean package --also-make
+```
+
+* mysql
+
+```shell
+mvn -pl module/mysql lean package -am
+# or
+mvn --projects module/mysql clean package --also-make
 ```
