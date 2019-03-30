@@ -12,7 +12,7 @@ Here is the support list:
 * Glusterfs
 * Gridfs
 * Zimg
-
+* Local File
 
 # Dependencies
 
@@ -22,16 +22,17 @@ So far the following version is available
 
 |category  |module name | latest version |
 |---|---|---|
-| core | daas-fss-core | [3.0.4](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-core/3.0.4)
-| physical file | daas-fss-zimg | [3.0.4](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-zimg/3.0.4)
-| | daas-fss-gridfs | [3.0.4](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-gridfs/3.0.4)
-| | daas-fss-alioss | [3.0.4](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.4)
-| | daas-fss-s3 | [3.0.4](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.4)
-| | daas-fss-webdev | [3.0.4](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-webdav/3.0.4)
-| | daas-fss-glusterfs | [3.0.4](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-glusterfs/3.0.4)
-| | daas-fss-qiniu | [3.0.4](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-qiniu/3.0.4)
-| database | daas-fss-mysql | [3.0.4](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-mysql/3.0.4)
-| |daas-fss-mongodb | [3.0.4](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-mongodb/3.0.4)
+| core | daas-fss-core | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-core/3.0.5)
+| physical file | daas-fss-zimg | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-zimg/3.0.5)
+| | daas-fss-gridfs | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-gridfs/3.0.5)
+| | daas-fss-alioss | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.5)
+| | daas-fss-s3 | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.5)
+| | daas-fss-webdev | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-webdav/3.0.5)
+| | daas-fss-glusterfs | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-glusterfs/3.0.5)
+| | daas-fss-qiniu | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-qiniu/3.0.5)
+| | daas-fss-local | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-local/3.0.5)
+| database | daas-fss-mysql | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-mysql/3.0.5)
+| |daas-fss-mongodb | [3.0.5](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-mongodb/3.0.5)
 
 > And 2.0.0 is deprecated.  
 
@@ -79,8 +80,8 @@ Now `80` port is exported as hosted port
 Gradle build.gradle
 
 ```gradle
-    compile("in.clouthink.daas:daas-fss-core:3.0.4")
-    compile("in.clouthink.daas:daas-fss-webdav:3.0.4")
+    compile("in.clouthink.daas:daas-fss-core:3.0.5")
+    compile("in.clouthink.daas:daas-fss-webdav:3.0.5")
 ```
 
 Maven pom.xml 
@@ -90,13 +91,13 @@ Maven pom.xml
 	<dependency>
 		<groupId>in.clouthink.daas</groupId>
 		<artifactId>daas-fss-core</artifactId>
-		<version>3.0.4</version>
+		<version>3.0.5</version>
 	</dependency>
         
 	<dependency>
 		<groupId>in.clouthink.daas</groupId>
 		<artifactId>daas-fss-webdav</artifactId>
-		<version>3.0.4</version>
+		<version>3.0.5</version>
 	</dependency>
 
 ```
@@ -307,6 +308,7 @@ fss:
 ```
 
 
+
 ## Amazon S3 Protocol 
 
 
@@ -376,6 +378,25 @@ fss:
 
 ```
 
+
+## Local File
+
+
+Definition
+
+> `in.clouthink.daas.fss.local.support.LocalFileProperties`
+
+Implementation 
+
+> `in.clouthink.daas.fss.local.support.DefaultLocalFileProperties`
+
+Sample
+
+```yml
+fss:
+  local:
+    store-path: <your local file store path>
+```
 
 
 # Appendix - Build the source
@@ -464,6 +485,14 @@ mvn --projects module/webdav clean package --also-make
 mvn -pl module/zimg lean package -am
 # or
 mvn --projects module/zimg clean package --also-make
+```
+
+* local
+
+```shell
+mvn -pl module/local lean package -am
+# or
+mvn --projects module/local clean package --also-make
 ```
 
 * mongodb

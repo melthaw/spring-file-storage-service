@@ -54,7 +54,6 @@ public class MetadataUtils {
     }
 
     /**
-     *
      * @param request
      * @return filename without '/' prefix
      */
@@ -63,7 +62,6 @@ public class MetadataUtils {
     }
 
     /**
-     *
      * @param request
      * @param generatePath
      * @return filename without '/' prefix
@@ -76,6 +74,32 @@ public class MetadataUtils {
         String filenameWithoutSuffix = UUID.randomUUID().toString().replace("-", "");
         if (generatePath) {
             sb.append(new SimpleDateFormat("yyyy/MM/dd/").format(uploadedAt));
+        }
+        sb.append(filenameWithoutSuffix);
+
+        String extName = FilenameUtils.getExtension(originalFilename);
+        if (!StringUtils.isEmpty(extName)) {
+            sb.append(".").append(extName);
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * @param request
+     * @param path
+     * @return filename without '/' prefix
+     */
+    public static String generateFilename(StoreFileRequest request, String path) {
+        String originalFilename = request.getOriginalFilename();
+        StringBuilder sb = new StringBuilder();
+
+        String filenameWithoutSuffix = UUID.randomUUID().toString().replace("-", "");
+        if (!StringUtils.isEmpty(path)) {
+            sb.append(path);
+            if (!path.endsWith("/")) {
+                sb.append("/");
+            }
         }
         sb.append(filenameWithoutSuffix);
 

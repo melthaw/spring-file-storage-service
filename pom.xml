@@ -6,7 +6,7 @@
 
     <groupId>in.clouthink.daas</groupId>
     <artifactId>daas-fss</artifactId>
-    <version>3.0.4</version>
+    <version>3.0.5</version>
     <name>daas-fss</name>
     <packaging>pom</packaging>
     <url>http://clouthink.in</url>
@@ -50,6 +50,7 @@
         <module>module/glusterfs</module>
         <module>module/fastdfs</module>
         <module>module/webdav</module>
+        <module>module/local</module>
         <module>module/mongodb</module>
         <module>module/mysql</module>
     </modules>
