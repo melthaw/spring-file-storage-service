@@ -19,29 +19,29 @@ public class MetadataUtils {
     public static Map<String, String> buildMetadata(StoreFileRequest request, boolean replaceNullWithEmpty) {
         Map<String, String> metadata = new HashMap<>();
 
-        metadata.put("fss-contentType", request.getContentType());
+        metadata.put("fss-contenttype", request.getContentType());
         if (replaceNullWithEmpty && request.getContentType() == null) {
-            metadata.put("fss-contentType", "");
+            metadata.put("fss-contenttype", "");
         }
 
-        metadata.put("fss-originalFilename", request.getOriginalFilename());
+        metadata.put("fss-originalfilename", request.getOriginalFilename());
         if (replaceNullWithEmpty && request.getOriginalFilename() == null) {
-            metadata.put("fss-originalFilename", "");
+            metadata.put("fss-originalfilename", "");
         }
 
-        metadata.put("fss-prettyFilename", request.getPrettyFilename());
+        metadata.put("fss-prettyfilename", request.getPrettyFilename());
         if (replaceNullWithEmpty && request.getPrettyFilename() == null) {
-            metadata.put("fss-prettyFilename", "");
+            metadata.put("fss-prettyfilename", "");
         }
 
-        metadata.put("fss-uploadedBy", request.getUploadedBy());
+        metadata.put("fss-uploadedby", request.getUploadedBy());
         if (replaceNullWithEmpty && request.getUploadedBy() == null) {
-            metadata.put("fss-uploadedBy", "");
+            metadata.put("fss-uploadedby", "");
         }
 
         metadata.put("fss-size", request.getSize() > 0 ? Long.toString(request.getSize()) : "-1");
 
-        metadata.put("fss-uploadedAt", Long.toString(System.currentTimeMillis()));
+        metadata.put("fss-uploadedat", Long.toString(System.currentTimeMillis()));
 
         if (request.getAttributes() != null) {
             request.getAttributes().entrySet().forEach(key -> {

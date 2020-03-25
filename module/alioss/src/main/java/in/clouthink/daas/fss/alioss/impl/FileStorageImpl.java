@@ -215,12 +215,12 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         }
 
         try {
-            fileObject.setOriginalFilename(userMetadata.get("fss-originalFilename"));
-            fileObject.setPrettyFilename(userMetadata.get("fss-prettyFilename"));
-            fileObject.setContentType(userMetadata.get("fss-contentType"));
-            fileObject.setUploadedBy(userMetadata.get("fss-uploadedBy"));
+            fileObject.setOriginalFilename(userMetadata.get("fss-originalfilename"));
+            fileObject.setPrettyFilename(userMetadata.get("fss-prettyfilename"));
+            fileObject.setContentType(userMetadata.get("fss-contenttype"));
+            fileObject.setUploadedBy(userMetadata.get("fss-uploadedby"));
 
-            String uploadedAt = userMetadata.get("fss-uploadedAt");
+            String uploadedAt = userMetadata.get("fss-uploadedat");
             fileObject.setUploadedAt(uploadedAt != null ? new Date(Long.parseLong(uploadedAt)) : null);
 
             String size = userMetadata.get("fss-size");
