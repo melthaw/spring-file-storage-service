@@ -4,6 +4,7 @@ target/
 .classpath
 .project
 .settings
+.vscode
 **.iml
 **.log
 
