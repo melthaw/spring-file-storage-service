@@ -6,7 +6,7 @@
 
     <groupId>in.clouthink.daas</groupId>
     <artifactId>daas-fss</artifactId>
-    <version>3.0.5</version>
+    <version>3.0.6</version>
     <name>daas-fss</name>
     <packaging>pom</packaging>
     <url>http://clouthink.in</url>
