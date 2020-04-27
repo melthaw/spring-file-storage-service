@@ -11,9 +11,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>daas-fss-mongodb</artifactId>
+    <artifactId>daas-fss-hwobs</artifactId>
     <packaging>jar</packaging>
-    <name>daas-fss-mongodb</name>
+    <name>daas-fss-hwobs</name>
     <version>3.0.6</version>
 
     <licenses>
@@ -36,6 +36,14 @@
         <url>git://git.coding.net/melthaw/daas-fss.git</url>
     </scm>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+    </properties>
+
     <dependencies>
 
         <dependency>
@@ -45,15 +53,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-            <version>1.7.1.RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
+            <groupId>com.huaweicloud</groupId>
+            <artifactId>esdk-obs-java</artifactId>
+            <version>3.19.7</version>
         </dependency>
 
         <dependency>
@@ -77,10 +79,20 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
 </project>
