@@ -43,6 +43,7 @@
     <modules>
         <module>module/core</module>
         <module>module/alioss</module>
+        <module>module/hwobs</module>
         <module>module/qiniu</module>
         <module>module/gridfs</module>
         <module>module/zimg</module>
@@ -147,6 +148,13 @@
                 <artifactId>spring-test</artifactId>
                 <version>3.2.13.RELEASE</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.12</version>
+                <optional>true</optional>
             </dependency>
 
         </dependencies>
