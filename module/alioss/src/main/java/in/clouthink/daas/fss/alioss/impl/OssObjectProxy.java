@@ -1,5 +1,6 @@
 package in.clouthink.daas.fss.alioss.impl;
 
+import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.OSSObject;
 import in.clouthink.daas.fss.util.IOUtils;
@@ -14,11 +15,11 @@ public class OssObjectProxy {
 
     private String objectName;
 
-    private OSSClient ossClient;
+    private OSS ossClient;
 
     private OSSObject ossObject;
 
-    public OssObjectProxy(OSSClient ossClient, String bucketName, String objectName) {
+    public OssObjectProxy(OSS ossClient, String bucketName, String objectName) {
         this.bucketName = bucketName;
         this.objectName = objectName;
         this.ossClient = ossClient;
