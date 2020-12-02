@@ -91,13 +91,13 @@ Maven pom.xml
 	<dependency>
 		<groupId>in.clouthink.daas</groupId>
 		<artifactId>daas-fss-core</artifactId>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 	</dependency>
         
 	<dependency>
 		<groupId>in.clouthink.daas</groupId>
 		<artifactId>daas-fss-webdav</artifactId>
-		<version>3.0.6</version>
+		<version>3.0.7</version>
 	</dependency>
 
 ```
