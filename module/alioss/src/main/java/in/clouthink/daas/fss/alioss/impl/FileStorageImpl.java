@@ -1,6 +1,8 @@
 package in.clouthink.daas.fss.alioss.impl;
 
-import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.ClientBuilderConfiguration;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
@@ -36,7 +38,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
     @Autowired
     private OssProperties ossProperties;
 
-    private OSSClient ossClient;
+    private OSS ossClient;
 
     @Override
     public String getName() {
@@ -70,8 +72,8 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
 
             try {
                 logger.debug(String.format("Response for uploading %s : %s",
-                                           request.getOriginalFilename(),
-                                           IOUtils.readAsString(putObjectResult.getResponse().getContent())));
+                        request.getOriginalFilename(),
+                        IOUtils.readAsString(putObjectResult.getResponse().getContent())));
             } catch (Throwable e) {
                 logger.error("Fail to parse uploading response content", e);
                 IOUtils.close(putObjectResult.getResponse().getContent());
@@ -79,18 +81,18 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         }
 
         logger.debug(String.format("The uploading %s stored as oss-object[bucket=%s,object=%s]",
-                                   request.getOriginalFilename(),
-                                   ossBucket,
-                                   ossObjectName));
+                request.getOriginalFilename(),
+                ossBucket,
+                ossObjectName));
 
         DefaultStoredFileObject fileObject = DefaultStoredFileObject.from(request);
 
         String url = new StringBuilder("https://").append(ossBucket)
-                                                  .append(".")
-                                                  .append(this.ossProperties.getEndpoint())
-                                                  .append("/")
-                                                  .append(ossObjectName)
-                                                  .toString();
+                .append(".")
+                .append(this.ossProperties.getEndpoint())
+                .append("/")
+                .append(ossObjectName)
+                .toString();
 
         fileObject.getAttributes().put("oss-bucket", ossBucket);
         fileObject.getAttributes().put("oss-object", ossObjectName);
@@ -156,6 +158,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(new OssObjectProxy(ossObject));
 
+        try {
+            ossObject.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return fileObject;
     }
 
@@ -201,7 +208,7 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
             logger.debug(String.format("The oss-object[bucket=%s,object=%s] is deleted.", ossBucket, ossObjectKey));
         } catch (Throwable e) {
             logger.error(String.format("Fail to delete the oss-object[bucket=%s,object=%s]", ossBucket, ossObjectKey),
-                         e);
+                    e);
         }
 
         return fileObject;
@@ -253,14 +260,20 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
     @Override
     public void afterPropertiesSet() {
         Assert.notNull(this.ossProperties);
-        this.ossClient = new OSSClient("http://" + this.ossProperties.getEndpoint(),
-                                       this.ossProperties.getKeyId(),
-                                       this.ossProperties.getKeySecret());
 
+        ClientBuilderConfiguration conf = new ClientBuilderConfiguration();
+//        this.ossClient = new OSSClient("http://" + this.ossProperties.getEndpoint(),
+//                                       this.ossProperties.getKeyId(),
+//                                       this.ossProperties.getKeySecret());
+//
         if (this.ossProperties.getClientConfiguration() != null) {
             BeanUtils.copyProperties(this.ossProperties.getClientConfiguration(),
-                                     this.ossClient.getClientConfiguration());
+                    conf);
         }
+        this.ossClient = new OSSClientBuilder().build("http://" + this.ossProperties.getEndpoint(),
+                this.ossProperties.getKeyId(),
+                this.ossProperties.getKeySecret(),
+                conf);
     }
 
     @Override
