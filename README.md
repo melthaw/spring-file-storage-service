@@ -189,11 +189,11 @@ public class WebDavTest {
 Default implementation is build inside , here is the sample to quick enable it in Spring. 
 
 ```java
-@EnableConfigurationProperties(WebDavApplication.TestOssProperties.class)
+@EnableConfigurationProperties(WebDavApplication.TestWebDavProperties.class)
 public class WebDavApplication {
 
-    @ConfigurationProperties(prefix = "fss.alioss")
-    public static class TestOssProperties extends DefaultOssProperties {
+    @ConfigurationProperties(prefix = "fss.webdav")
+    public static class TestWebDavProperties extends DefaultWebDavProperties {
 
     }
     
