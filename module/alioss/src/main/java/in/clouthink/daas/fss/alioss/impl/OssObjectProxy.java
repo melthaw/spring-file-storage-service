@@ -1,7 +1,6 @@
 package in.clouthink.daas.fss.alioss.impl;
 
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.OSSObject;
 import in.clouthink.daas.fss.util.IOUtils;
 
@@ -39,6 +38,16 @@ public class OssObjectProxy {
             IOUtils.copy(is, outputStream, bufferSize);
         } finally {
             IOUtils.close(is);
+        }
+    }
+
+    public void close() {
+        if (this.ossObject != null) {
+            try {
+                this.ossObject.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
