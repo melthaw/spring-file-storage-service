@@ -22,18 +22,18 @@ So far the following version is available
 
 |category  |module name | latest version |
 |---|---|---|
-| core | daas-fss-core | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-core/3.0.7)
-| physical file | daas-fss-zimg | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-zimg/3.0.7)
-| | daas-fss-gridfs | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-gridfs/3.0.7)
-| | daas-fss-alioss | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.7)
-| | daas-fss-s3 | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.7)
-| | daas-fss-webdev | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-webdav/3.0.7)
-| | daas-fss-glusterfs | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-glusterfs/3.0.7)
-| | daas-fss-qiniu | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-qiniu/3.0.7)
-| | daas-fss-local | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-local/3.0.7)
-| | daas-fss-hwobs | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-hwobs/3.0.7)
-| database | daas-fss-mysql | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-mysql/3.0.7)
-| | daas-fss-mongodb | [3.0.7](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-mongodb/3.0.7)
+| core | daas-fss-core | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-core/3.0.8)
+| physical file | daas-fss-zimg | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-zimg/3.0.8)
+| | daas-fss-alioss | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.8)
+| | daas-fss-gridfs | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-gridfs/3.0.8)
+| | daas-fss-glusterfs | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-glusterfs/3.0.8)
+| | daas-fss-hwobs | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-hwobs/3.0.8)
+| | daas-fss-local | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-local/3.0.8)
+| | daas-fss-qiniu | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-qiniu/3.0.8)
+| | daas-fss-s3 | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-alioss/3.0.8)
+| | daas-fss-webdev | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-webdav/3.0.8)
+| database | daas-fss-mysql | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-mysql/3.0.8)
+| | daas-fss-mongodb | [3.0.8](https://mvnrepository.com/artifact/in.clouthink.daas/daas-fss-mongodb/3.0.8)
 
 > And 2.0.0 is deprecated.  
 
@@ -81,8 +81,8 @@ Now `80` port is exported as hosted port
 Gradle build.gradle
 
 ```gradle
-    compile("in.clouthink.daas:daas-fss-core:3.0.7")
-    compile("in.clouthink.daas:daas-fss-webdav:3.0.7")
+    compile("in.clouthink.daas:daas-fss-core:3.0.8")
+    compile("in.clouthink.daas:daas-fss-webdav:3.0.8")
 ```
 
 Maven pom.xml 
@@ -92,13 +92,13 @@ Maven pom.xml
 	<dependency>
 		<groupId>in.clouthink.daas</groupId>
 		<artifactId>daas-fss-core</artifactId>
-		<version>3.0.7</version>
+		<version>3.0.8</version>
 	</dependency>
         
 	<dependency>
 		<groupId>in.clouthink.daas</groupId>
 		<artifactId>daas-fss-webdav</artifactId>
-		<version>3.0.7</version>
+		<version>3.0.8</version>
 	</dependency>
 
 ```
