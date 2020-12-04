@@ -158,11 +158,11 @@ public class FileStorageImpl implements FileStorage, InitializingBean, Disposabl
         fileObject.setProviderName(PROVIDER_NAME);
         fileObject.setImplementation(new OssObjectProxy(ossObject));
 
-        try {
-            ossObject.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ossObject.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return fileObject;
     }
 
