@@ -69,14 +69,14 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
-                <version>3.2.13.RELEASE</version>
+                <version>3.2.18.RELEASE</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
-                <version>3.2.13.RELEASE</version>
+                <version>3.2.18.RELEASE</version>
                 <scope>provided</scope>
             </dependency>
 
